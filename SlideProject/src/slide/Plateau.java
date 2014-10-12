@@ -21,6 +21,7 @@ import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
+import org.jsfml.window.Keyboard;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
@@ -28,10 +29,12 @@ public class Plateau extends Sequence {
 	private Case[][] damierCases;
 	private Entite[][] damierEntite;
 	private Vector2i entiteMobile;
-	private Vector2i joueur;
+	private Vector2i positionJoueur;
+	private Joueur joueur;
 	private Vector2i dimensionPlateau;
 	private View camera;
 	private static final int EPSILON=0;//TODO choisir Epsilon
+	private boolean optionDebug;
 	
 	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur, Vector2i positionJoueurInitiale){
 		super();
@@ -39,7 +42,9 @@ public class Plateau extends Sequence {
 		this.damierEntite = entites;
 		this.entiteMobile=null;
 		this.dimensionPlateau = new Vector2i(cases.length,cases[0].length);
-		this.joueur = positionJoueurInitiale;
+		this.positionJoueur = positionJoueurInitiale;
+		this.joueur = joueur;
+		optionDebug=false;
 		
 		this.damierEntite[positionJoueurInitiale.x][positionJoueurInitiale.y] = joueur;
 		Vector2i taille= Case.getTailleCase();
@@ -94,19 +99,27 @@ public class Plateau extends Sequence {
 			if(event instanceof KeyEvent){
 				switch( ((KeyEvent)event).key ){
 					case UP: if (entiteMobile == null) {
-									entiteMobile = joueur;
-									damierEntite[joueur.x][joueur.y].setVitesse( new Vector2i(0,-mouvement));
+									entiteMobile = positionJoueur;
+									damierEntite[positionJoueur.x][positionJoueur.y].setVitesse( new Vector2i(0,-mouvement));
 								}
 							break;
 					case RIGHT: if (entiteMobile == null) {
-						entiteMobile = joueur;
-						damierEntite[joueur.x][joueur.y].setVitesse( new Vector2i(mouvement,0));
-					}					
+						entiteMobile = positionJoueur;
+						damierEntite[positionJoueur.x][positionJoueur.y].setVitesse( new Vector2i(mouvement,0));
+					}	
+					break;
+					case A:optionDebug = true;
 							break;
 					default:break;
 				}
 			}
 		}
+		/* Patch GITAN */
+		if (entiteMobile != null ) {
+			Vector2i vect = damierEntite[entiteMobile.x][entiteMobile.y].getVitesse();
+			if (vect.x==0 && vect.y ==0) { entiteMobile=null; }
+		}
+		/* Fin patch GITATn le reste est ~ propres*/
 		if(entiteMobile!=null){
 			Vector2i taille= Case.getTailleCase(); 
 			Vector2f positionEntitieMobile = damierEntite[entiteMobile.x][entiteMobile.y].getPosition();
@@ -151,9 +164,12 @@ public class Plateau extends Sequence {
 				}
 				Entite entiteSuivante = damierEntite[caseSuivante.x][caseSuivante.y];
 				if ( entiteSuivante ==null) {
-					damierEntite[caseSuivante.x][caseSuivante.y] = damierEntite[entiteMobile.x][entiteMobile.y];
-					damierEntite[entiteMobile.x][entiteMobile.y]=null;
+					setEntite(getEntite(entiteMobile),caseSuivante);
+					setEntite(null, entiteMobile);
 					entiteMobile = caseSuivante;
+					if(getEntite(entiteMobile) == joueur){
+						positionJoueur=entiteMobile;
+					}
 				}
 				else {
 					boolean vitesseTransmise;
@@ -175,6 +191,15 @@ public class Plateau extends Sequence {
 					 */
 			}
 		}
+		if(optionDebug){
+			System.out.println("entitemobile : "+entiteMobile);
+			System.out.println("positionjoueur"+positionJoueur);
+			System.out.println("joueur : "+getEntite(positionJoueur));
+			System.out.println("pixel joueur : "+getEntite(positionJoueur).getPosition());
+			System.out.println("vitesse : "+getEntite(positionJoueur).getVitesse());
+			
+			optionDebug = false;
+		}
 	}
 
 	@Override
@@ -182,12 +207,6 @@ public class Plateau extends Sequence {
 		//camera.setViewport(new FloatRect(0.5f, 0.5f, 0.5f, 0.5f));
 		fenetre.setView(camera);
 		Vector2i taille= Case.getTailleCase();
-		if(entiteMobile != null){
-			Shape cercle = new CircleShape(5);
-			cercle.setPosition(entiteMobile.x*taille.x,entiteMobile.y*taille.y);
-			cercle.setFillColor(Color.BLUE);
-			fenetre.draw(cercle);
-		}
 		int i,j;
 		Sprite sprite;
 		for (i=0; i<dimensionPlateau.x; i++) {
@@ -229,10 +248,18 @@ public class Plateau extends Sequence {
 				positionY--;
 			}		
 			else {
-				//System.out.println("THis souldnot happend"+vitesse);
+				System.out.println("THis souldnot happend"+vitesse);
 			}
 			return new Vector2i(positionX, positionY);
 		}
 		
+	}
+	
+	private Entite getEntite(Vector2i position){
+		return damierEntite[position.x][position.y];
+	}
+	
+	private void setEntite(Entite placer,Vector2i position){
+		damierEntite[position.x][position.y] = placer;
 	}
 }
