@@ -11,6 +11,7 @@ import org.jsfml.window.VideoMode;
 import org.jsfml.window.event.Event;
 
 public abstract class Jeu {
+	//ajout de commentaire inutile
 	private RenderWindow fenetre;
 	private Collection<Sequence> sequenceAUpdate;
 	private Collection<Sequence> sequenceARender;
