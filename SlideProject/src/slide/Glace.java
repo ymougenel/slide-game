@@ -1,9 +1,11 @@
 package slide;
 
-import org.jsfml.system.Vector2i;
+import org.jsfml.system.Vector2f;
 
 public final class Glace extends Case {
 
+	private static final long serialVersionUID = -7702822558882271584L;
+	
 	private static Glace singleton = new Glace();
 	
 	public Glace() {
@@ -16,7 +18,7 @@ public final class Glace extends Case {
 	}
 
 	@Override
-	public Vector2i interaction(Vector2i vitesse) {
+	public Vector2f interaction(Vector2f vitesse) {
 		// TODO Auto-generated method stub
 		return vitesse;
 	}

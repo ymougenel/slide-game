@@ -1,5 +1,10 @@
 package slide;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import jeu.EventGame;
 import jeu.Jeu;
 import jeu.Sequence;
@@ -14,7 +19,23 @@ public class Slide extends Jeu {
 	public Slide(String nom) {
 		super(nom);
 		// TODO Auto-generated constructor stub
-		Sequence seq = new Terrain0(new Joueur(), new Vector2i(0,5));
+		ObjectInputStream caMarche;
+		Sequence seq = null;
+		try {
+			caMarche = new ObjectInputStream( new FileInputStream("terrain0.plt"));
+			seq = (Sequence)caMarche.readObject();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Sequence seq = new Terrain0(new Joueur(), new Vector2i(1,6));
 		chargerUpdate(seq);
 		chargerRender(seq);
 		run();

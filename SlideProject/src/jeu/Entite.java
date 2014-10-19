@@ -1,6 +1,8 @@
 package jeu;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.IntRect;
@@ -8,60 +10,94 @@ import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.system.Time;
+import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
 import slide.Case;
 
-public abstract class Entite extends Sprite{
-	protected Vector2i vitesse;
+public abstract class Entite extends Sprite implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4940088905580735189L;
+	
+	private static float vitesse = 0.005f;
 	private  static Vector2i TAILLEENTITE = new Vector2i(16,16);
-	public enum TextureEntite {
+	protected Vector2f mouvement;
+	private Vector2f positionFinale;
+	private boolean mouvementEnCours;
+	private TextureEntite textureEntite;
+	private static ChargeurTexture chargeur = new ChargeurTexture(Entite.class.getResourceAsStream("../sprites/entites.png"), TAILLEENTITE);
+	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE,
 		ROCHERIMMOBILE,
 		EAU;
 	}
-	protected static Image image = chargerImage();
 	
-	private static Image chargerImage(){
-			Image image = new Image();
-			try {
-				image.loadFromStream(Case.class.getResourceAsStream("../sprites/entites.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return image;
-	}		
-
 	public Entite(TextureEntite texture) {
-		super();
-		vitesse=Vector2i.ZERO;
-		try {
-			int ordinal = texture.ordinal();
-			Texture fond = new Texture();
-			fond.loadFromImage(image, new IntRect(ordinal*TAILLEENTITE.x, 0, (ordinal+1)*TAILLEENTITE.x, TAILLEENTITE.y) );
-			setTexture(fond);
-			//sprite.setOrigin(8, 8);
-		}
-		catch (TextureCreationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this();
+		this.setTexture(chargeur.getTexture(texture));
+		this.textureEntite = texture;
 	}
 	
 	public Entite() {
 		super();
-		vitesse=Vector2i.ZERO;
-	}	
-	public Vector2i getVitesse(){
-		return new Vector2i(vitesse.x,vitesse.y);
+		mouvement = Vector2f.ZERO;	
+		positionFinale = Vector2f.ZERO;
+		mouvementEnCours=false;
+		this.textureEntite = null;
 	}
 	
-	public abstract boolean setVitesse(Vector2i vitesse);
-	
-	public void deplacer( Time t) {
-		float distanceX = t.asMilliseconds() * vitesse.x;
-		float distanceY = t.asMilliseconds() * vitesse.y;
-		this.move(distanceX,distanceY);
+	public boolean setMouvement( Vector2f deplacement){
+		this.mouvementEnCours=true;
+		this.mouvement=deplacement;
+		this.positionFinale = new Vector2f(deplacement.x * Case.TAILLECASE.x + getPosition().x, 
+											deplacement.y * Case.TAILLECASE.y + getPosition().y);
+		return true;
 	}
+		
+			
+	public Vector2f getMouvement() {
+		return mouvement;
+	}
+	
+	public boolean transmettreMouvement( Entite receptrice){
+		boolean retour=receptrice.setMouvement(mouvement);
+		this.mouvementEnCours = false;
+		this.mouvement= Vector2f.ZERO;
+		
+		return retour;
+	}
+	
+	public void update( Time t) {
+		if( mouvementEnCours) {	
+			System.out.println("position " +getPosition()+" vers "+positionFinale);
+			float distanceX = t.asMilliseconds() * vitesse * mouvement.x;
+			float distanceY = t.asMilliseconds() * vitesse * mouvement.y;
+			this.move(distanceX, distanceY);
+			/* TODO ANIMATION FLOWER */
+			
+			if ( getPosition().x * mouvement.x >= positionFinale.x * mouvement.x || getPosition().y *mouvement.y >= positionFinale.y * mouvement.y){
+				this.setPosition(positionFinale);
+				System.out.println("Wazaaaz");
+				this.mouvementEnCours = false;
+				System.out.println("mouvement fini");
+			}
+		}
+		
+	}
+	
+	public boolean mouvementTermine (){
+		return positionFinale.equals(getPosition());
+	}
+	
+	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
+		in.defaultReadObject();
+		if (textureEntite != null) {
+			this.setTexture( chargeur.getTexture(textureEntite));
+		}
+		
+			//sprite.setOrigin(8, 8);
+	}
+	
 }

@@ -21,7 +21,7 @@ public abstract class Jeu {
 	public Jeu(String nom){
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
-		
+		this.fenetre.setVerticalSyncEnabled(true);
 		this.sequenceAUpdate = new LinkedList<Sequence>();
 		this.sequenceARender = new LinkedList<Sequence>();
 		this.events = new LinkedList<Event>();

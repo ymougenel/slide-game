@@ -1,265 +1,266 @@
 package slide;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.nio.file.Paths;
 
 import jeu.Entite;
 import jeu.Jeu;
 import jeu.Sequence;
 
-import org.jsfml.graphics.CircleShape;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderTarget;
-import org.jsfml.graphics.Shader;
-import org.jsfml.graphics.Shape;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
-import org.jsfml.window.Keyboard;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public class Plateau extends Sequence {
+public class Plateau extends Sequence implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7433390095796292630L;
+	
 	private Case[][] damierCases;
 	private Entite[][] damierEntite;
 	private Vector2i entiteMobile;
 	private Vector2i positionJoueur;
 	private Joueur joueur;
 	private Vector2i dimensionPlateau;
-	private View camera;
-	private static final int EPSILON=0;//TODO choisir Epsilon
+	private transient View camera;
 	private boolean optionDebug;
-	
-	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur, Vector2i positionJoueurInitiale){
+	private boolean checkMouvement;
+
+	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur,
+			Vector2i positionJoueurInitiale) {
 		super();
 		this.damierCases = cases;
 		this.damierEntite = entites;
-		this.entiteMobile=null;
-		this.dimensionPlateau = new Vector2i(cases.length,cases[0].length);
+		this.entiteMobile = null;
+		this.dimensionPlateau = new Vector2i(cases.length, cases[0].length);
 		this.positionJoueur = positionJoueurInitiale;
 		this.joueur = joueur;
-		optionDebug=false;
-		
+		optionDebug = false;
+		checkMouvement = false;
+
 		this.damierEntite[positionJoueurInitiale.x][positionJoueurInitiale.y] = joueur;
-		Vector2i taille= Case.getTailleCase();
-		int i,j;
-		for (i=0; i<dimensionPlateau.x; i++) {
-			for (j=0; j<dimensionPlateau.y; j++) {
+		Vector2i taille = Case.getTailleCase();
+		int i, j;
+		for (i = 0; i < dimensionPlateau.x; i++) {
+			for (j = 0; j < dimensionPlateau.y; j++) {
 				/* Traitement des cases du pleateau */
-				if ( damierEntite[i][j] != null ) {
-					damierEntite[i][j].setPosition(i*taille.x, j* taille.y );
+				if (damierEntite[i][j] != null) {
+					damierEntite[i][j].setPosition(i * taille.x, j * taille.y);
 				}
-				
+
 			}
 		}
 		// TODO initialiser dimension plat
-		camera=new View(new FloatRect(0,0,160,144));
-		//initialiser();
+		camera = new View(new FloatRect(0, 0, 160, 144));
+		// initialiser();
 	}
-	
-	private void initialiser(){
-		Texture bg=new Texture();
-		Image imageSprites=new Image();
-		
+
+	private void initialiser() {
+		Texture bg = new Texture();
+		Image imageSprites = new Image();
+
 		try {
-			bg.loadFromFile( Paths.get("src/sprites/bg.png")   );
+			bg.loadFromFile(Paths.get("src/sprites/bg.png"));
 			imageSprites.loadFromFile(Paths.get("src/sprites/pong.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		imageSprites.createMaskFromColor(Color.WHITE);
-		
-		Texture textureBall=new Texture();
-		Texture textureBarre1=new Texture();
-		
+
+		Texture textureBall = new Texture();
+		Texture textureBarre1 = new Texture();
+
 		try {
 			textureBall.loadFromImage(imageSprites, new IntRect(28, 0, 29, 12));
-			textureBarre1.loadFromImage(imageSprites, new IntRect(0,0,12,45));
+			textureBarre1
+					.loadFromImage(imageSprites, new IntRect(0, 0, 12, 45));
 		} catch (TextureCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-	}
-	
 
-	
+	}
+
 	public void update(Jeu game){
-		int mouvement=1;
+		/* Traitement entrees clavier */
+		
 		for(Event event : game.getEvents()){
 			if(event instanceof KeyEvent){
-				switch( ((KeyEvent)event).key ){
-					case UP: if (entiteMobile == null) {
-									entiteMobile = positionJoueur;
-									damierEntite[positionJoueur.x][positionJoueur.y].setVitesse( new Vector2i(0,-mouvement));
-								}
-							break;
-					case RIGHT: if (entiteMobile == null) {
+				switch (((KeyEvent) event).key) {
+				case UP:
+					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						damierEntite[positionJoueur.x][positionJoueur.y].setVitesse( new Vector2i(mouvement,0));
-					}	
+						System.out.println("entitemobile = "
+								+ getEntite(positionJoueur));
+						getEntite(positionJoueur).setMouvement(
+								new Vector2f(0, -1));
+						checkMouvement = true;
+
+					}
 					break;
-					case A:optionDebug = true;
-							break;
-					default:break;
+				case RIGHT:
+					if (entiteMobile == null) {
+						entiteMobile = positionJoueur;
+						System.out.println("entitemobile = "
+								+ getEntite(positionJoueur));
+						getEntite(positionJoueur).setMouvement(
+								new Vector2f(1, 0));
+						checkMouvement = true;
+					}
+					break;
+				case LEFT:
+					if (entiteMobile == null) {
+						entiteMobile = positionJoueur;
+						System.out.println("entitemobile = "
+								+ getEntite(positionJoueur));
+						getEntite(positionJoueur).setMouvement(
+								new Vector2f(-1, 0));
+						checkMouvement = true;
+
+					}
+					break;
+				case DOWN:
+					if (entiteMobile == null) {
+						entiteMobile = positionJoueur;
+						System.out.println("entitemobile = "
+								+ getEntite(positionJoueur));
+						getEntite(positionJoueur).setMouvement(
+								new Vector2f(0, 1));
+						checkMouvement = true;
+
+					}
+					break;
+				case A:
+					optionDebug = true;
+					break;
+				default:
+					break;
 				}
 			}
-		}
-		/* Patch GITAN */
+		}	
+		// Patch GITAN 
 		if (entiteMobile != null ) {
-			Vector2i vect = damierEntite[entiteMobile.x][entiteMobile.y].getVitesse();
-			if (vect.x==0 && vect.y ==0) { entiteMobile=null; }
+			Vector2f vect = getEntite(entiteMobile).getMouvement();
+			if (vect.x==0 && vect.y ==0) {
+				entiteMobile=null;
+				checkMouvement = false;
+				System.out.println("entitemobile annulée");
+			}
 		}
-		/* Fin patch GITATn le reste est ~ propres*/
+		// Fin patch GITATn le reste est ~ propres
+		
 		if(entiteMobile!=null){
-			Vector2i taille= Case.getTailleCase(); 
-			Vector2f positionEntitieMobile = damierEntite[entiteMobile.x][entiteMobile.y].getPosition();
-			int distance = (int)(entiteMobile.x*taille.x-positionEntitieMobile.x
-								+entiteMobile.y*taille.y-positionEntitieMobile.y);
-			Entite mobile = damierEntite[entiteMobile.x][entiteMobile.y];
-			if(distance>EPSILON){
-				//phase2
-				
-				mobile.deplacer( game.TIME_PER_FRAME);
-				
-				 distance = (int)(entiteMobile.x*taille.x-positionEntitieMobile.x
-								+entiteMobile.y*taille.y-positionEntitieMobile.y);
-				 if(distance <= 0){
-					 
-					 mobile.setPosition(entiteMobile.x*taille.x, entiteMobile.y*taille.y );
-					 Vector2i nouvelleVitesse = damierCases[entiteMobile.x][entiteMobile.y].interaction(mobile.getVitesse());
-					 mobile.setVitesse(nouvelleVitesse);
-					 
-					 if (nouvelleVitesse == Vector2i.ZERO) {
-						 System.out.println("THis sould happend"+mobile.getVitesse());
-						entiteMobile = null;
-					 }
-					 else { System.out.println("Jaime le viande");}
-
-				 }
-				
-				/*
-				regarder si on a dépacer (recalculer la distance)
-					.Si inferieur à epsilon
-						Replacer sur la case (position exact)
-						appeller intériaction vitesse de case entité x,y, elle revoie un vitesse
-							..si vitesse non nul
-								donner la vitesse a entité mobile (setVItesee)
-								
-					.Sinon mettre entité mobile à nulle
-				*/
-			}else{
-				Vector2i caseSuivante = this.coordoneesSuivantes();
-				if(caseSuivante.x == entiteMobile.x && caseSuivante.x == entiteMobile.x){
-					
-				}
-				Entite entiteSuivante = damierEntite[caseSuivante.x][caseSuivante.y];
-				if ( entiteSuivante ==null) {
-					setEntite(getEntite(entiteMobile),caseSuivante);
-					setEntite(null, entiteMobile);
-					entiteMobile = caseSuivante;
-					if(getEntite(entiteMobile) == joueur){
-						positionJoueur=entiteMobile;
-					}
+			if ( checkMouvement ) {
+				/* Phase1 */
+				System.out.println("phase 1");
+				System.out.println("entite mobile :" +getEntite(entiteMobile)+" en "+entiteMobile);
+				Vector2i nouvellesCoordonees = new Vector2i (coordoneesSuivantes()) ;
+				System.out.println("entitesuivante :"+getEntite(nouvellesCoordonees)+" en "+coordoneesSuivantes());
+				System.out.println("-------------------------------------------");
+				Entite entiteSuivante = getEntite( nouvellesCoordonees );
+				if ( entiteSuivante!= null ){
+					System.out.println("entite suivante"+entiteSuivante);
+					boolean imobile = getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
+					entiteMobile= nouvellesCoordonees;
+					checkMouvement = true;
+					System.out.println("mouvement transmi : "+imobile);
 				}
 				else {
-					boolean vitesseTransmise;
-					vitesseTransmise = entiteSuivante.setVitesse(mobile.getVitesse());
-					mobile.setVitesse(Vector2i.ZERO);
-					entiteSuivante = null;
-					if (vitesseTransmise){
-						entiteMobile = caseSuivante;
-					}	
+					checkMouvement = false;
+					deplacerEntiteMobile(nouvellesCoordonees);
+					System.out.println("debut du mouvement");
 				}
-				//phase1
-					/*
-					  Regarder si il y a une entité sur la case suivante
-					  	.Si il y en a une
-					  		transmettre vitesse
-					  		Elle devient entité mobile
-					  	.Sinon
-					  		Deplace entité mobile
-					 */
 			}
-		}
-		if(optionDebug){
-			System.out.println("entitemobile : "+entiteMobile);
-			System.out.println("positionjoueur"+positionJoueur);
-			System.out.println("joueur : "+getEntite(positionJoueur));
-			System.out.println("pixel joueur : "+getEntite(positionJoueur).getPosition());
-			System.out.println("vitesse : "+getEntite(positionJoueur).getVitesse());
 			
-			optionDebug = false;
+			else {
+				/* Phase 2 */
+				System.out.println("mouvement en cours entite en"+entiteMobile);
+				getEntite(entiteMobile).update( game.TIME_PER_FRAME );
+				if ( getEntite(entiteMobile).mouvementTermine() ) {
+					System.out.println("mouvement termine");
+					Vector2f cinetique = getEntite(entiteMobile).getMouvement();
+					Vector2f nouvelleCinetique = getCase(entiteMobile).interaction(cinetique);
+					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
+					checkMouvement = true;
+				}
+			}
+			
 		}
 	}
 
+	
 	@Override
 	public void render(RenderTarget fenetre) {
-		//camera.setViewport(new FloatRect(0.5f, 0.5f, 0.5f, 0.5f));
+		// camera.setViewport(new FloatRect(0.5f, 0.5f, 0.5f, 0.5f));
 		fenetre.setView(camera);
-		Vector2i taille= Case.getTailleCase();
-		int i,j;
+		Vector2i taille = Case.getTailleCase();
+		int i, j;
 		Sprite sprite;
-		for (i=0; i<dimensionPlateau.x; i++) {
-			for (j=0; j<dimensionPlateau.y; j++) {
+		for (i = 0; i < dimensionPlateau.x; i++) {
+			for (j = 0; j < dimensionPlateau.y; j++) {
 				/* Traitement des cases du pleateau */
-				sprite =damierCases[i][j].getSprite();
-				sprite.setPosition(i*taille.x, j* taille.y );
+				sprite = damierCases[i][j].getSprite();
+				sprite.setPosition(i * taille.x, j * taille.y);
 				fenetre.draw(sprite);
-				
+
 				/* Traitement des entites du plateau */
-				if ( damierEntite[i][j] != null){
-					fenetre.draw(damierEntite[i][j]); 
+				if (damierEntite[i][j] != null) {
+					fenetre.draw(damierEntite[i][j]);
 				}
 			}
 		}
-		 
+
 	}
-	
-	private Vector2i coordoneesSuivantes(){
-		if (entiteMobile==null){
+
+	private Vector2f coordoneesSuivantes() {
+		if (entiteMobile == null) {
 			return null;
-		}
-		else {
-			Entite mobile = damierEntite[entiteMobile.x][entiteMobile.y];
-			Vector2i vitesse = mobile.getVitesse();
-			int positionX = entiteMobile.x; // position de lentite mobile selon x
-			int positionY = entiteMobile.y; // position de lentite mobile selon y
+		} else {
+			System.out.println("mouvement"+getEntite(entiteMobile).getMouvement());
+			if( getEntite(entiteMobile).getMouvement()==Vector2f.ZERO ){
+				System.out.println("this shoould not appened");
+			}
 			
-			if (vitesse.x > 0) { // Deplacement x positif
-				positionX++;
-			}
-			else if ( vitesse.x < 0) {
-				positionX--;
-			}
-			else if (vitesse.y > 0) { // Deplacement x positif
-				positionY++;
-			}
-			else if ( vitesse.y < 0) {
-				positionY--;
-			}		
-			else {
-				System.out.println("THis souldnot happend"+vitesse);
-			}
-			return new Vector2i(positionX, positionY);
+			return Vector2f.add( new Vector2f(entiteMobile), getEntite(entiteMobile).getMouvement());
 		}
-		
+
 	}
-	
-	private Entite getEntite(Vector2i position){
+
+	private Entite getEntite(Vector2i position) {
 		return damierEntite[position.x][position.y];
 	}
+
+	private void deplacerEntiteMobile(Vector2i position) {
+		Entite aDeplacer = damierEntite[entiteMobile.x][entiteMobile.y];
+		damierEntite[entiteMobile.x][entiteMobile.y] = null;
+		damierEntite[position.x][position.y] = aDeplacer;
+		entiteMobile = position;
+		if(getEntite(entiteMobile)==joueur){
+			positionJoueur = position;
+		}
+	}
 	
-	private void setEntite(Entite placer,Vector2i position){
-		damierEntite[position.x][position.y] = placer;
+	private Case getCase ( Vector2i position){
+		return damierCases[position.x][position.y];
+	}
+	
+	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
+		in.defaultReadObject();
+		this.camera = new View (new FloatRect(0, 0, 160, 144));
 	}
 }

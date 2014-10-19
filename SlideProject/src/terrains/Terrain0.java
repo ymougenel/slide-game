@@ -19,9 +19,9 @@ public class Terrain0 extends Plateau{
 	
 	private static Case[][] chargerCases(){
 		Case glace = Glace.getInstance();
-		Case[][] cases = new Case[6][6];
-		for(int j=0;j<6;j++){
-			for(int i=0;i<6;i++){
+		Case[][] cases = new Case[8][8];
+		for(int j=0;j<8;j++){
+			for(int i=0;i<8;i++){
 				cases[i][j] = glace;
 			}
 		}
@@ -30,19 +30,29 @@ public class Terrain0 extends Plateau{
 
 	private static Entite[][] chargerEntites(){
 		
-		Entite[][] entites = new Entite[6][6];
+		Entite[][] entites = new Entite[8][8];
 		
-		entites[0][0] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[0][1] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[2][1] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[1][1] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[1][2] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
 		entites[3][2] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[3][3] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[3][4] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[3][5] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[0][4] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
-		entites[4][0] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[4][3] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[4][4] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[4][5] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[4][6] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[1][5] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+		entites[5][1] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
 		
-		entites[1][3] = new EntiteMobile(TextureEntite.ROCHERMOBILE);
+		/* Bordure */
+		for (int i=0;i<8;i++){
+			entites[0][i] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+			entites[7][i] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+			
+			entites[i][0] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);
+			entites[i][7] = new EntiteImmobile(TextureEntite.ROCHERIMMOBILE);			
+		}
+		
+		/* Joueur */
+		entites[2][4] = new EntiteMobile(TextureEntite.ROCHERMOBILE);
 		
 		return entites;
 	}

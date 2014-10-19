@@ -1,24 +1,29 @@
 package slide;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import jeu.Entite;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Image;
+import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
-import org.jsfml.system.Vector2i;
 
-public class Joueur extends EntiteMobile {
-	private Image image;
+public class Joueur extends Entite {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8558378554755724609L;
 
 	public Joueur() {
 		super();
-		image = new Image();
+		Image image = new Image();
 		try {
 			image.loadFromStream( Joueur.class.getResourceAsStream("../sprites/joueur.png") );
-			image.createMaskFromColor( new Color(151, 155, 49) );
+			image.createMaskFromColor( new Color(222, 230, 10) );
 			Texture texture = new Texture();
 			texture.loadFromImage(image);
 			this.setTexture(texture);
@@ -32,11 +37,21 @@ public class Joueur extends EntiteMobile {
 		
 		
 	}
-
-	@Override
-	public boolean setVitesse(Vector2i vitesse) {
-		this.vitesse = new Vector2i(vitesse.x,vitesse.y);
-		return true;
+	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
+		in.defaultReadObject();
+		Image image = new Image();
+		try {
+			image.loadFromStream( Joueur.class.getResourceAsStream("../sprites/joueur.png") );
+			image.createMaskFromColor( new Color(222, 230, 10) );
+			Texture texture = new Texture();
+			texture.loadFromImage(image);
+			this.setTexture(texture);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TextureCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
 }

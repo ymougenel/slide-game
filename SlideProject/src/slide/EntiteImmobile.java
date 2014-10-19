@@ -1,8 +1,8 @@
 package slide;
 
-import org.jsfml.system.Vector2i;
-
 import jeu.Entite;
+
+import org.jsfml.system.Vector2f;
 
 public class EntiteImmobile extends Entite {
 
@@ -11,7 +11,7 @@ public class EntiteImmobile extends Entite {
 	}
 
 	@Override
-	public boolean setVitesse(Vector2i vitesse) {
+	public boolean setMouvement( Vector2f deplacement) {
 		return false;
 	}
 

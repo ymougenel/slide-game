@@ -1,17 +1,26 @@
 package slide;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 
-import org.jsfml.graphics.Image;
-import org.jsfml.graphics.IntRect;
+import jeu.ChargeurTexture;
+
 import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
-import org.jsfml.graphics.TextureCreationException;
+import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
-public abstract class Case {
-	protected static Image image = chargerImage();
+public abstract class Case implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1622952502425902144L;
+	protected  transient Sprite sprite;
+	public static final Vector2i TAILLECASE = new Vector2i(16, 16);
+	private TextureCase texture;
 	
+	protected static ChargeurTexture chargeur = new ChargeurTexture(Case.class.getResourceAsStream("../sprites/cases.png"), TAILLECASE);
+/*
 	private static Image chargerImage(){
 			Image image = new Image();
 			try {
@@ -21,11 +30,10 @@ public abstract class Case {
 				e.printStackTrace();
 			}
 			return image;
-	}		
-	protected Sprite sprite;
-	public static final Vector2i TAILLECASE = new Vector2i(16, 16);
+	}	*/	
+
 	
-	public enum TextureCase {
+	public enum TextureCase implements ChargeurTexture.Element{
 		GLACE,
 		TERRE,
 		EAU;
@@ -33,25 +41,23 @@ public abstract class Case {
 	public Case (TextureCase texture){
 		
 		sprite= new Sprite();
-		try {
-			int ordinal = texture.ordinal();
-			Texture fond = new Texture();
-			fond.loadFromImage(image, new IntRect(ordinal*TAILLECASE.x, 0, (ordinal+1)*TAILLECASE.x, TAILLECASE.y) );
-			sprite.setTexture(fond);
-			//sprite.setOrigin(8, 8);
-		}
-		catch (TextureCreationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.texture = texture;
+		sprite.setTexture( chargeur.getTexture(texture));
 	}
 	
 	public  Sprite getSprite() {
 		return this.sprite;
 	}
-	public abstract Vector2i interaction(Vector2i vitesse);
+	public abstract Vector2f interaction(Vector2f vitesse);
 	
 	public static Vector2i getTailleCase() {
 		return TAILLECASE;
+	}
+	
+	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
+		in.defaultReadObject();
+		sprite= new Sprite();
+		sprite.setTexture( chargeur.getTexture(texture));
+			//sprite.setOrigin(8, 8);
 	}
 }
