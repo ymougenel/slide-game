@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
@@ -24,7 +25,7 @@ public abstract class Entite extends Sprite implements Serializable{
 	private Vector2f positionFinale;
 	private boolean mouvementEnCours;
 	private TextureEntite textureEntite;
-	private static ChargeurTexture chargeur = new ChargeurTexture(Entite.class.getResourceAsStream("../sprites/entites.png"), TAILLEENTITE);
+	private static ChargeurTexture chargeur = new ChargeurTexture(Entite.class.getResourceAsStream("../sprites/entites.png"), TAILLEENTITE,new Color(222, 230, 10) );
 	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE,
 		ROCHERIMMOBILE,

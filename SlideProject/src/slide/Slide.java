@@ -9,10 +9,7 @@ import jeu.EventGame;
 import jeu.Jeu;
 import jeu.Sequence;
 
-import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
-
-import terrains.Terrain0;
 
 public class Slide extends Jeu {
 

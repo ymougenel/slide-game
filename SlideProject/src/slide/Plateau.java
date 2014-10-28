@@ -3,20 +3,14 @@ package slide;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.nio.file.Paths;
 
 import jeu.Entite;
 import jeu.Jeu;
 import jeu.Sequence;
 
-import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
-import org.jsfml.graphics.Image;
-import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
-import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
@@ -36,7 +30,6 @@ public class Plateau extends Sequence implements Serializable {
 	private Joueur joueur;
 	private Vector2i dimensionPlateau;
 	private transient View camera;
-	private boolean optionDebug;
 	private boolean checkMouvement;
 
 	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur,
@@ -48,7 +41,6 @@ public class Plateau extends Sequence implements Serializable {
 		this.dimensionPlateau = new Vector2i(cases.length, cases[0].length);
 		this.positionJoueur = positionJoueurInitiale;
 		this.joueur = joueur;
-		optionDebug = false;
 		checkMouvement = false;
 
 		this.damierEntite[positionJoueurInitiale.x][positionJoueurInitiale.y] = joueur;
@@ -68,39 +60,11 @@ public class Plateau extends Sequence implements Serializable {
 		// initialiser();
 	}
 
-	private void initialiser() {
-		Texture bg = new Texture();
-		Image imageSprites = new Image();
-
-		try {
-			bg.loadFromFile(Paths.get("src/sprites/bg.png"));
-			imageSprites.loadFromFile(Paths.get("src/sprites/pong.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		imageSprites.createMaskFromColor(Color.WHITE);
-
-		Texture textureBall = new Texture();
-		Texture textureBarre1 = new Texture();
-
-		try {
-			textureBall.loadFromImage(imageSprites, new IntRect(28, 0, 29, 12));
-			textureBarre1
-					.loadFromImage(imageSprites, new IntRect(0, 0, 12, 45));
-		} catch (TextureCreationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	public void update(Jeu game){
 		/* Traitement entrees clavier */
 		
 		for(Event event : game.getEvents()){
-			if(event instanceof KeyEvent){
+			if(event instanceof KeyEvent && event.type == Event.Type.KEY_PRESSED){
 				switch (((KeyEvent) event).key) {
 				case UP:
 					if (entiteMobile == null) {
@@ -145,9 +109,6 @@ public class Plateau extends Sequence implements Serializable {
 
 					}
 					break;
-				case A:
-					optionDebug = true;
-					break;
 				default:
 					break;
 				}
@@ -190,7 +151,7 @@ public class Plateau extends Sequence implements Serializable {
 			else {
 				/* Phase 2 */
 				System.out.println("mouvement en cours entite en"+entiteMobile);
-				getEntite(entiteMobile).update( game.TIME_PER_FRAME );
+				getEntite(entiteMobile).update( Jeu.TIME_PER_FRAME );
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
 					System.out.println("mouvement termine");
 					Vector2f cinetique = getEntite(entiteMobile).getMouvement();
@@ -224,7 +185,6 @@ public class Plateau extends Sequence implements Serializable {
 				}
 			}
 		}
-
 	}
 
 	private Vector2f coordoneesSuivantes() {

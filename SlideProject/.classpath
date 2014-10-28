@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="/home/yann/programmation/java/G44/slide/jsfml-test-Dec02_2013/jsfml.jar"/>
+	<classpathentry kind="lib" path="/home/mon/Cours/TO/Slide/slide/jsfml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

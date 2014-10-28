@@ -12,9 +12,12 @@ import jeu.Entite.TextureEntite;
 import slide.Case;
 import slide.EntiteImmobile;
 import slide.EntiteMobile;
+import slide.Fleche;
+import slide.Fleche.Sens;
 import slide.Glace;
 import slide.Joueur;
 import slide.Plateau;
+import slide.Sol;
 
 public class Terrain0 {
 
@@ -29,6 +32,9 @@ public class Terrain0 {
 				cases[i][j] = glace;
 			}
 		}
+		
+		cases[5][2]=Sol.getInstance();
+		cases[5][6]=Fleche.getInstance(Sens.HAUT);
 
 		// creation damierentite
 		Entite[][] entites = new Entite[8][8];

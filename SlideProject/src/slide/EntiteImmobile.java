@@ -6,6 +6,11 @@ import org.jsfml.system.Vector2f;
 
 public class EntiteImmobile extends Entite {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3399235602263076085L;
+
 	public EntiteImmobile(TextureEntite texture) {
 		super(texture);
 	}

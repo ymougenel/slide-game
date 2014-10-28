@@ -1,0 +1,38 @@
+package slide;
+
+import java.io.ObjectStreamException;
+
+import org.jsfml.system.Vector2f;
+
+public final class Fleche extends Case {
+
+	private static final long serialVersionUID = 882271584L;
+	
+	public enum Sens{
+		HAUT,BAS,DROITE,GAUCHE;
+	}
+	
+	private static Fleche haut = new Fleche(Sens.HAUT);
+	private static Fleche bas = new Fleche(Sens.BAS);
+	private static Fleche droite = new Fleche(Sens.DROITE);
+	private static Fleche gauche = new Fleche(Sens.BAS);
+	
+	public Fleche(Sens sens) {
+		super(TextureCase.GLACE);
+	}
+	
+	public static Case getInstance() {
+		// TODO Auto-generated method stub
+		return singleton;
+	}
+
+	@Override
+	public Vector2f interaction(Vector2f vitesse) {
+		// TODO Auto-generated method stub
+		return vitesse;
+	}
+	
+	private Object readResolve() throws ObjectStreamException {
+		return getInstance();
+	}
+}

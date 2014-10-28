@@ -7,7 +7,6 @@ import jeu.Entite;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Image;
-import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 
