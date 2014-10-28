@@ -12,6 +12,8 @@ import org.jsfml.window.event.Event;
 
 public abstract class Jeu {
 	//ajout de commentaire inutile
+	public interface EventGame{};
+	
 	private RenderWindow fenetre;
 	private Collection<Sequence> sequenceAUpdate;
 	private Collection<Sequence> sequenceARender;

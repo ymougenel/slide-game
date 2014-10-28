@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-import jeu.Entite;
 import jeu.Jeu;
 import jeu.Sequence;
 
@@ -12,10 +11,11 @@ import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.View;
-import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
+
+import slide.cases.Case;
 
 public class Plateau extends Sequence implements Serializable {
 	/**
@@ -64,7 +64,7 @@ public class Plateau extends Sequence implements Serializable {
 		/* Traitement entrees clavier */
 		
 		for(Event event : game.getEvents()){
-			if(event instanceof KeyEvent && event.type == Event.Type.KEY_PRESSED){
+			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
 				case UP:
 					if (entiteMobile == null) {
@@ -72,7 +72,7 @@ public class Plateau extends Sequence implements Serializable {
 						System.out.println("entitemobile = "
 								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
-								new Vector2f(0, -1));
+								new Vector2i(0, -1));
 						checkMouvement = true;
 
 					}
@@ -83,7 +83,7 @@ public class Plateau extends Sequence implements Serializable {
 						System.out.println("entitemobile = "
 								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
-								new Vector2f(1, 0));
+								new Vector2i(1, 0));
 						checkMouvement = true;
 					}
 					break;
@@ -93,7 +93,7 @@ public class Plateau extends Sequence implements Serializable {
 						System.out.println("entitemobile = "
 								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
-								new Vector2f(-1, 0));
+								new Vector2i(-1, 0));
 						checkMouvement = true;
 
 					}
@@ -104,7 +104,7 @@ public class Plateau extends Sequence implements Serializable {
 						System.out.println("entitemobile = "
 								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
-								new Vector2f(0, 1));
+								new Vector2i(0, 1));
 						checkMouvement = true;
 
 					}
@@ -116,7 +116,7 @@ public class Plateau extends Sequence implements Serializable {
 		}	
 		// Patch GITAN 
 		if (entiteMobile != null ) {
-			Vector2f vect = getEntite(entiteMobile).getMouvement();
+			Vector2i vect = getEntite(entiteMobile).getMouvement();
 			if (vect.x==0 && vect.y ==0) {
 				entiteMobile=null;
 				checkMouvement = false;
@@ -130,7 +130,7 @@ public class Plateau extends Sequence implements Serializable {
 				/* Phase1 */
 				System.out.println("phase 1");
 				System.out.println("entite mobile :" +getEntite(entiteMobile)+" en "+entiteMobile);
-				Vector2i nouvellesCoordonees = new Vector2i (coordoneesSuivantes()) ;
+				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
 				System.out.println("entitesuivante :"+getEntite(nouvellesCoordonees)+" en "+coordoneesSuivantes());
 				System.out.println("-------------------------------------------");
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
@@ -154,8 +154,8 @@ public class Plateau extends Sequence implements Serializable {
 				getEntite(entiteMobile).update( Jeu.TIME_PER_FRAME );
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
 					System.out.println("mouvement termine");
-					Vector2f cinetique = getEntite(entiteMobile).getMouvement();
-					Vector2f nouvelleCinetique = getCase(entiteMobile).interaction(cinetique);
+					Vector2i cinetique = getEntite(entiteMobile).getMouvement();
+					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(cinetique);
 					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
 					checkMouvement = true;
 				}
@@ -187,16 +187,16 @@ public class Plateau extends Sequence implements Serializable {
 		}
 	}
 
-	private Vector2f coordoneesSuivantes() {
+	private Vector2i coordoneesSuivantes() {
 		if (entiteMobile == null) {
 			return null;
 		} else {
 			System.out.println("mouvement"+getEntite(entiteMobile).getMouvement());
-			if( getEntite(entiteMobile).getMouvement()==Vector2f.ZERO ){
+			if( getEntite(entiteMobile).getMouvement()==Vector2i.ZERO ){
 				System.out.println("this shoould not appened");
 			}
 			
-			return Vector2f.add( new Vector2f(entiteMobile), getEntite(entiteMobile).getMouvement());
+			return Vector2i.add(entiteMobile, getEntite(entiteMobile).getMouvement());
 		}
 
 	}

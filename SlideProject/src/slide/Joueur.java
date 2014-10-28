@@ -3,8 +3,6 @@ package slide;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import jeu.Entite;
-
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.Texture;

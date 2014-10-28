@@ -35,7 +35,6 @@ public class ChargeurTexture {
 		int ordinal = element.ordinal();
 		Texture texture = new Texture();
 		IntRect contour = new IntRect( ordinal*taille.x, 0, taille.x, taille.y );
-		System.out.println("appel:"+ contour);
 		try {
 			texture.loadFromImage(image, contour);
 		} catch (TextureCreationException e) {
