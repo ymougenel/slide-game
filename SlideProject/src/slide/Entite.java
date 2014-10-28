@@ -21,7 +21,7 @@ public class Entite extends Sprite implements Serializable{
 	 */
 	private static final long serialVersionUID = -4940088905580735189L;
 	
-	private static float vitesse = 0.005f;
+	private static float vitesse = 400f;
 	private  static Vector2i TAILLEENTITE = new Vector2i(16,16);
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
@@ -83,12 +83,15 @@ public class Entite extends Sprite implements Serializable{
 	public void update( Time t) {
 		if( mouvementEnCours) {	
 			System.out.println("position " +getPosition()+" vers "+positionFinale);
-			float distanceX = t.asMilliseconds() * vitesse * mouvement.x;
-			float distanceY = t.asMilliseconds() * vitesse * mouvement.y;
+			float distanceX = t.asSeconds() * vitesse * mouvement.x;
+			float distanceY = t.asSeconds() * vitesse * mouvement.y;
 			this.move(distanceX, distanceY);
+			System.out.println("deplacement : "+distanceX+", "+distanceY);
+			System.out.println("position : "+getPosition());
+			System.out.println(t.asSeconds());
 			/* TODO ANIMATION FLOWER */
 			
-			if ( getPosition().x * mouvement.x >= positionFinale.x * mouvement.x || getPosition().y *mouvement.y >= positionFinale.y * mouvement.y){
+			if ( getPosition().x * mouvement.x > positionFinale.x * mouvement.x || getPosition().y *mouvement.y > positionFinale.y * mouvement.y){
 				this.setPosition(positionFinale);
 				System.out.println("Wazaaaz");
 				this.mouvementEnCours = false;

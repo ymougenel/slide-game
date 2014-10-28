@@ -38,8 +38,7 @@ public abstract class Case implements Serializable{
 	}
 	public Case (TextureCase texture){
 		
-		sprite= new Sprite();
-		sprite.setTexture( chargeur.getTexture(texture));
+		sprite= new Sprite( chargeur.getTexture(texture));
 	}
 	
 	public  Sprite getSprite() {
