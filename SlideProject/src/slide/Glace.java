@@ -1,5 +1,7 @@
 package slide;
 
+import java.io.ObjectStreamException;
+
 import org.jsfml.system.Vector2f;
 
 public final class Glace extends Case {
@@ -21,5 +23,9 @@ public final class Glace extends Case {
 	public Vector2f interaction(Vector2f vitesse) {
 		// TODO Auto-generated method stub
 		return vitesse;
+	}
+	
+	private Object readResolve() throws ObjectStreamException {
+		return getInstance();
 	}
 }

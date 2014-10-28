@@ -2,13 +2,10 @@ package jeu;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.jsfml.graphics.Image;
-import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
-import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
@@ -96,8 +93,16 @@ public abstract class Entite extends Sprite implements Serializable{
 		if (textureEntite != null) {
 			this.setTexture( chargeur.getTexture(textureEntite));
 		}
+		setPosition( (Vector2f)in.readObject() );
+		setOrigin( (Vector2f)in.readObject() );
 		
 			//sprite.setOrigin(8, 8);
+	}
+	
+	private void writeObject(final ObjectOutputStream out) throws IOException{
+		out.defaultWriteObject();
+		out.writeObject(getPosition());
+		out.writeObject(getOrigin());
 	}
 	
 }

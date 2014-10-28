@@ -1,7 +1,5 @@
 package slide;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import jeu.ChargeurTexture;
@@ -17,7 +15,6 @@ public abstract class Case implements Serializable{
 	private static final long serialVersionUID = 1622952502425902144L;
 	protected  transient Sprite sprite;
 	public static final Vector2i TAILLECASE = new Vector2i(16, 16);
-	private TextureCase texture;
 	
 	protected static ChargeurTexture chargeur = new ChargeurTexture(Case.class.getResourceAsStream("../sprites/cases.png"), TAILLECASE);
 /*
@@ -41,7 +38,6 @@ public abstract class Case implements Serializable{
 	public Case (TextureCase texture){
 		
 		sprite= new Sprite();
-		this.texture = texture;
 		sprite.setTexture( chargeur.getTexture(texture));
 	}
 	
@@ -52,12 +48,5 @@ public abstract class Case implements Serializable{
 	
 	public static Vector2i getTailleCase() {
 		return TAILLECASE;
-	}
-	
-	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
-		in.defaultReadObject();
-		sprite= new Sprite();
-		sprite.setTexture( chargeur.getTexture(texture));
-			//sprite.setOrigin(8, 8);
 	}
 }
