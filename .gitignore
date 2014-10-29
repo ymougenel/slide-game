@@ -1,0 +1,7 @@
+.metadata
+.classpath
+.settings
+.project
+*.class
+SlideProject/bin
+
