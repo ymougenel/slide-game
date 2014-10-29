@@ -18,7 +18,7 @@ public class Slide extends Jeu {
 		ObjectInputStream caMarche;
 		Sequence seq = null;
 		try {
-			caMarche = new ObjectInputStream( new FileInputStream("terrain1.plt"));
+			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain1.plt"));
 			seq = (Sequence)caMarche.readObject();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
