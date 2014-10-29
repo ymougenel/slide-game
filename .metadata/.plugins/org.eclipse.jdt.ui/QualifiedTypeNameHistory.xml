@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.jsfml.system.Vector2i"/>
-<fullyQualifiedTypeName name="slide.Sol"/>
-<fullyQualifiedTypeName name="slide.Fleche"/>
-<fullyQualifiedTypeName name="slide.Fleche.Sens"/>
-<fullyQualifiedTypeName name="org.jsfml.window.event.Event"/>
-<fullyQualifiedTypeName name="org.jsfml.window.event.Event.Type"/>
-</qualifiedTypeNameHistroy>
