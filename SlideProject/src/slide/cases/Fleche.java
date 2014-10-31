@@ -2,6 +2,8 @@ package slide.cases;
 
 import java.io.ObjectStreamException;
 
+import jeu.Jeu;
+
 import org.jsfml.system.Vector2i;
 
 public final class Fleche extends Case {
@@ -47,7 +49,7 @@ public final class Fleche extends Case {
 	}
 
 	@Override
-	public Vector2i interaction(Vector2i vitesse) {
+	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		// TODO Auto-generated method stub
 		return sens.getSens();
 	}

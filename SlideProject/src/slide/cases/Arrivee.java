@@ -6,16 +6,19 @@ import jeu.Jeu;
 
 import org.jsfml.system.Vector2i;
 
-public final class Glace extends Case {
+import slide.NewEventGame;
+import slide.cases.Case.TextureCase;
+
+public final class Arrivee extends Case {
 
 	private static final long serialVersionUID = -7702822558882271584L;
-	
-	private static Glace singleton = new Glace();
-	
-	public Glace() {
-		super(TextureCase.GLACE);
+
+	private static Arrivee singleton = new Arrivee();
+
+	public Arrivee() {
+		super(TextureCase.ARRIVEE);
 	}
-	
+
 	public static Case getInstance() {
 		// TODO Auto-generated method stub
 		return singleton;
@@ -24,9 +27,10 @@ public final class Glace extends Case {
 	@Override
 	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		// TODO Auto-generated method stub
-		return vitesse;
+		jeu.ajouterEvenement(NewEventGame.COUCOU);
+		return Vector2i.ZERO;
 	}
-	
+
 	private Object readResolve() throws ObjectStreamException {
 		return getInstance();
 	}

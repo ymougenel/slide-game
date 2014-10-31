@@ -18,7 +18,7 @@ public class Slide extends Jeu {
 		ObjectInputStream caMarche;
 		Sequence seq = null;
 		try {
-			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain1.plt"));
+			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"));
 			seq = (Sequence)caMarche.readObject();
 			seq.setPause(false);
 			seq.setVisible(true);

@@ -157,7 +157,7 @@ public class Plateau extends Sequence implements Serializable {
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
 					System.out.println("mouvement termine");
 					Vector2i cinetique = getEntite(entiteMobile).getMouvement();
-					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(cinetique);
+					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(cinetique, game);
 					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
 					checkMouvement = true;
 				}

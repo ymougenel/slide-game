@@ -35,7 +35,7 @@ public abstract class Jeu {
 	 *
 	 * @param event, l'evenement a lever 
 	 */
-	public void add(EventGame event){
+	public void ajouterEvenement(EventGame event){
 		eventsGame.push(event);
 	}
 	

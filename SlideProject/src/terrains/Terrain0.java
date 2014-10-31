@@ -9,6 +9,7 @@ import org.jsfml.system.Vector2i;
 
 import slide.Entite;
 import slide.Entite.TextureEntite;
+import slide.cases.Arrivee;
 import slide.cases.Case;
 import slide.cases.Fleche;
 import slide.cases.Glace;
@@ -24,6 +25,7 @@ public class Terrain0 {
 
 		// creation damierCase
 		Case glace = Glace.getInstance();
+		Case arrivee = Arrivee.getInstance();
 		Case[][] cases = new Case[8][8];
 		for (int j = 0; j < 8; j++) {
 			for (int i = 0; i < 8; i++) {
@@ -33,7 +35,8 @@ public class Terrain0 {
 		
 		cases[5][2]=Sol.getInstance();
 		cases[5][6]=Fleche.getInstance(Sens.HAUT);
-
+		cases[7][1]=Arrivee.getInstance();
+		
 		// creation damierentite
 		Entite[][] entites = new Entite[8][8];
 

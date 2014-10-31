@@ -3,6 +3,7 @@ package slide.cases;
 import java.io.Serializable;
 
 import jeu.ChargeurTexture;
+import jeu.Jeu;
 
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2i;
@@ -34,7 +35,9 @@ public abstract class Case implements Serializable{
 		TERRE,
 		EAU,
 		MOUSSE,
-		FLECHE;
+		FLECHE,
+		DEPART,
+		ARRIVEE;
 	}
 	public Case (TextureCase texture){
 		
@@ -44,7 +47,7 @@ public abstract class Case implements Serializable{
 	public  Sprite getSprite() {
 		return this.sprite;
 	}
-	public abstract Vector2i interaction(Vector2i vitesse);
+	public abstract Vector2i interaction(Vector2i vitesse, Jeu jeu);
 	
 	public static Vector2i getTailleCase() {
 		return TAILLECASE;
