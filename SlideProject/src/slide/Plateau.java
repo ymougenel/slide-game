@@ -35,6 +35,9 @@ public class Plateau extends Sequence implements Serializable {
 	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur,
 			Vector2i positionJoueurInitiale) {
 		super();
+		this.setVisible(true);
+		this.setPause(false);
+		
 		this.damierCases = cases;
 		this.damierEntite = entites;
 		this.entiteMobile = null;
@@ -60,7 +63,8 @@ public class Plateau extends Sequence implements Serializable {
 		// initialiser();
 	}
 
-	public void update(Jeu game){
+	@Override
+	public void activeUpdate(Jeu game){
 		/* Traitement entrees clavier */
 		
 		for(Event event : game.getEvents()){
@@ -222,5 +226,11 @@ public class Plateau extends Sequence implements Serializable {
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		this.camera = new View (new FloatRect(0, 0, 160, 144));
+	}
+
+	@Override
+	public void backgroundUpdate(Jeu game) {
+		// TODO Auto-generated method stub
+		
 	}
 }
