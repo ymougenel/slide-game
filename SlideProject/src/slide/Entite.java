@@ -82,7 +82,6 @@ public class Entite extends Sprite implements Serializable{
 	
 	public void update() {
 		if( mouvementEnCours) {	
-			System.out.println("position " +getPosition()+" vers "+positionFinale);
 			float distanceX = Jeu.TIME_PER_FRAME * vitesse * mouvement.x / 1000;
 			float distanceY = Jeu.TIME_PER_FRAME * vitesse * mouvement.y / 1000;
 			this.move(distanceX, distanceY);
@@ -90,9 +89,7 @@ public class Entite extends Sprite implements Serializable{
 			
 			if ( getPosition().x * mouvement.x > positionFinale.x * mouvement.x || getPosition().y *mouvement.y > positionFinale.y * mouvement.y){
 				this.setPosition(positionFinale);
-				System.out.println("Wazaaaz");
 				this.mouvementEnCours = false;
-				System.out.println("mouvement fini");
 			}
 		}
 		

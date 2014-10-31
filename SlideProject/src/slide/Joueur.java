@@ -24,6 +24,7 @@ public class Joueur extends Entite {
 			Texture texture = new Texture();
 			texture.loadFromImage(image);
 			this.setTexture(texture);
+			this.setOrigin(0,8);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

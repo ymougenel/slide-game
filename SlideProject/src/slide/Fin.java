@@ -39,7 +39,6 @@ public class Fin extends Sequence implements Serializable{
 
 	@Override
 	protected void render(RenderTarget fenetre) {
-		System.out.println("Felecitation!!!");
 		fenetre.draw(texte);
 		
 	}	
