@@ -15,10 +15,7 @@ public class Slide extends Jeu {
 	
 	public Slide(String nom) {
 		super(nom);
-		// TODO Auto-generated constructor stub
-		ObjectInputStream caMarche;
-		try {
-			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"));
+		try (ObjectInputStream caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"))){
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);
@@ -35,8 +32,7 @@ public class Slide extends Jeu {
 		}
 		
 		//Sequence seq = new Terrain0(new Joueur(), new Vector2i(1,6));
-		chargerUpdate(plateauCourant);
-		chargerRender(plateauCourant);
+		charger(plateauCourant);
 		run();
 	}
 
@@ -52,19 +48,13 @@ public class Slide extends Jeu {
 		if(event instanceof NewEventGame){
 			switch( (NewEventGame) event ){
 				case COUCOU:System.out.println("yes");
-				case CHARGERNIVEAU: 	ObjectInputStream caMarche;
-				
-				try {
-					this.libererUpdate(plateauCourant);
-					this.libererRender(plateauCourant);
-					caMarche = new ObjectInputStream( new FileInputStream("terrains/"+NewEventGame.CHARGERNIVEAU.getMessage()));
+				case CHARGERNIVEAU:
+				try (ObjectInputStream caMarche = new ObjectInputStream( new FileInputStream("terrains/"+NewEventGame.CHARGERNIVEAU.getMessage()))) {
+					this.liberer(plateauCourant);
 					plateauCourant = (Sequence)caMarche.readObject();
-					this.chargerRender(plateauCourant);
-					this.chargerUpdate(plateauCourant);
+					this.charger(plateauCourant);
 					plateauCourant.setPause(false);
 					plateauCourant.setVisible(true);
-					
-					caMarche.close();
 				} catch (Exception  e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

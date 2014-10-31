@@ -19,6 +19,7 @@ import slide.cases.Sol;
 public class Terrain1 {
 
 	public static void main(String[] args) {
+		
 		Joueur joueur = new Joueur();
 
 		// creation damierCase
