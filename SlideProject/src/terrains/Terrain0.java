@@ -35,7 +35,7 @@ public class Terrain0 {
 		
 		cases[5][2]=Sol.getInstance();
 		cases[5][6]=Fleche.getInstance(Sens.HAUT);
-		cases[7][1]=Arrivee.getInstance();
+		cases[6][1]=Arrivee.getInstance();
 		
 		// creation damierentite
 		Entite[][] entites = new Entite[8][8];

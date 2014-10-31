@@ -11,17 +11,17 @@ import jeu.Sequence;
 import org.jsfml.window.event.Event;
 
 public class Slide extends Jeu {
-
+	private Plateau plateauCourant;
+	
 	public Slide(String nom) {
 		super(nom);
 		// TODO Auto-generated constructor stub
 		ObjectInputStream caMarche;
-		Sequence seq = null;
 		try {
 			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"));
-			seq = (Sequence)caMarche.readObject();
-			seq.setPause(false);
-			seq.setVisible(true);
+			plateauCourant = (Plateau)caMarche.readObject();
+			plateauCourant.setPause(false);
+			plateauCourant.setVisible(true);
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -35,8 +35,8 @@ public class Slide extends Jeu {
 		}
 		
 		//Sequence seq = new Terrain0(new Joueur(), new Vector2i(1,6));
-		chargerUpdate(seq);
-		chargerRender(seq);
+		chargerUpdate(plateauCourant);
+		chargerRender(plateauCourant);
 		run();
 	}
 
@@ -52,6 +52,18 @@ public class Slide extends Jeu {
 		if(event instanceof NewEventGame){
 			switch( (NewEventGame) event ){
 				case COUCOU:System.out.println("yes");
+				case CHARGERNIVEAU: 	ObjectInputStream caMarche;
+				
+				try {
+					caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain1.plt"));
+					plateauCourant = (Plateau)caMarche.readObject();
+					plateauCourant.setPause(false);
+					plateauCourant.setVisible(true);
+				} catch (Exception  e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+
 			}
 		}
 		if(event == NewEventGame.COUCOU){

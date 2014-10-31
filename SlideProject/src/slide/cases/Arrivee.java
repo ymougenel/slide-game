@@ -27,7 +27,8 @@ public final class Arrivee extends Case {
 	@Override
 	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		// TODO Auto-generated method stub
-		jeu.ajouterEvenement(NewEventGame.COUCOU);
+		NewEventGame.CHARGERNIVEAU.setMessage("Terrain1.plt");
+		jeu.ajouterEvenement(NewEventGame.CHARGERNIVEAU);
 		return Vector2i.ZERO;
 	}
 
