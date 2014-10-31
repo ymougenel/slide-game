@@ -10,7 +10,7 @@ public abstract class Sequence implements Drawable {
 	private boolean estEnPause;
 	private boolean estVisible;
 	
-	public void Sequence (){
+	public Sequence (){
 		this.estEnPause = true;
 		this.estVisible = false; 
 	}
@@ -25,12 +25,12 @@ public abstract class Sequence implements Drawable {
 	}
 	protected abstract void render(RenderTarget fenetre);
 	
-	public void draw(RenderTarget fenetre, RenderStates statut) {
-		ConstView vue=fenetre.getView();//sauvegarder la vue de la fenetre
+	public void draw(RenderTarget fenetre, RenderStates statut) {		
 		if (estVisible) {
+			ConstView vue=fenetre.getView();//sauvegarder la vue de la fenetre
 			render(fenetre);
+			fenetre.setView(vue);//remettre la vue originelle de la fenetre
 		}
-		fenetre.setView(vue);//remettre la vue originelle de la fenetre
 	}
 	
 	public void setVisible (boolean visibilite){

@@ -35,8 +35,6 @@ public class Plateau extends Sequence implements Serializable {
 	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur,
 			Vector2i positionJoueurInitiale) {
 		super();
-		this.setVisible(true);
-		this.setPause(false);
 		
 		this.damierCases = cases;
 		this.damierEntite = entites;
@@ -231,6 +229,7 @@ public class Plateau extends Sequence implements Serializable {
 	@Override
 	public void backgroundUpdate(Jeu game) {
 		// TODO Auto-generated method stub
+		
 		
 	}
 }

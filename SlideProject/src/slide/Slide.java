@@ -20,6 +20,9 @@ public class Slide extends Jeu {
 		try {
 			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain1.plt"));
 			seq = (Sequence)caMarche.readObject();
+			seq.setPause(false);
+			seq.setVisible(true);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
