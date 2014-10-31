@@ -11,7 +11,7 @@ import jeu.Sequence;
 import org.jsfml.window.event.Event;
 
 public class Slide extends Jeu {
-	private Plateau plateauCourant;
+	private Sequence plateauCourant;
 	
 	public Slide(String nom) {
 		super(nom);
@@ -19,7 +19,7 @@ public class Slide extends Jeu {
 		ObjectInputStream caMarche;
 		try {
 			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"));
-			plateauCourant = (Plateau)caMarche.readObject();
+			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);
 			
@@ -55,10 +55,16 @@ public class Slide extends Jeu {
 				case CHARGERNIVEAU: 	ObjectInputStream caMarche;
 				
 				try {
-					caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain1.plt"));
-					plateauCourant = (Plateau)caMarche.readObject();
+					this.libererUpdate(plateauCourant);
+					this.libererRender(plateauCourant);
+					caMarche = new ObjectInputStream( new FileInputStream("terrains/"+NewEventGame.CHARGERNIVEAU.getMessage()));
+					plateauCourant = (Sequence)caMarche.readObject();
+					this.chargerRender(plateauCourant);
+					this.chargerUpdate(plateauCourant);
 					plateauCourant.setPause(false);
 					plateauCourant.setVisible(true);
+					
+					caMarche.close();
 				} catch (Exception  e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
