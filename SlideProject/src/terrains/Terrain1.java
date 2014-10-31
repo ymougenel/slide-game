@@ -40,7 +40,7 @@ public class Terrain1 {
 		cases[6][5] = sol;
 		//cases[5][6] = sol; 
 		cases[6][6] = sol;
-		cases[6][1]= new Arrivee("terrain0.plt");
+		cases[6][1]= new Arrivee("sequencefinale.plt");
 		// creation damierentite
 		Entite[][] entites = new Entite[8][8];
 
