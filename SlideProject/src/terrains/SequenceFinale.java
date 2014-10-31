@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 
 import slide.Fin;
 
-import com.sun.org.apache.bcel.internal.generic.F2D;
-
 public class SequenceFinale {
 
 	/**

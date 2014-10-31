@@ -8,6 +8,7 @@ import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Text;
+import org.jsfml.system.Vector2f;
 
 import jeu.Jeu;
 import jeu.Sequence;
@@ -22,7 +23,7 @@ public class Fin extends Sequence implements Serializable{
 	private transient Text texte;
 
 	public Fin(){
-		this.texte= new Text(message, new Font(), 16);
+
 	}
 	@Override
 	public void activeUpdate(Jeu game) {
@@ -45,7 +46,16 @@ public class Fin extends Sequence implements Serializable{
 	
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
-		this.texte= new Text(message, new Font(), 16);
+		Font font = new Font();
+		try {
+			font.loadFromStream(Fin.class.getResourceAsStream("../sprites/orangejuice.ttf"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.texte= new Text(message, font, 60);
+		texte.setPosition( new Vector2f(0, 250));
+		
 		texte.setColor(Color.RED);
 		
 	}
