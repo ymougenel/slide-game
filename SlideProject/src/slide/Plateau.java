@@ -124,7 +124,7 @@ public class Plateau extends Sequence implements Serializable {
 				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
 				if ( entiteSuivante!= null ){
-					boolean imobile = getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
+					getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
 					entiteMobile= nouvellesCoordonees;
 					checkMouvement = true;
 				}

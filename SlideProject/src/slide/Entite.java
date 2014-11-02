@@ -29,7 +29,7 @@ public class Entite extends Sprite implements Serializable{
 	private TextureEntite textureEntite;
 	private boolean mobile;
 	
-	private static ChargeurTexture chargeur = new ChargeurTexture(Entite.class.getResourceAsStream("../sprites/entites.png"), TAILLEENTITE,new Color(222, 230, 10) );
+	private static ChargeurTexture chargeur = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
 	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE,
 		ROCHERIMMOBILE,
@@ -38,7 +38,7 @@ public class Entite extends Sprite implements Serializable{
 	
 	public Entite(TextureEntite texture) {
 		this();
-		this.setTexture(chargeur.getTexture(texture));
+		chargeur.addTexture(this, texture);
 		this.textureEntite = texture;
 		this.mobile=true;
 	}
@@ -102,7 +102,7 @@ public class Entite extends Sprite implements Serializable{
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		if (textureEntite != null) {
-			this.setTexture( chargeur.getTexture(textureEntite));
+			chargeur.addTexture(this, textureEntite);
 		}
 		setPosition( (Vector2f)in.readObject() );
 		setOrigin( (Vector2f)in.readObject() );

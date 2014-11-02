@@ -33,7 +33,6 @@ public class Slide extends Jeu {
 		
 		//Sequence seq = new Terrain0(new Joueur(), new Vector2i(1,6));
 		charger(plateauCourant);
-		run();
 	}
 
 	@Override
@@ -67,7 +66,18 @@ public class Slide extends Jeu {
 		}
 	}
 
-	public static void main(String[] args) {
-		new Slide("jeu du Slide");
+	public static void main(String[] args) throws IOException {
+		Slide sl = new Slide("jeu du Slide");
+		sl.run();
+		//Code produisant l'erreur xcb
+		/*
+		RenderWindow foo = new RenderWindow (new VideoMode(600, 600),"problème xcb");
+		Texture bar = new Texture();
+		bar.loadFromStream(Slide.class.getResourceAsStream("/sprites/joueur.png"));
+		Sprite spr = new Sprite(bar);
+		spr = null;
+		System.gc();
+		foo.display();
+		*/
 	}
 }

@@ -2,16 +2,13 @@ package slide.cases;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
 
 import jeu.Jeu;
 
 import org.jsfml.graphics.Sprite;
-import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
 import slide.NewEventGame;
-import slide.cases.Case.TextureCase;
 
 public class Arrivee extends Case {
 
@@ -38,7 +35,8 @@ public class Arrivee extends Case {
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		if (TextureCase.ARRIVEE != null) {
-			sprite = new Sprite( chargeur.getTexture(TextureCase.ARRIVEE) );
+			sprite = new Sprite();
+			chargeur.addTexture(sprite, TextureCase.ARRIVEE);
 		}
 			//sprite.setOrigin(8, 8);
 	}
