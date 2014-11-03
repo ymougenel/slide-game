@@ -18,7 +18,7 @@ public class Slide extends Jeu {
 		// TODO Auto-generated constructor stub
 		ObjectInputStream caMarche;
 		try {
-			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain0.plt"));
+			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain2.plt"));
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);

@@ -2,16 +2,13 @@ package slide.cases;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
 
 import jeu.Jeu;
 
 import org.jsfml.graphics.Sprite;
-import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
 import slide.NewEventGame;
-import slide.cases.Case.TextureCase;
 
 public class Arrivee extends Case {
 
