@@ -70,7 +70,7 @@ public class Terrain1 {
 		Plateau plateau0 = new Plateau(cases,entites,joueur,new Vector2i(1,6));
 		try {
 			ObjectOutputStream colimateur = new ObjectOutputStream(
-					new FileOutputStream("terrains/terrain1.plt"));
+					new FileOutputStream("src/plateaux/terrain1.plt"));
 			colimateur.writeObject(plateau0);
 			colimateur.flush();
 			colimateur.close();
