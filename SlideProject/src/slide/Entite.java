@@ -106,7 +106,6 @@ public class Entite extends Sprite implements Serializable{
 		}
 		setPosition( (Vector2f)in.readObject() );
 		setOrigin( (Vector2f)in.readObject() );
-		System.out.println(getOrigin());
 	}
 	
 	private void writeObject(final ObjectOutputStream out) throws IOException{
