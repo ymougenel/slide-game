@@ -6,10 +6,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import jeu.ChargeurTexture;
+import jeu.Jeu;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Sprite;
-import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
@@ -21,7 +21,7 @@ public class Entite extends Sprite implements Serializable{
 	 */
 	private static final long serialVersionUID = -4940088905580735189L;
 	
-	private static float vitesse = 400f;
+	private static float vitesse = 0.4f;
 	private  static Vector2i TAILLEENTITE = new Vector2i(16,16);
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
@@ -29,7 +29,7 @@ public class Entite extends Sprite implements Serializable{
 	private TextureEntite textureEntite;
 	private boolean mobile;
 	
-	private static ChargeurTexture chargeur = new ChargeurTexture(Entite.class.getResourceAsStream("../sprites/entites.png"), TAILLEENTITE,new Color(222, 230, 10) );
+	private static ChargeurTexture chargeur = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
 	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE,
 		ROCHERIMMOBILE,
@@ -38,7 +38,7 @@ public class Entite extends Sprite implements Serializable{
 	
 	public Entite(TextureEntite texture) {
 		this();
-		this.setTexture(chargeur.getTexture(texture));
+		chargeur.addTexture(this, texture);
 		this.textureEntite = texture;
 		this.mobile=true;
 	}
@@ -80,22 +80,16 @@ public class Entite extends Sprite implements Serializable{
 		return retour;
 	}
 	
-	public void update( Time t) {
+	public void update() {
 		if( mouvementEnCours) {	
-			System.out.println("position " +getPosition()+" vers "+positionFinale);
-			float distanceX = t.asSeconds() * vitesse * mouvement.x;
-			float distanceY = t.asSeconds() * vitesse * mouvement.y;
+			float distanceX = Jeu.TIME_PER_FRAME * vitesse * mouvement.x / 1000;
+			float distanceY = Jeu.TIME_PER_FRAME * vitesse * mouvement.y / 1000;
 			this.move(distanceX, distanceY);
-			System.out.println("deplacement : "+distanceX+", "+distanceY);
-			System.out.println("position : "+getPosition());
-			System.out.println(t.asSeconds());
 			/* TODO ANIMATION FLOWER */
 			
 			if ( getPosition().x * mouvement.x > positionFinale.x * mouvement.x || getPosition().y *mouvement.y > positionFinale.y * mouvement.y){
 				this.setPosition(positionFinale);
-				System.out.println("Wazaaaz");
 				this.mouvementEnCours = false;
-				System.out.println("mouvement fini");
 			}
 		}
 		
@@ -108,7 +102,7 @@ public class Entite extends Sprite implements Serializable{
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		if (textureEntite != null) {
-			this.setTexture( chargeur.getTexture(textureEntite));
+			chargeur.addTexture(this, textureEntite);
 		}
 		setPosition( (Vector2f)in.readObject() );
 		setOrigin( (Vector2f)in.readObject() );

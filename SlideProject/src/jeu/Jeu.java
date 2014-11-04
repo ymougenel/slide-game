@@ -15,20 +15,30 @@ public abstract class Jeu {
 	public interface EventGame{};
 	
 	private RenderWindow fenetre;
-	private Collection<Sequence> sequenceAUpdate;
-	private Collection<Sequence> sequenceARender;
+	private Collection<Sequence> sequencesChargees;
 	private Collection<Event> events;
-	private Stack<EventGame> eventsGame;
-	public static final Time TIME_PER_FRAME = Time.getMilliseconds(1000/60);
+	private Collection<EventGame> eventsGame;
+	private Stack<EventGame> pileEventGame;
+	//duree d'une frame en µseconde;
+	public static final float TIME_PER_FRAME = Time.getMilliseconds(1000/60).asMicroseconds();
+	
+	//Quand xInitThreads passe, les Textures sales trépassent.
+	private static native void xInitThreads();
 	
 	public Jeu(String nom){
+		if(System.getProperty("os.name").contains("Linux")){
+			System.load(getClass().getResource("/jeu/XInitThreads").getPath());
+			System.out.println("lib");
+			xInitThreads();
+		}
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
 		this.fenetre.setVerticalSyncEnabled(true);
-		this.sequenceAUpdate = new LinkedList<Sequence>();
-		this.sequenceARender = new LinkedList<Sequence>();
+		this.fenetre.setKeyRepeatEnabled(false);
+		this.sequencesChargees = new LinkedList<Sequence>();
 		this.events = new LinkedList<Event>();
-		this.eventsGame = new Stack<EventGame>();
+		this.eventsGame = new LinkedList<EventGame>();
+		this.pileEventGame = new Stack<EventGame>();
 	}
 	
 	/** lever un evenement interne du jeu
@@ -36,12 +46,12 @@ public abstract class Jeu {
 	 * @param event, l'evenement a lever 
 	 */
 	public void ajouterEvenement(EventGame event){
-		eventsGame.push(event);
+		pileEventGame.push(event);
 	}
 	
 	//traite les evenements
 	private void processEvents(){
-		Event event=null;
+		Event event;
 		this.events.clear();
 		//depiler les evenements externes
 		while ((event=fenetre.pollEvent())!=null){
@@ -52,8 +62,11 @@ public abstract class Jeu {
             processEvent(event);
         }
 		//depiler les evenements internes
-		while(! eventsGame.isEmpty()){
-			processEventGame(eventsGame.pop());
+		this.eventsGame.clear();
+		while(! pileEventGame.isEmpty()){
+			EventGame eventGame = pileEventGame.pop();
+			eventsGame.add(eventGame);
+			processEventGame(eventGame);
 		}
 	}
 	
@@ -65,36 +78,24 @@ public abstract class Jeu {
 		return new LinkedList<Event>(this.events); 
 	}
 	
+	public Collection<EventGame> getEventsGame(){
+		return new LinkedList<EventGame>(this.eventsGame); 
+	}
+	
 	/**activer les calculs de la sequence seq
 	 * 
 	 * @param seq
 	 */
-	public void chargerUpdate(Sequence seq){
-		sequenceAUpdate.add(seq);
+	public void charger(Sequence seq){
+		sequencesChargees.add(seq);
 	}
 	
 	/**desactiver les calculs de la sequence seq
 	 * 
 	 * @param seq
 	 */
-	public void libererUpdate(Sequence seq){
-		sequenceAUpdate.remove(seq);
-	}
-	
-	/**activer le rendu de la sequence seq
-	 * 
-	 * @param seq
-	 */
-	public void chargerRender(Sequence seq){
-		sequenceARender.add(seq);
-	}
-	
-	/**desactiver le rendu de la sequence seq
-	 * 
-	 * @param seq
-	 */
-	public void libererRender(Sequence seq){
-		sequenceARender.remove(seq);
+	public void liberer(Sequence seq){
+		sequencesChargees.remove(seq);
 	}
 	
 	protected abstract void processEvent(Event event);
@@ -105,20 +106,16 @@ public abstract class Jeu {
 	 */
 	protected void run(){
 		Clock clock=new Clock();
-		Time timeSinceLastUpdate=Time.ZERO;
+		float timeSinceLastUpdate=0;
 		while (fenetre.isOpen()){ 
-	        timeSinceLastUpdate = Time.add( timeSinceLastUpdate, clock.restart() );
-	        while (timeSinceLastUpdate.compareTo(TIME_PER_FRAME) >0){
-	        	timeSinceLastUpdate = Time.sub( timeSinceLastUpdate, TIME_PER_FRAME );
+	        timeSinceLastUpdate += clock.restart().asMicroseconds();
+	        while (timeSinceLastUpdate > TIME_PER_FRAME){
+	        	timeSinceLastUpdate -= TIME_PER_FRAME;
 	        	processEvents();
-	        	for (Sequence seq : sequenceAUpdate) {
-					seq.update(this);
-				}
+	        	for (Sequence seq : sequencesChargees) seq.update(this);
 	        }
 	        fenetre.clear();
-	        for (Sequence seq : sequenceARender) {
-				fenetre.draw(seq);
-			}
+	        for (Sequence seq : sequencesChargees) fenetre.draw(seq);
 	        fenetre.display();
 	    }
 	}

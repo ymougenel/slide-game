@@ -6,41 +6,52 @@ import java.io.InputStream;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.IntRect;
+import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.system.Vector2i;
 
 public class ChargeurTexture {
-	private Image image;
+	private Texture texture;
 	private Vector2i taille;
 	
 	public interface Element { int ordinal(); }
 	
-	public ChargeurTexture(InputStream stream,Vector2i taille){
-		image = new Image();
-		try {
+	public ChargeurTexture(String name,Vector2i taille){
+		texture = new Texture();
+		try (InputStream stream = getClass().getResourceAsStream("/ressources/sprites/"+name)){
+			texture.loadFromStream(stream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.taille=taille;
+	}
+	
+	public ChargeurTexture(String name, Vector2i taille, Color masque){
+		Image image = new Image();
+		try (InputStream stream = getClass().getResourceAsStream("/ressources/sprites/"+name)){
 			image.loadFromStream(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.taille = taille;
-	}
-	
-	public ChargeurTexture(InputStream stream, Vector2i taille, Color masque){
-		this(stream,taille);
 		image.createMaskFromColor(masque);
-	}
-	
-	public Texture getTexture(Element element){
-		int ordinal = element.ordinal();
-		Texture texture = new Texture();
-		IntRect contour = new IntRect( ordinal*taille.x, 0, taille.x, taille.y );
+		texture = new Texture();
 		try {
-			texture.loadFromImage(image, contour);
+			texture.loadFromImage(image);
 		} catch (TextureCreationException e) {
 			e.printStackTrace();
 		}
-		return texture;
+		this.taille=taille;
 	}
+	
+	public void addTexture(Sprite sprite, Element element){
+		addTexture(sprite, element.ordinal());
+	}
+	
+	public void addTexture(Sprite sprite, int element){
+		IntRect contour = new IntRect( element*taille.x, 0, taille.x, taille.y );
+		sprite.setTexture(texture);
+		sprite.setTextureRect(contour);
+	} 
 	
 }

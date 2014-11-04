@@ -35,7 +35,8 @@ public class Arrivee extends Case {
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		if (TextureCase.ARRIVEE != null) {
-			sprite = new Sprite( chargeur.getTexture(TextureCase.ARRIVEE) );
+			sprite = new Sprite();
+			chargeur.addTexture(sprite, TextureCase.ARRIVEE);
 		}
 			//sprite.setOrigin(8, 8);
 	}

@@ -17,7 +17,7 @@ public class SequenceFinale {
 		
 		try {
 			ObjectOutputStream colimateur = new ObjectOutputStream(
-					new FileOutputStream("terrains/sequencefinale.plt"));
+					new FileOutputStream("src/ressources/plateaux/sequencefinale.plt"));
 			colimateur.writeObject(fin);
 			colimateur.flush();
 			colimateur.close();

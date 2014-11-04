@@ -71,8 +71,6 @@ public class Plateau extends Sequence implements Serializable {
 				case UP:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						System.out.println("entitemobile = "
-								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, -1));
 						checkMouvement = true;
@@ -82,8 +80,6 @@ public class Plateau extends Sequence implements Serializable {
 				case RIGHT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						System.out.println("entitemobile = "
-								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(1, 0));
 						checkMouvement = true;
@@ -92,8 +88,6 @@ public class Plateau extends Sequence implements Serializable {
 				case LEFT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						System.out.println("entitemobile = "
-								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(-1, 0));
 						checkMouvement = true;
@@ -103,8 +97,6 @@ public class Plateau extends Sequence implements Serializable {
 				case DOWN:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						System.out.println("entitemobile = "
-								+ getEntite(positionJoueur));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, 1));
 						checkMouvement = true;
@@ -122,7 +114,6 @@ public class Plateau extends Sequence implements Serializable {
 			if (vect.x==0 && vect.y ==0) {
 				entiteMobile=null;
 				checkMouvement = false;
-				System.out.println("entitemobile annulée");
 			}
 		}
 		// Fin patch GITATn le reste est ~ propres
@@ -130,32 +121,23 @@ public class Plateau extends Sequence implements Serializable {
 		if(entiteMobile!=null){
 			if ( checkMouvement ) {
 				/* Phase1 */
-				System.out.println("phase 1");
-				System.out.println("entite mobile :" +getEntite(entiteMobile)+" en "+entiteMobile);
 				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
-				System.out.println("entitesuivante :"+getEntite(nouvellesCoordonees)+" en "+coordoneesSuivantes());
-				System.out.println("-------------------------------------------");
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
 				if ( entiteSuivante!= null ){
-					System.out.println("entite suivante"+entiteSuivante);
-					boolean imobile = getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
+					getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
 					entiteMobile= nouvellesCoordonees;
 					checkMouvement = true;
-					System.out.println("mouvement transmi : "+imobile);
 				}
 				else {
 					checkMouvement = false;
 					deplacerEntiteMobile(nouvellesCoordonees);
-					System.out.println("debut du mouvement");
 				}
 			}
 			
 			else {
 				/* Phase 2 */
-				System.out.println("mouvement en cours entite en"+entiteMobile);
-				getEntite(entiteMobile).update( Jeu.TIME_PER_FRAME );
+				getEntite(entiteMobile).update();
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
-					System.out.println("mouvement termine");
 					Vector2i cinetique = getEntite(entiteMobile).getMouvement();
 					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(cinetique, game);
 					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
@@ -180,7 +162,10 @@ public class Plateau extends Sequence implements Serializable {
 				sprite = damierCases[i][j].getSprite();
 				sprite.setPosition(i * taille.x, j * taille.y);
 				fenetre.draw(sprite);
-
+			}
+		}
+		for (i = 0; i < dimensionPlateau.x; i++) {
+			for (j = 0; j < dimensionPlateau.y; j++) {
 				/* Traitement des entites du plateau */
 				if (damierEntite[i][j] != null) {
 					fenetre.draw(damierEntite[i][j]);
@@ -193,7 +178,6 @@ public class Plateau extends Sequence implements Serializable {
 		if (entiteMobile == null) {
 			return null;
 		} else {
-			System.out.println("mouvement"+getEntite(entiteMobile).getMouvement());
 			if( getEntite(entiteMobile).getMouvement()==Vector2i.ZERO ){
 				System.out.println("this shoould not appened");
 			}
