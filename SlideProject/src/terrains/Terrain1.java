@@ -1,39 +1,27 @@
 package terrains;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
-import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2i;
 
-import slide.Entite;
 import slide.Entite.TextureEntite;
-import slide.Joueur;
-import slide.Plateau;
 import slide.cases.Arrivee;
 import slide.cases.Case;
 import slide.cases.Fleche;
-import slide.cases.Glace;
-import slide.cases.Sol;
 import slide.cases.Fleche.Sens;
+import slide.cases.Glace;
 
 public class Terrain1 {
 
 	public static void main(String[] args) {
-		Joueur joueur = new Joueur();
 		Case glace = Glace.getInstance();
-		Case sol = Sol.getInstance();
 		
 		Terrain terrain = new  Terrain(8);
 		
 		
 		/* Traitement des cases */
 		terrain.remplirDamier(glace);
-		terrain.cases[6][6]= new Arrivee("terrain2.plt");
-		terrain.cases[3][3]=Fleche.getInstance(Sens.DROITE);
-		terrain.cases[6][3]=Fleche.getInstance(Sens.BAS);
+		terrain.placerCase(7, 7,  new Arrivee("terrain2.plt"));
+		terrain.placerCase(4, 4, Fleche.getInstance(Sens.DROITE));
+		terrain.placerCase(7,4,Fleche.getInstance(Sens.BAS));
 		/* Traitementes des entites */
 		TextureEntite RI = TextureEntite.ROCHERIMMOBILE;
 		TextureEntite RM = TextureEntite.ROCHERMOBILE;
@@ -62,21 +50,7 @@ public class Terrain1 {
 		
 
 		/* Creation du Plateau */
-		Plateau plateau0 = new Plateau(terrain.cases,terrain.entites,joueur,new Vector2i(1,6));
-		try {
-			ObjectOutputStream colimateur = new ObjectOutputStream(
-					new FileOutputStream("src/ressources/plateaux/terrain1.plt"));
-			colimateur.writeObject(plateau0);
-			colimateur.flush();
-			colimateur.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		terrain.sauvegarderTerrain(1, new Vector2i(1,6));
 	}
 
 }

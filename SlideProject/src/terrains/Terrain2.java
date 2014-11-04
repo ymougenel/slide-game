@@ -1,35 +1,23 @@
 package terrains;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
-import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2i;
 
-import slide.Entite;
 import slide.Entite.TextureEntite;
-import slide.Joueur;
-import slide.Plateau;
 import slide.cases.Arrivee;
 import slide.cases.Case;
 import slide.cases.Glace;
-import slide.cases.Sol;
 
 public class Terrain2 {
 
 	public static void main(String[] args) {
-		Joueur joueur = new Joueur();
 		Case glace = Glace.getInstance();
-		Case sol = Sol.getInstance();
 		
 		Terrain terrain = new  Terrain(10);
 		
 		
 		/* Traitement des cases */
 		terrain.remplirDamier(glace);
-		terrain.cases[2][2]= new Arrivee("sequencefinale.plt");
+		terrain.placerCase(3, 3, new Arrivee("sequencefinale.plt"));
 		/* Traitementes des entites */
 		TextureEntite RI = TextureEntite.ROCHERIMMOBILE;
 		TextureEntite RM = TextureEntite.ROCHERMOBILE;
@@ -61,21 +49,7 @@ public class Terrain2 {
 		terrain.placerEntiteMobile(8, 6, RM);
 		
 		/* Creation du Plateau */
-		Plateau plateau0 = new Plateau(terrain.cases,terrain.entites,joueur,new Vector2i(4,5));
-		try {
-			ObjectOutputStream colimateur = new ObjectOutputStream(
-					new FileOutputStream("src/ressources/plateaux/terrain2.plt"));
-			colimateur.writeObject(plateau0);
-			colimateur.flush();
-			colimateur.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		terrain.sauvegarderTerrain(2,new Vector2i(4,5));
 	}
 
 }

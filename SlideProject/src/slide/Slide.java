@@ -1,6 +1,5 @@
 package slide;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,7 +7,6 @@ import java.io.ObjectInputStream;
 import jeu.Jeu;
 import jeu.Sequence;
 
-import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
