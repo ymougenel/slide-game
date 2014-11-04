@@ -7,8 +7,8 @@ import java.io.ObjectInputStream;
 import jeu.Jeu;
 import jeu.Sequence;
 
+import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
-import org.jsfml.window.Keyboard;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
@@ -19,7 +19,7 @@ public class Slide extends Jeu {
 	public Slide(String nom) {
 		super(nom);
 		this.menuPause = new MenuPauseSlide();
-		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/plateaux/terrain0.plt"))){
+		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain0.plt"))){
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);
@@ -69,7 +69,7 @@ public class Slide extends Jeu {
 			switch( (NewEventGame) event ){
 				case COUCOU:System.out.println("yes");
 				case CHARGERNIVEAU:
-				try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/plateaux/"+NewEventGame.CHARGERNIVEAU.getMessage()))) {
+				try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/"+NewEventGame.CHARGERNIVEAU.getMessage()))) {
 					this.liberer(plateauCourant);
 					plateauCourant = (Sequence)caMarche.readObject();
 					this.charger(plateauCourant);
@@ -90,14 +90,5 @@ public class Slide extends Jeu {
 	public static void main(String[] args) throws IOException, TextureCreationException {
 		Slide sl = new Slide("jeu du Slide");
 		sl.run();
-		//Code produisant l'erreur xcb
-		/*
-		RenderWindow foo = new RenderWindow (new VideoMode(600, 600),"problème xcb");
-		Texture bar = new Texture();
-		bar.create(600, 600);
-		bar = null;
-		System.gc();
-		foo.display();
-		*/
 	}
 }

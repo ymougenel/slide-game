@@ -47,7 +47,7 @@ public class Fin extends Sequence implements Serializable{
 		in.defaultReadObject();
 		Font font = new Font();
 		try {
-			font.loadFromStream(Fin.class.getResourceAsStream("/sprites/orangejuice.ttf"));
+			font.loadFromStream(Fin.class.getResourceAsStream("/ressources/sprites/orangejuice.ttf"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

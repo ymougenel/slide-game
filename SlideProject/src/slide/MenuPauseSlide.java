@@ -29,9 +29,9 @@ public class MenuPauseSlide extends Sequence {
 		bouttons = new Sprite[nbBouttons];
 		
 		try {
-			texFond.loadFromStream(getClass().getResourceAsStream("/images/menu_background.png"));
+			texFond.loadFromStream(getClass().getResourceAsStream("/ressources/images/menu_background.png"));
 			Image img = new Image();
-			img.loadFromStream(getClass().getResourceAsStream("/images/boutton.png"));
+			img.loadFromStream(getClass().getResourceAsStream("/ressources/images/boutton.png"));
 			img.createMaskFromColor(Color.WHITE);
 			texBoutton.loadFromImage(img);
 			

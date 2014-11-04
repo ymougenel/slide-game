@@ -19,7 +19,7 @@ public class ChargeurTexture {
 	
 	public ChargeurTexture(String name,Vector2i taille){
 		texture = new Texture();
-		try (InputStream stream = getClass().getResourceAsStream("/sprites/"+name)){
+		try (InputStream stream = getClass().getResourceAsStream("/ressources/sprites/"+name)){
 			texture.loadFromStream(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -29,7 +29,7 @@ public class ChargeurTexture {
 	
 	public ChargeurTexture(String name, Vector2i taille, Color masque){
 		Image image = new Image();
-		try (InputStream stream = getClass().getResourceAsStream("/sprites/"+name)){
+		try (InputStream stream = getClass().getResourceAsStream("/ressources/sprites/"+name)){
 			image.loadFromStream(stream);
 		} catch (IOException e) {
 			e.printStackTrace();

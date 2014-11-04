@@ -22,11 +22,13 @@ public abstract class Jeu {
 	//duree d'une frame en µseconde;
 	public static final float TIME_PER_FRAME = Time.getMilliseconds(1000/60).asMicroseconds();
 	
+	//Quand xInitThreads passe, les Textures sales trépassent.
 	private static native void xInitThreads();
 	
 	public Jeu(String nom){
 		if(System.getProperty("os.name").contains("Linux")){
 			System.load(getClass().getResource("/jeu/XInitThreads").getPath());
+			System.out.println("lib");
 			xInitThreads();
 		}
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
@@ -117,6 +119,4 @@ public abstract class Jeu {
 	        fenetre.display();
 	    }
 	}
-	
-	private static native void XInitThreads();
 }
