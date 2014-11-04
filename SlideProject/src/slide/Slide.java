@@ -8,13 +8,17 @@ import jeu.Jeu;
 import jeu.Sequence;
 
 import org.jsfml.graphics.TextureCreationException;
+import org.jsfml.window.Keyboard;
 import org.jsfml.window.event.Event;
+import org.jsfml.window.event.KeyEvent;
 
 public class Slide extends Jeu {
 	private Sequence plateauCourant;
+	private Sequence menuPause;
 	
 	public Slide(String nom) {
 		super(nom);
+		this.menuPause = new MenuPauseSlide();
 		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/plateaux/terrain0.plt"))){
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
@@ -37,7 +41,24 @@ public class Slide extends Jeu {
 
 	@Override
 	protected void processEvent(Event event) {
-		// TODO Auto-generated method stub
+		if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
+			switch (((KeyEvent) event).key) {
+			case RETURN:
+			case A:if(menuPause.isPause()){
+						this.plateauCourant.setPause(true);
+						this.menuPause.setPause(false);
+						this.menuPause.setVisible(true);
+						charger(menuPause);
+					}else{
+						this.plateauCourant.setPause(false);
+						this.menuPause.setPause(true);
+						this.menuPause.setVisible(false);
+						liberer(menuPause);
+					}
+					break;
+			default:
+			}
+		}
 
 	}
 	

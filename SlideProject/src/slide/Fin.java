@@ -19,7 +19,7 @@ public class Fin extends Sequence implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String message="Yann et Arcady vous felicite";
+	private String message="Yann et Arcady vous félicitent!\n ca vous fera 20€";
 	private transient Text texte;
 
 	public Fin(){

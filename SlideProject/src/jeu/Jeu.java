@@ -32,6 +32,7 @@ public abstract class Jeu {
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
 		this.fenetre.setVerticalSyncEnabled(true);
+		this.fenetre.setKeyRepeatEnabled(false);
 		this.sequencesChargees = new LinkedList<Sequence>();
 		this.events = new LinkedList<Event>();
 		this.eventsGame = new LinkedList<EventGame>();
@@ -116,4 +117,6 @@ public abstract class Jeu {
 	        fenetre.display();
 	    }
 	}
+	
+	private static native void XInitThreads();
 }
