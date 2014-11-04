@@ -40,7 +40,6 @@ public class Entite extends Sprite implements Serializable{
 		this();
 		chargeur.addTexture(this, texture);
 		this.textureEntite = texture;
-		this.mobile=true;
 	}
 	
 	public Entite(TextureEntite texture,boolean mobile){
@@ -55,6 +54,7 @@ public class Entite extends Sprite implements Serializable{
 		mouvementEnCours=false;
 		this.textureEntite = null;
 		this.mobile = true;
+		setOrigin(8,8);
 	}
 	
 	public boolean setMouvement( Vector2i deplacement){
@@ -106,8 +106,7 @@ public class Entite extends Sprite implements Serializable{
 		}
 		setPosition( (Vector2f)in.readObject() );
 		setOrigin( (Vector2f)in.readObject() );
-		
-			//sprite.setOrigin(8, 8);
+		System.out.println(getOrigin());
 	}
 	
 	private void writeObject(final ObjectOutputStream out) throws IOException{

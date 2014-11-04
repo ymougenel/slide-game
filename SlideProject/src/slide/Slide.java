@@ -21,7 +21,7 @@ public class Slide extends Jeu {
 		super(nom);
 		// TODO Auto-generated constructor stub
 		this.menuPause = new MenuPauseSlide();
-		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain2.plt"))){
+		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain0.plt"))){
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);

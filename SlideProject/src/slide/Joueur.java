@@ -20,10 +20,11 @@ public class Joueur extends Entite {
 	public Joueur() {
 		super();
 		chargeur.addTexture(this, 0);
-		this.setOrigin(0,8);
+		this.setOrigin(8,16);
 	}
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		chargeur.addTexture(this, 0);
+		this.setOrigin(8,16);
 	}
 }

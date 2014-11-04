@@ -38,7 +38,6 @@ public final class Fleche extends Case {
 	
 	private Fleche(Sens sens) {
 		super(TextureCase.FLECHE);
-		super.sprite.setOrigin(8,8);
 		super.sprite.setRotation(-90*sens.ordinal());
 		this.sens=sens;
 	}

@@ -207,7 +207,7 @@ public class Plateau extends Sequence implements Serializable {
 	
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
-		this.camera = new View (new FloatRect(0, 0, 160, 144));
+		this.camera = new View (new FloatRect(-8, -8, 160, 144));
 	}
 
 	@Override

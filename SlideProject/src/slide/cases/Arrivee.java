@@ -22,6 +22,7 @@ public class Arrivee extends Case {
 
 	public Arrivee() {
 		super(TextureCase.ARRIVEE);
+		sprite.setOrigin(8,8);
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class Arrivee extends Case {
 		if (TextureCase.ARRIVEE != null) {
 			sprite = new Sprite();
 			chargeur.addTexture(sprite, TextureCase.ARRIVEE);
+			sprite.setOrigin(8,8);
 		}
-			//sprite.setOrigin(8, 8);
 	}
 }

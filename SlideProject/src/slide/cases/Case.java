@@ -31,6 +31,7 @@ public abstract class Case implements Serializable{
 		
 		sprite= new Sprite();
 		chargeur.addTexture(sprite, texture);
+		sprite.setOrigin(8,8);
 		
 	}
 	
