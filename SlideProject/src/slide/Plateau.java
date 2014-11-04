@@ -164,11 +164,11 @@ public class Plateau extends Sequence implements Serializable {
 				fenetre.draw(sprite);
 			}
 		}
-		for (i = 0; i < dimensionPlateau.x; i++) {
-			for (j = 0; j < dimensionPlateau.y; j++) {
+		for (i = 0; i < dimensionPlateau.y; i++) {
+			for (j = 0; j < dimensionPlateau.x; j++) {
 				/* Traitement des entites du plateau */
-				if (damierEntite[i][j] != null) {
-					fenetre.draw(damierEntite[i][j]);
+				if (damierEntite[j][i] != null) {
+					fenetre.draw(damierEntite[j][i]);
 				}
 			}
 		}

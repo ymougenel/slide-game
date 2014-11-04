@@ -28,7 +28,6 @@ public abstract class Jeu {
 	public Jeu(String nom){
 		if(System.getProperty("os.name").contains("Linux")){
 			System.load(getClass().getResource("/jeu/XInitThreads").getPath());
-			System.out.println("lib");
 			xInitThreads();
 		}
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);

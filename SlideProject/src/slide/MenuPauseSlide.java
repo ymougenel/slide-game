@@ -50,36 +50,36 @@ public class MenuPauseSlide extends Sequence {
 		bouttons[index].setColor(Color.GREEN);
 	}
 	
-	private void reprendre(){
+	/*private void reprendre(){
 		
-	}
+	}*/
 
 	@Override
 	public void activeUpdate(Jeu game) {
-		
+		int newIndex=0;
 		for(Event event : game.getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
-				case UP:
-					index--;
-					break;
+				case DOWN:
 				case RIGHT:
-					index++;
+					newIndex++;
 					break;
 				case LEFT:
-					index--;
-					break;
-				case DOWN:
-					index++;
+				case UP:
+					newIndex--;
 					break;
 				default:
 					break;
 				}
 			}
 		}
-		index = (index<0) ? index+nbBouttons :
+		if(newIndex!=0){
+			bouttons[index].setColor(Color.WHITE);
+			index+=newIndex;
+			index = (index<0) ? index+nbBouttons :
 				(index>=nbBouttons) ? index-nbBouttons: index;
-		bouttons[index].setColor(Color.GREEN);
+			bouttons[index].setColor(Color.GREEN);
+		}
 	}
 
 	@Override

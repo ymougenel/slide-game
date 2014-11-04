@@ -21,7 +21,7 @@ public class Entite extends Sprite implements Serializable{
 	 */
 	private static final long serialVersionUID = -4940088905580735189L;
 	
-	private static float vitesse = 0.4f;
+	private static float vitesse = 0.25f;
 	private  static Vector2i TAILLEENTITE = new Vector2i(16,16);
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
