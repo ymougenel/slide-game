@@ -38,11 +38,15 @@ public class Terrain {
 	}
 	
 	public void remplirDamier (Case type){
-		for (int i=1; i< TAILLE; i++){
-			for (int j=1; j< TAILLE; j++){
+		for (int i=0; i< TAILLE; i++){
+			for (int j=0; j< TAILLE; j++){
 				cases[i][j] = type; 
 			}
 		}
+	}
+	
+	public void placerCase (int i,int j, Case type) {
+		cases[i-1][j-1] = type;
 	}
 	
 }

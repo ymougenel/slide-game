@@ -24,47 +24,44 @@ public class Terrain2 {
 		Case glace = Glace.getInstance();
 		Case sol = Sol.getInstance();
 		
-		Terrain terrain = new  Terrain(8);
+		Terrain terrain = new  Terrain(10);
 		
 		
 		/* Traitement des cases */
-		/* TODO Corriger linitialisation du damier */
-		//terrain.remplirDamier(glace);
-		for (int j = 0; j < 8; j++) {
-			for (int i = 0; i < 8; i++) {
-				terrain.cases[i][j] = glace;
-			}
-		}
-
+		terrain.remplirDamier(glace);
+		terrain.cases[2][2]= new Arrivee("sequencefinale.plt");
 		/* Traitementes des entites */
 		TextureEntite RI = TextureEntite.ROCHERIMMOBILE;
 		TextureEntite RM = TextureEntite.ROCHERMOBILE;
 		
 		terrain.placerBordure(RI);
 		
-		terrain.placerEntiteImmobile(3, 5, RI);
-		terrain.placerEntiteImmobile(3, 6, RI);
-		terrain.placerEntiteImmobile(4, 4, RI);
-		terrain.placerEntiteImmobile(4, 3, RI);
-		/*
-		terrain.entites[1][1] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[1][2] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[3][2] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[4][3] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[4][4] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[4][5] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[4][6] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[1][5] = new Entite(TextureEntite.ROCHERIMMOBILE,false);
-		terrain.entites[5][1] = new Entite(TextureEntite.ROCHERIMMOBILE,false);*/
-
-
-		/* Bordure */
-
-		terrain.placerEntiteMobile(2, 6, RM);
-		terrain.placerEntiteMobile(2, 4, RM);
-		terrain.placerEntiteMobile(3, 7, RM);
+		terrain.placerEntiteImmobile(2, 3, RI);
+		terrain.placerEntiteImmobile(2, 6, RI);
+		terrain.placerEntiteImmobile(2, 9, RI);
+		terrain.placerEntiteImmobile(3, 2, RI);
+		terrain.placerEntiteImmobile(3, 4, RI);
+		terrain.placerEntiteImmobile(3, 7, RI);
+		terrain.placerEntiteImmobile(5, 2, RI);
+		terrain.placerEntiteImmobile(6, 5, RI);
+		terrain.placerEntiteImmobile(6, 8, RI);
+		terrain.placerEntiteImmobile(7, 2, RI);
+		terrain.placerEntiteImmobile(7, 3, RI);
+		terrain.placerEntiteImmobile(7, 7, RI);		
+		terrain.placerEntiteImmobile(7, 8, RI);
+		terrain.placerEntiteImmobile(8, 4, RI);
+		terrain.placerEntiteImmobile(8, 7, RI);
+		terrain.placerEntiteImmobile(9, 2, RI);		
+		terrain.placerEntiteImmobile(9, 3, RI);
 		
-		Plateau plateau0 = new Plateau(terrain.cases,terrain.entites,joueur,new Vector2i(1,6));
+		terrain.placerEntiteMobile(4, 6, RM);
+		terrain.placerEntiteMobile(5, 5, RM);
+		terrain.placerEntiteMobile(6, 6, RM);
+		terrain.placerEntiteMobile(5, 7, RM);
+		terrain.placerEntiteMobile(8, 6, RM);
+		
+		/* Creation du Plateau */
+		Plateau plateau0 = new Plateau(terrain.cases,terrain.entites,joueur,new Vector2i(4,5));
 		try {
 			ObjectOutputStream colimateur = new ObjectOutputStream(
 					new FileOutputStream("src/ressources/plateaux/terrain2.plt"));
