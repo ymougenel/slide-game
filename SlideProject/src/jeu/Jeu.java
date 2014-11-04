@@ -22,7 +22,13 @@ public abstract class Jeu {
 	//duree d'une frame en µseconde;
 	public static final float TIME_PER_FRAME = Time.getMilliseconds(1000/60).asMicroseconds();
 	
+	private static native void xInitThreads();
+	
 	public Jeu(String nom){
+		if(System.getProperty("os.name").contains("Linux")){
+			System.load(getClass().getResource("/jeu/XInitThreads").getPath());
+			xInitThreads();
+		}
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
 		this.fenetre.setVerticalSyncEnabled(true);
