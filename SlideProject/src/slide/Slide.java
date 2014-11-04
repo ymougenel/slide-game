@@ -1,5 +1,6 @@
 package slide;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,15 +19,9 @@ public class Slide extends Jeu {
 	
 	public Slide(String nom) {
 		super(nom);
-<<<<<<< HEAD
 		// TODO Auto-generated constructor stub
-		ObjectInputStream caMarche;
-		try {
-			caMarche = new ObjectInputStream( new FileInputStream("terrains/terrain2.plt"));
-=======
 		this.menuPause = new MenuPauseSlide();
-		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain0.plt"))){
->>>>>>> d45eb23c5a5d0f9ab26f7eaeb04b26394dd29922
+		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain2.plt"))){
 			plateauCourant = (Sequence)caMarche.readObject();
 			plateauCourant.setPause(false);
 			plateauCourant.setVisible(true);
