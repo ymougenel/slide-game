@@ -20,6 +20,7 @@ public abstract class Case implements Serializable{
 	
 	public enum TextureCase implements ChargeurTexture.Element{
 		GLACE,
+		ROCHER,
 		TERRE,
 		EAU,
 		MOUSSE,

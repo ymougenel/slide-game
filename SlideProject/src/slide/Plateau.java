@@ -1,8 +1,13 @@
 package slide;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import jeu.Jeu;
 import jeu.Sequence;
@@ -15,7 +20,14 @@ import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
+import slide.Entite.TextureEntite;
+import slide.cases.Arrivee;
 import slide.cases.Case;
+import slide.cases.Fleche;
+import slide.cases.Fleche.Sens;
+import slide.cases.Glace;
+import slide.cases.Rocher;
+import slide.cases.Sol;
 
 public class Plateau extends Sequence implements Serializable {
 	/**
@@ -28,37 +40,83 @@ public class Plateau extends Sequence implements Serializable {
 	private Vector2i entiteMobile;
 	private Vector2i positionJoueur;
 	private Joueur joueur;
-	private Vector2i dimensionPlateau;
+	//private Vector2i dimensionPlateau;
 	private transient View camera;
 	private boolean checkMouvement;
+	private Map<Vector2i, Integer> arrivees;
 
-	public Plateau(Case[][] cases, Entite[][] entites, Joueur joueur,
-			Vector2i positionJoueurInitiale) {
-		super();
+	
+	public static Plateau chargerPlateau(int numero,Joueur joueur) throws IOException{
+		Plateau chargee = new Plateau();
+		chargee.arrivees = new HashMap<Vector2i, Integer>();
 		
-		this.damierCases = cases;
-		this.damierEntite = entites;
-		this.entiteMobile = null;
-		this.dimensionPlateau = new Vector2i(cases.length, cases[0].length);
-		this.positionJoueur = positionJoueurInitiale;
-		this.joueur = joueur;
-		checkMouvement = false;
-
-		this.damierEntite[positionJoueurInitiale.x][positionJoueurInitiale.y] = joueur;
-		Vector2i taille = Case.getTailleCase();
-		int i, j;
-		for (i = 0; i < dimensionPlateau.x; i++) {
-			for (j = 0; j < dimensionPlateau.y; j++) {
-				/* Traitement des cases du pleateau */
-				if (damierEntite[i][j] != null) {
-					damierEntite[i][j].setPosition(i * taille.x, j * taille.y);
-				}
-
-			}
+		BufferedReader chargeur = new BufferedReader(new InputStreamReader(
+				Plateau.class.getResourceAsStream("/ressources/plateaux/terrain"+numero+".ascii")));
+		final String VIDE = "--";
+		String ligne;
+		int tx = Integer.parseInt(chargeur.readLine());
+		int ty = Integer.parseInt(chargeur.readLine());
+		int px = Integer.parseInt(chargeur.readLine());
+		int py = Integer.parseInt(chargeur.readLine());
+		chargee.damierEntite = new Entite[tx+2][ty+2];
+		chargee.damierCases = new Case[tx+2][ty+2];
+		LinkedList<Integer> file = new LinkedList<Integer>();
+		while(!(ligne = chargeur.readLine()).equals("")){
+			file.add(Integer.parseInt(ligne));
 		}
-		// TODO initialiser dimension plat
-		camera = new View(new FloatRect(0, 0, 160, 144));
-		// initialiser();
+		
+		for(int i=0;i<ty;i++){
+			ligne = chargeur.readLine();
+			for(int j=0;j<tx;j++){
+				switch(ligne.substring(2*j, 2*(j+1))){
+				case "gl":chargee.damierCases[j+1][i+1]=Glace.getInstance();break;
+				case "tr":chargee.damierCases[j+1][i+1]=Sol.getInstance();break;
+				case "fh":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.HAUT);break;
+				case "fg":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.GAUCHE);break;
+				case "fd":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.DROITE);break;
+				case "fb":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.BAS);break;
+				case "ar":chargee.damierCases[j+1][i+1]=Arrivee.getInstance();
+							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
+				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
+				}
+			}
+			chargee.damierCases[i+1][0] = Rocher.getInstance();	
+			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();	
+			chargee.damierCases[i+1][ty+1] = Rocher.getInstance();	
+			chargee.damierCases[0][i+1] = Rocher.getInstance();	
+		}
+		chargee.damierCases[0][0] = Rocher.getInstance();	
+		chargee.damierCases[tx+1][0] = Rocher.getInstance();	
+		chargee.damierCases[0][ty+1] = Rocher.getInstance();	
+		chargee.damierCases[tx+1][ty+1] = Rocher.getInstance();
+		
+		chargeur.readLine();
+		for(int i=0;i<ty;i++){
+			ligne = chargeur.readLine();
+			for(int j=0;j<tx;j++){
+				String code = ligne.substring(2*j, 2*j+2);
+				if(!code.equals(VIDE)){
+					switch(code){
+					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE, true);break;
+					default:break;
+					}
+					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+				}
+			}
+		}	
+		chargeur.close();
+		chargee.entiteMobile = null;
+		chargee.positionJoueur = new Vector2i(px,py);
+		chargee.joueur = joueur;
+		chargee.damierEntite[px][py]=joueur;
+		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
+		chargee.checkMouvement = false;
+		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
+		return chargee;
+	}
+	
+	private Plateau(){
+		super();
 	}
 
 	@Override
@@ -127,21 +185,33 @@ public class Plateau extends Sequence implements Serializable {
 					getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
 					entiteMobile= nouvellesCoordonees;
 					checkMouvement = true;
-				}
-				else {
-					checkMouvement = false;
+				}else if (damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y] == Rocher.getInstance()){
+					getEntite(entiteMobile).setMouvement(Vector2i.ZERO);
+				}else {
 					deplacerEntiteMobile(nouvellesCoordonees);
+					checkMouvement = false;
 				}
-			}
-			
-			else {
+			}else {
 				/* Phase 2 */
 				getEntite(entiteMobile).update();
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
-					Vector2i cinetique = getEntite(entiteMobile).getMouvement();
-					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(cinetique, game);
+					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(getEntite(entiteMobile).getMouvement(), game);
 					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
 					checkMouvement = true;
+					if(getCase(entiteMobile) == Arrivee.getInstance() && getEntite(entiteMobile) == joueur){
+						try {
+							Integer nouveauNiveau = arrivees.get(entiteMobile);
+							if(nouveauNiveau != null){
+								game.charger(Plateau.chargerPlateau(nouveauNiveau, joueur));
+							}else{
+								game.charger(new Fin());
+							}
+							game.liberer(this);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 			
@@ -151,21 +221,19 @@ public class Plateau extends Sequence implements Serializable {
 	
 	@Override
 	public void render(RenderTarget fenetre) {
-		// camera.setViewport(new FloatRect(0.5f, 0.5f, 0.5f, 0.5f));
 		fenetre.setView(camera);
-		Vector2i taille = Case.getTailleCase();
 		int i, j;
 		Sprite sprite;
-		for (i = 0; i < dimensionPlateau.x; i++) {
-			for (j = 0; j < dimensionPlateau.y; j++) {
+		for (i = 0; i < damierCases.length; i++) {
+			for (j = 0; j < damierCases[0].length; j++) {
 				/* Traitement des cases du pleateau */
 				sprite = damierCases[i][j].getSprite();
-				sprite.setPosition(i * taille.x, j * taille.y);
+				sprite.setPosition(i * Case.TAILLECASE.x, j * Case.TAILLECASE.y);
 				fenetre.draw(sprite);
 			}
 		}
-		for (i = 0; i < dimensionPlateau.y; i++) {
-			for (j = 0; j < dimensionPlateau.x; j++) {
+		for (i = 0; i < damierEntite.length; i++) {
+			for (j = 0; j < damierEntite[0].length; j++) {
 				/* Traitement des entites du plateau */
 				if (damierEntite[j][i] != null) {
 					fenetre.draw(damierEntite[j][i]);
@@ -178,10 +246,6 @@ public class Plateau extends Sequence implements Serializable {
 		if (entiteMobile == null) {
 			return null;
 		} else {
-			if( getEntite(entiteMobile).getMouvement()==Vector2i.ZERO ){
-				System.out.println("this shoould not appened");
-			}
-			
 			return Vector2i.add(entiteMobile, getEntite(entiteMobile).getMouvement());
 		}
 
@@ -204,16 +268,17 @@ public class Plateau extends Sequence implements Serializable {
 	private Case getCase ( Vector2i position){
 		return damierCases[position.x][position.y];
 	}
-	
-	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
-		in.defaultReadObject();
-		this.camera = new View (new FloatRect(-8, -8, 160, 144));
-	}
 
 	@Override
 	public void backgroundUpdate(Jeu game) {
 		// TODO Auto-generated method stub
 		
+		
+	}
+	
+	private void readObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
+		ois.defaultReadObject();
+		camera = new View(new FloatRect(-8, -8, 16*(damierCases.length+2), 16*(damierCases[0].length+2)));
 		
 	}
 }

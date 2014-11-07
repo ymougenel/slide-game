@@ -15,15 +15,22 @@ import jeu.Sequence;
 
 public class Fin extends Sequence implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String message="Yann et Arcady vous félicitent!\n ca vous fera 20€";
 	private transient Text texte;
 
 	public Fin(){
-
+		Font font = new Font();
+		try {
+			font.loadFromStream(Fin.class.getResourceAsStream("/ressources/sprites/orangejuice.ttf"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.texte= new Text(message, font, 60);
+		texte.setPosition( new Vector2f(0, 250));
+		
+		texte.setColor(Color.RED);
 	}
 	@Override
 	public void activeUpdate(Jeu game) {

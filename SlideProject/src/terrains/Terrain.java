@@ -1,9 +1,12 @@
 package terrains;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 
 import org.jsfml.system.Vector2i;
 
@@ -11,12 +14,18 @@ import slide.Entite;
 import slide.Entite.TextureEntite;
 import slide.Joueur;
 import slide.Plateau;
+import slide.cases.Arrivee;
 import slide.cases.Case;
+import slide.cases.Fleche;
+import slide.cases.Fleche.Sens;
+import slide.cases.Glace;
+import slide.cases.Sol;
 
 public class Terrain {
 	private Case[][] cases;
 	private Entite[][] entites;
 	private int TAILLE;
+	
 	
 	public Terrain(int taille) {
 		this.cases = new Case[taille][taille];
@@ -56,10 +65,10 @@ public class Terrain {
 	}
 	
 	public void sauvegarderTerrain(int numero,Vector2i positionDepart){
-		Plateau plateau0 = new Plateau(cases,entites,new Joueur(),positionDepart);
+		//Plateau plateau0 = new Plateau(cases,entites,new Joueur(),positionDepart);
 		try (ObjectOutputStream colimateur = new ObjectOutputStream(
 				new FileOutputStream("src/ressources/plateaux/terrain"+numero+".plt"))){
-			colimateur.writeObject(plateau0);
+			//colimateur.writeObject(plateau0);
 			colimateur.flush();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

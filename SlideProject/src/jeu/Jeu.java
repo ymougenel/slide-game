@@ -1,5 +1,13 @@
 package jeu;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -24,12 +32,35 @@ public abstract class Jeu {
 	
 	//Quand xInitThreads passe, les Textures sales trépassent.
 	private static native void xInitThreads();
-	
-	public Jeu(String nom){
+	private static void verifierOs(){
 		if(System.getProperty("os.name").contains("Linux")){
-			System.load(getClass().getResource("/jeu/XInitThreads").getPath());
+			Path library = Paths.get(System.getProperty("user.home"), ".jsfml");
+			if(!Files.exists(library)){
+				try {
+					Files.createDirectories(library);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			Path xInit = library.resolve("XInitThreads");
+			if(!Files.exists(xInit)){
+				try ( OutputStream out = new FileOutputStream(xInit.toString()); 
+						InputStream in = Jeu.class.getResourceAsStream("/jeu/XInitThreads")){
+					byte[] buffer = new byte[10000];
+					out.write(buffer, 0, in.read(buffer));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}	
+			}
+			System.load(xInit.toString());
 			xInitThreads();
 		}
+	}
+	
+	public Jeu(String nom){
+		verifierOs();
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
 		this.fenetre.setVerticalSyncEnabled(true);
@@ -66,6 +97,12 @@ public abstract class Jeu {
 			EventGame eventGame = pileEventGame.pop();
 			eventsGame.add(eventGame);
 			processEventGame(eventGame);
+		}
+	}
+	
+	public void setPause(boolean pause){
+		for(Sequence seq : sequencesChargees){
+			seq.setPause(pause);
 		}
 	}
 	

@@ -1,8 +1,6 @@
 package slide;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 import jeu.Jeu;
 import jeu.Sequence;
@@ -12,31 +10,16 @@ import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
 public class Slide extends Jeu {
-	private Sequence plateauCourant;
 	private Sequence menuPause;
 	
 	public Slide(String nom) {
 		super(nom);
-		// TODO Auto-generated constructor stub
 		this.menuPause = new MenuPauseSlide();
-		try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/terrain0.plt"))){
-			plateauCourant = (Sequence)caMarche.readObject();
-			plateauCourant.setPause(false);
-			plateauCourant.setVisible(true);
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try {
+			charger(Plateau.chargerPlateau(0,new Joueur()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//Sequence seq = new Terrain0(new Joueur(), new Vector2i(1,6));
-		charger(plateauCourant);
 	}
 
 	@Override
@@ -45,12 +28,12 @@ public class Slide extends Jeu {
 			switch (((KeyEvent) event).key) {
 			case RETURN:
 			case A:if(menuPause.isPause()){
-						this.plateauCourant.setPause(true);
+						setPause(true);
 						this.menuPause.setPause(false);
 						this.menuPause.setVisible(true);
 						charger(menuPause);
 					}else{
-						this.plateauCourant.setPause(false);
+						setPause(false);
 						this.menuPause.setPause(true);
 						this.menuPause.setVisible(false);
 						liberer(menuPause);
@@ -68,18 +51,7 @@ public class Slide extends Jeu {
 		if(event instanceof NewEventGame){
 			switch( (NewEventGame) event ){
 				case COUCOU:System.out.println("yes");
-				case CHARGERNIVEAU:
-				try (ObjectInputStream caMarche = new ObjectInputStream(getClass().getResourceAsStream("/ressources/plateaux/"+NewEventGame.CHARGERNIVEAU.getMessage()))) {
-					this.liberer(plateauCourant);
-					plateauCourant = (Sequence)caMarche.readObject();
-					this.charger(plateauCourant);
-					plateauCourant.setPause(false);
-					plateauCourant.setVisible(true);
-				} catch (Exception  e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			
-
+				default:
 			}
 		}
 		if(event == NewEventGame.COUCOU){

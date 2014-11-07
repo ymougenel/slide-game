@@ -12,8 +12,8 @@ public abstract class Sequence implements Drawable {
 	
 	
 	protected Sequence(){
-		this.enPause = true;
-		this.visible = false; 
+		this.enPause = false;
+		this.visible = true; 
 	}
 	
 	public abstract void activeUpdate(Jeu game);
