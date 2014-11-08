@@ -27,16 +27,10 @@ public class Slide extends Jeu {
 		if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 			switch (((KeyEvent) event).key) {
 			case RETURN:
-			case A:if(menuPause.isPause()){
+			case A:if(!isPause()){
 						setPause(true);
-						this.menuPause.setPause(false);
-						this.menuPause.setVisible(true);
 						charger(menuPause);
-					}else{
-						setPause(false);
-						this.menuPause.setPause(true);
-						this.menuPause.setVisible(false);
-						liberer(menuPause);
+						this.events.remove(event);
 					}
 					break;
 			default:

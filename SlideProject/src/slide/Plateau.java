@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import jeu.Jeu;
+import jeu.Jeu.EventGame;
 import jeu.Sequence;
 
 import org.jsfml.graphics.FloatRect;
@@ -30,9 +31,7 @@ import slide.cases.Rocher;
 import slide.cases.Sol;
 
 public class Plateau extends Sequence implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 7433390095796292630L;
 	
 	private Case[][] damierCases;
@@ -44,11 +43,13 @@ public class Plateau extends Sequence implements Serializable {
 	private transient View camera;
 	private boolean checkMouvement;
 	private Map<Vector2i, Integer> arrivees;
+	private int niveau;
 
 	
 	public static Plateau chargerPlateau(int numero,Joueur joueur) throws IOException{
 		Plateau chargee = new Plateau();
 		chargee.arrivees = new HashMap<Vector2i, Integer>();
+		chargee.niveau = numero;
 		
 		BufferedReader chargeur = new BufferedReader(new InputStreamReader(
 				Plateau.class.getResourceAsStream("/ressources/plateaux/terrain"+numero+".ascii")));
@@ -118,11 +119,8 @@ public class Plateau extends Sequence implements Serializable {
 	private Plateau(){
 		super();
 	}
-
-	@Override
-	public void activeUpdate(Jeu game){
-		/* Traitement entrees clavier */
-		
+	
+	private void processEvents(Jeu game){
 		for(Event event : game.getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
@@ -165,7 +163,30 @@ public class Plateau extends Sequence implements Serializable {
 					break;
 				}
 			}
-		}	
+		}		
+	}
+	
+	private void processEventsGame(Jeu game){
+		for(EventGame eg : game.getEventsGame()){
+			switch((NewEventGame)eg){
+			case COUCOU:break;
+			case RESTART:
+				try {
+					game.charger(Plateau.chargerPlateau(niveau, joueur));
+					game.liberer(this);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void activeUpdate(Jeu game){
+		/* Traitement entrees clavier */
+		processEvents(game);
+		processEventsGame(game);
 		// Patch GITAN 
 		if (entiteMobile != null ) {
 			Vector2i vect = getEntite(entiteMobile).getMouvement();

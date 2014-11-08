@@ -6,9 +6,11 @@ import jeu.Jeu;
 import jeu.Sequence;
 
 import org.jsfml.graphics.Color;
+import org.jsfml.graphics.Font;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.Text;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.window.event.Event;
@@ -20,10 +22,20 @@ public class MenuPauseSlide extends Sequence {
 	private int index;
 	private int nbBouttons;
 	private Sprite[] bouttons;
+	private Text reprendre,rejouer,menuPrincipal;
 	
 	public MenuPauseSlide() {
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
+		Font police = new Font();
+		try {
+			police.loadFromStream(Fin.class.getResourceAsStream("/ressources/sprites/orangejuice.ttf"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		reprendre = new Text("Reprendre", police, 30);
+		rejouer = new Text("Rejouer", police, 30);
+		menuPrincipal = new Text("Menu Principal", police, 30);
 		index=0;
 		nbBouttons =3;
 		bouttons = new Sprite[nbBouttons];
@@ -47,6 +59,9 @@ public class MenuPauseSlide extends Sequence {
 			bouttons[i] = new Sprite(texBoutton);
 			bouttons[i].setPosition(20,20+100*i);
 		}
+		reprendre.setPosition(150,60);
+		rejouer.setPosition(160,160);
+		menuPrincipal.setPosition(120,260);
 		bouttons[index].setColor(Color.GREEN);
 	}
 	
@@ -68,6 +83,18 @@ public class MenuPauseSlide extends Sequence {
 				case UP:
 					newIndex--;
 					break;
+				case RETURN:
+					if(index==0){
+						game.setPause(false);
+						game.liberer(this);
+					}else if(index == 1){
+						game.ajouterEvenement(NewEventGame.RESTART);
+						game.setPause(false);
+						game.liberer(this);
+					}else if(index == 2){
+						game.setPause(false);
+						game.liberer(this);
+					}
 				default:
 					break;
 				}
@@ -94,6 +121,8 @@ public class MenuPauseSlide extends Sequence {
 		for(int i=0;i<nbBouttons;i++){
 			fenetre.draw(bouttons[i]);
 		}
-		
+		fenetre.draw(menuPrincipal);
+		fenetre.draw(rejouer);
+		fenetre.draw(reprendre);
 	}
 }

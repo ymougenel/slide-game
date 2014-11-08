@@ -5,16 +5,17 @@ import jeu.Jeu.EventGame;
 public enum NewEventGame implements EventGame {
 	
 	COUCOU,
-	CHARGERNIVEAU;
+	RESTART;
 	
-	private int numero=0;
+	private String message="";
 	
-	public void setMessage(int niveau){
-		this.numero = niveau;
+	public NewEventGame setMessage(String message){
+		this.message = message;
+		return this;
 	}
 	
-	public int getMessage() {
-		return numero;
+	public String getMessage() {
+		return message;
 	}
 
 }
