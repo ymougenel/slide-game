@@ -44,17 +44,15 @@ public abstract class Jeu {
 				}
 			}
 			Path xInit = library.resolve("XInitThreads");
-			if(!Files.exists(xInit)){
-				try ( OutputStream out = new FileOutputStream(xInit.toString()); 
-						InputStream in = Jeu.class.getResourceAsStream("/jeu/noyau/XInitThreads")){
-					byte[] buffer = new byte[10000];
-					out.write(buffer, 0, in.read(buffer));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}	
-			}
+			try ( OutputStream out = new FileOutputStream(xInit.toString()); 
+					InputStream in = Jeu.class.getResourceAsStream("/jeu/noyau/XInitThreads")){
+				byte[] buffer = new byte[10000];
+				out.write(buffer, 0, in.read(buffer));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}	
 			System.load(xInit.toString());
 			xInitThreads();
 		}
