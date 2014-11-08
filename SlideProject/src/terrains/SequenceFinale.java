@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import slide.Fin;
+import jeu.slide.Fin;
 
 public class SequenceFinale {
 

@@ -1,25 +1,15 @@
 package terrains;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
+
+import jeu.slide.Entite;
+import jeu.slide.Entite.TextureEntite;
+import jeu.slide.cases.Case;
 
 import org.jsfml.system.Vector2i;
-
-import slide.Entite;
-import slide.Entite.TextureEntite;
-import slide.Joueur;
-import slide.Plateau;
-import slide.cases.Arrivee;
-import slide.cases.Case;
-import slide.cases.Fleche;
-import slide.cases.Fleche.Sens;
-import slide.cases.Glace;
-import slide.cases.Sol;
 
 public class Terrain {
 	private Case[][] cases;
