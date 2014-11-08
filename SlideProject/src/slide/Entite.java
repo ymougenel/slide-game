@@ -32,8 +32,7 @@ public class Entite extends Sprite implements Serializable{
 	private static ChargeurTexture chargeur = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
 	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE,
-		ROCHERIMMOBILE,
-		EAU;
+		CLE;
 	}
 	
 	public Entite(TextureEntite texture) {
