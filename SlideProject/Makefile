@@ -1,7 +1,7 @@
-java:=$(shell find src/jeu -name "*.java")
-ressources:=$(shell find src/ressources)
-classpath:=../jsfml.jar:.
-main:=jeu.slide.Slide
+java=$(shell find src/jeu -name "*.java")
+ressources=$(shell find src/ressources) src/jeu/noyau/XInitThreads
+classpath=../jsfml.jar:.
+main=jeu.slide.Slide
 
 ../Slide.jar: $(java) $(ressources)
 	mkdir archives
@@ -11,7 +11,7 @@ main:=jeu.slide.Slide
 	cat archives/META-INF/MANIFEST.MF>>MANIFEST.MF
 	rm -r archives/META-INF
 	jar cvfm ../Slide.jar MANIFEST.MF -C archives .
-	jar uvf ../Slide.jar -C src/ ressources
+	jar uvf ../Slide.jar -C src $(shell echo $(ressources) | xargs -il expr l : src/'\(.*[^/]\)')
 	rm MANIFEST.MF
 	rm -r archives
 
