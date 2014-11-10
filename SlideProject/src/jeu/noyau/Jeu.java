@@ -48,13 +48,13 @@ public abstract class Jeu {
 					InputStream in = Jeu.class.getResourceAsStream("/jeu/noyau/XInitThreads")){
 				byte[] buffer = new byte[10000];
 				out.write(buffer, 0, in.read(buffer));
+				System.load(xInit.toString());
+				xInitThreads();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}	
-			System.load(xInit.toString());
-			xInitThreads();
 		}
 	}
 	
