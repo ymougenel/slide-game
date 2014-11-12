@@ -49,7 +49,7 @@ public abstract class Jeu {
 				byte[] buffer = new byte[10000];
 				out.write(buffer, 0, in.read(buffer));
 				System.load(xInit.toString());
-				xInitThreads();
+				//xInitThreads();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e1) {

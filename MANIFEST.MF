@@ -1,0 +1,34 @@
+Manifest-Version: 0.3
+Class-Path: .
+Main-Class: jeu.slide.Slide
+
+Name: common
+Built-By: pdinklag
+Implementation-Vendor: Patrick Dinklage
+Implementation-Title: org.jsfml
+Specification-Title: JSFML
+Implementation-Version: pre-RC
+Specification-Version: 1.0
+Specification-Vendor: Patrick Dinklage
+
+Name: org/jsfml/
+Sealed: true
+
+Name: org/jsfml/window/event/
+Sealed: true
+
+Name: org/jsfml/system/
+Sealed: true
+
+Name: org/jsfml/audio/
+Sealed: true
+
+Name: org/jsfml/internal
+Sealed: true
+
+Name: org/jsfml/window/
+Sealed: true
+
+Name: org/jsfml/graphics/
+Sealed: true
+
