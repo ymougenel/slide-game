@@ -22,6 +22,7 @@ import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
 
 import org.jsfml.graphics.FloatRect;
+import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.View;
@@ -126,6 +127,7 @@ public class Plateau extends Sequence implements Serializable {
 				case UP:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
+						joueur.setTextureRect(new IntRect(22, 0,11,18));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, -1));
 						checkMouvement = true;
@@ -135,6 +137,7 @@ public class Plateau extends Sequence implements Serializable {
 				case RIGHT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
+						joueur.setTextureRect(new IntRect(33, 0,11,18));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(1, 0));
 						checkMouvement = true;
@@ -143,6 +146,7 @@ public class Plateau extends Sequence implements Serializable {
 				case LEFT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
+						joueur.setTextureRect(new IntRect(0, 0,11,18));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(-1, 0));
 						checkMouvement = true;
@@ -152,6 +156,7 @@ public class Plateau extends Sequence implements Serializable {
 				case DOWN:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
+						joueur.setTextureRect(new IntRect(11, 0,11,18));
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, 1));
 						checkMouvement = true;
