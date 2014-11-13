@@ -11,15 +11,14 @@ import org.jsfml.window.event.KeyEvent;
 
 public class Slide extends Jeu {
 	private Sequence menuPause;
+	private Sequence menuPrincipale;
+	private final int debut=0; /* TODO************** Premier niveau *************************************************/
 	
 	public Slide(String nom) {
 		super(nom);
 		this.menuPause = new MenuPauseSlide();
-		try {
-			charger(Plateau.chargerPlateau(0,new Joueur()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.menuPrincipale = new MenuPrincipale();
+		this.charger(menuPrincipale);
 	}
 
 	@Override
@@ -27,7 +26,7 @@ public class Slide extends Jeu {
 		if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 			switch (((KeyEvent) event).key) {
 			case RETURN:
-			case A:if(!isPause()){
+			case A:if(!isPause() && menuPrincipale.isPause()){
 						setPause(true);
 						charger(menuPause);
 						this.events.remove(event);
@@ -44,7 +43,11 @@ public class Slide extends Jeu {
 		// TODO Auto-generated method stub
 		if(event instanceof NewEventGame){
 			switch( (NewEventGame) event ){
-				case COUCOU:System.out.println("yes");
+				case DEBUTPARTIE:		try {
+											charger(Plateau.chargerPlateau(debut,new Joueur()));
+										} catch (IOException e) {
+												e.printStackTrace();
+										}
 				default:
 			}
 		}

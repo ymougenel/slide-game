@@ -13,6 +13,7 @@ import jeu.noyau.Jeu;
 import jeu.noyau.Jeu.EventGame;
 import jeu.noyau.Sequence;
 import jeu.slide.Entite.TextureEntite;
+import jeu.slide.Joueur.TextureJoueur;
 import jeu.slide.cases.Arrivee;
 import jeu.slide.cases.Case;
 import jeu.slide.cases.Fleche;
@@ -22,7 +23,6 @@ import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
 
 import org.jsfml.graphics.FloatRect;
-import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.View;
@@ -127,7 +127,7 @@ public class Plateau extends Sequence implements Serializable {
 				case UP:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setTextureRect(new IntRect(22, 0,11,18));
+						joueur.setElement( TextureJoueur.JOUEUR_HAUT);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, -1));
 						checkMouvement = true;
@@ -137,7 +137,7 @@ public class Plateau extends Sequence implements Serializable {
 				case RIGHT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setTextureRect(new IntRect(33, 0,11,18));
+						joueur.setElement( TextureJoueur.JOUEUR_DROITE);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(1, 0));
 						checkMouvement = true;
@@ -146,7 +146,7 @@ public class Plateau extends Sequence implements Serializable {
 				case LEFT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setTextureRect(new IntRect(0, 0,11,18));
+						joueur.setElement( TextureJoueur.JOUEUR_GAUCHE);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(-1, 0));
 						checkMouvement = true;
@@ -156,7 +156,7 @@ public class Plateau extends Sequence implements Serializable {
 				case DOWN:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setTextureRect(new IntRect(11, 0,11,18));
+						joueur.setElement( TextureJoueur.JOUEUR_BAS);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, 1));
 						checkMouvement = true;
@@ -219,6 +219,7 @@ public class Plateau extends Sequence implements Serializable {
 			}else {
 				/* Phase 2 */
 				getEntite(entiteMobile).update();
+				getEntite(entiteMobile).animer();
 				if ( getEntite(entiteMobile).mouvementTermine() ) {
 					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(getEntite(entiteMobile).getMouvement(), game);
 					getEntite(entiteMobile).setMouvement(nouvelleCinetique);

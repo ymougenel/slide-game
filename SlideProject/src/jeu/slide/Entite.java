@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import jeu.noyau.ChargeurTexture;
+import jeu.noyau.ChargeurTexture.Element;
 import jeu.noyau.Jeu;
 import jeu.slide.cases.Case;
 
@@ -21,23 +22,36 @@ public class Entite extends Sprite implements Serializable{
 	private static final long serialVersionUID = -4940088905580735189L;
 	
 	private static float vitesse = 0.25f;
-	private  static Vector2i TAILLEENTITE = new Vector2i(16,16);
+	protected  static Vector2i TAILLEENTITE = new Vector2i(16,16);
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
-	private boolean mouvementEnCours;
-	private TextureEntite textureEntite;
+	protected boolean mouvementEnCours;
+	private Element textureEntite;
 	private boolean mobile;
+	protected int trameCourante;
+	protected ChargeurTexture chargeur;
 	
-	private static ChargeurTexture chargeur = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
+	private static ChargeurTexture chargeurEntite = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
+	
 	public enum TextureEntite implements ChargeurTexture.Element {
-		ROCHERMOBILE,
-		CLE;
+		ROCHERMOBILE(1),
+		CLE(0);
+		
+		private int nombreTrame;
+		private TextureEntite (int nombre){
+			this.nombreTrame = nombre;
+		}
+		@Override
+		public int getNombreTrames() {
+			return nombreTrame;
+		}
 	}
 	
 	public Entite(TextureEntite texture) {
 		this();
-		chargeur.addTexture(this, texture);
+		chargeur.addTexture(this, texture,0);
 		this.textureEntite = texture;
+
 	}
 	
 	public Entite(TextureEntite texture,boolean mobile){
@@ -52,6 +66,8 @@ public class Entite extends Sprite implements Serializable{
 		mouvementEnCours=false;
 		this.textureEntite = null;
 		this.mobile = true;
+		this.trameCourante =0;
+		this.chargeur = chargeurEntite;
 		setOrigin(8,8);
 	}
 	
@@ -100,7 +116,7 @@ public class Entite extends Sprite implements Serializable{
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		if (textureEntite != null) {
-			chargeur.addTexture(this, textureEntite);
+			chargeur.addTexture(this, textureEntite,0);
 		}
 		setPosition( (Vector2f)in.readObject() );
 		setOrigin( (Vector2f)in.readObject() );
@@ -110,6 +126,17 @@ public class Entite extends Sprite implements Serializable{
 		out.defaultWriteObject();
 		out.writeObject(getPosition());
 		out.writeObject(getOrigin());
+	}
+	
+	public void animer (){
+		if (trameCourante != 0 || mouvementEnCours) {
+			trameCourante = (trameCourante == textureEntite.getNombreTrames() - 1) ? 0 : trameCourante+1;
+		}
+		this.chargeur.addTexture(this, textureEntite, trameCourante);
+	}
+	
+	public void setElement (Element element){
+		this.textureEntite = element;
 	}
 	
 }

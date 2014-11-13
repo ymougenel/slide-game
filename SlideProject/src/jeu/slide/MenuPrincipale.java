@@ -2,10 +2,6 @@ package jeu.slide;
 
 import java.io.IOException;
 
-import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
-import jeu.noyau.Menu;
-
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.Image;
@@ -13,13 +9,13 @@ import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 
-import jeu.slide.NewEventGame;
+import jeu.noyau.Boutton;
+import jeu.noyau.Jeu;
+import jeu.noyau.Menu;
 
-public class MenuPauseSlide extends Menu {
+public class MenuPrincipale extends Menu{
 
-	//private Text reprendre,rejouer,menuPrincipal;
-	
-	public MenuPauseSlide() {
+	public MenuPrincipale() {
 		super();
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
@@ -45,10 +41,9 @@ public class MenuPauseSlide extends Menu {
 			e.printStackTrace();
 		}
 		
-		bouttons.add( new Boutton(texBoutton, null, "reprendre",font));
-		bouttons.add( new Boutton(texBoutton, NewEventGame.RESTART, "rejouer",font));
-		bouttons.add( new Boutton(texBoutton, null, "menu Principal",font));
-		bouttons.add( new Boutton(texBoutton, null, "Details plateau",font));
+		bouttons.add( new Boutton(texBoutton, NewEventGame.DEBUTPARTIE, "Nouvelle Partie",font));
+		bouttons.add( new Boutton(texBoutton, null, "Options",font));
+		bouttons.add( new Boutton(texBoutton, null, "A propos",font));
 		bouttons.add( new Boutton(texBoutton, null, "Quitter",font));
 		
 		fond = new Sprite(texFond);
@@ -58,10 +53,12 @@ public class MenuPauseSlide extends Menu {
 		
 		bouttons.get(0).setColor(Color.GREEN);
 	}
-
 	@Override
 	public void backgroundUpdate(Jeu game) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 }

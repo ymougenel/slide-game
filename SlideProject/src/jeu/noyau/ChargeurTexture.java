@@ -15,7 +15,11 @@ public class ChargeurTexture {
 	private Texture texture;
 	private Vector2i taille;
 	
-	public interface Element { int ordinal(); }
+	public interface Element { 
+		int ordinal();
+		int getNombreTrames();
+		
+	}
 	
 	public ChargeurTexture(String name,Vector2i taille){
 		texture = new Texture();
@@ -44,12 +48,12 @@ public class ChargeurTexture {
 		this.taille=taille;
 	}
 	
-	public void addTexture(Sprite sprite, Element element){
-		addTexture(sprite, element.ordinal());
+	public void addTexture(Sprite sprite, Element element,int trame){
+		addTexture(sprite, element.ordinal(),trame);
 	}
 	
-	public void addTexture(Sprite sprite, int element){
-		IntRect contour = new IntRect( element*taille.x, 0, taille.x, taille.y );
+	public void addTexture(Sprite sprite, int element,int trame){
+		IntRect contour = new IntRect( element*taille.x, trame*taille.y, taille.x, taille.y );
 		sprite.setTexture(texture);
 		sprite.setTextureRect(contour);
 	} 

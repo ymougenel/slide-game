@@ -5,7 +5,9 @@ import jeu.noyau.Jeu.EventGame;
 public enum NewEventGame implements EventGame {
 	
 	COUCOU,
+	DEBUTPARTIE,
 	RESTART;
+	
 	
 	private String message="";
 	

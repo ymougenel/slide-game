@@ -27,11 +27,17 @@ public abstract class Case implements Serializable{
 		FLECHE,
 		DEPART,
 		ARRIVEE;
+
+		@Override
+		public int getNombreTrames() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 	public Case (TextureCase texture){
 		
 		sprite= new Sprite();
-		chargeur.addTexture(sprite, texture);
+		chargeur.addTexture(sprite, texture,0);
 		sprite.setOrigin(8,8);
 		
 	}
