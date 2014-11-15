@@ -1,13 +1,13 @@
 package jeu.noyau;
 
-import java.io.IOException;
-
 import jeu.noyau.Jeu.EventGame;
-import jeu.slide.Fin;
 
+import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
+import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
+import org.jsfml.graphics.Shape;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Text;
 import org.jsfml.graphics.Texture;
@@ -17,11 +17,18 @@ public class Boutton extends Sprite {
 
 	private Text texte;
 	private EventGame event;
+	private Shape rectangle;
 	
 	public Boutton( Texture texture, EventGame eventgame, String message, Font font) {
 		super(texture);
 		this.event = eventgame;
 		this.texte = new Text(message, font);
+		texte.setCharacterSize(50);
+		rectangle = new RectangleShape(new Vector2f(texte.getGlobalBounds().width,texte.getGlobalBounds().height));
+		rectangle.setPosition(texte.getPosition());
+		rectangle.setFillColor(Color.TRANSPARENT);
+		rectangle.setOutlineColor(Color.BLUE);
+		rectangle.setOutlineThickness(1);
 	}
 	
 	public EventGame getEventGame (){
@@ -31,9 +38,10 @@ public class Boutton extends Sprite {
 	public void setPosition ( Vector2f vecteur) {
 		super.setPosition(vecteur);
 		Vector2f positionTexte = new Vector2f(	vecteur.x + super.getGlobalBounds().width/2 - texte.getGlobalBounds().width /2, 
-												vecteur.y + super.getGlobalBounds().height/3-8) ;
+												vecteur.y + super.getGlobalBounds().height/2-texte.getGlobalBounds().height*5/6) ;
 			
 		this.texte.setPosition( positionTexte);
+		rectangle.setPosition(texte.getPosition());
 		
 		/*
 		System.out.println("---------------------");
@@ -54,7 +62,8 @@ public class Boutton extends Sprite {
 	@Override
 	public void draw(RenderTarget fenetre, RenderStates status) {
 		super.draw(fenetre, status);
-		fenetre.draw(texte, status);		
+		fenetre.draw(texte, status);
+		fenetre.draw(rectangle);
 	}
 
 }

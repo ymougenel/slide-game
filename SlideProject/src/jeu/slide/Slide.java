@@ -12,7 +12,7 @@ import org.jsfml.window.event.KeyEvent;
 public class Slide extends Jeu {
 	private Sequence menuPause;
 	private Sequence menuPrincipale;
-	private final int debut=0; /* TODO************** Premier niveau *************************************************/
+	private final int debut=5; /* TODO************** Premier niveau *************************************************/
 	
 	public Slide(String nom) {
 		super(nom);
