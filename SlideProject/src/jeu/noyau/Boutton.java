@@ -30,7 +30,20 @@ public class Boutton extends Sprite {
 	
 	public void setPosition ( Vector2f vecteur) {
 		super.setPosition(vecteur);
-		this.texte.setPosition(vecteur);
+		Vector2f positionTexte = new Vector2f(	vecteur.x + super.getGlobalBounds().width/2 - texte.getGlobalBounds().width /2, 
+												vecteur.y + super.getGlobalBounds().height/3-8) ;
+			
+		this.texte.setPosition( positionTexte);
+		
+		/*
+		System.out.println("---------------------");
+		System.out.println(texte.getString());
+		System.out.println("Position du sprite :"+ vecteur);
+		System.out.println("taille du sprite: largeur->"+ super.getGlobalBounds().width + "  hauteur->" + super.getGlobalBounds().height );
+		System.out.println("Position du texte :"+ positionTexte);
+		System.out.println("Taille du texte : "+ this.texte.getGlobalBounds());
+		System.out.println("");
+		*/
 	}
 	
 	public void setOrigine ( Vector2f vecteur) {
