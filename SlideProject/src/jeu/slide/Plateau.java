@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import jeu.noyau.ChargeurFont;
 import jeu.noyau.Jeu;
 import jeu.noyau.Jeu.EventGame;
 import jeu.noyau.Sequence;
@@ -22,9 +23,11 @@ import jeu.slide.cases.Glace;
 import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
 
+import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.Text;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
@@ -44,6 +47,8 @@ public class Plateau extends Sequence implements Serializable {
 	private boolean checkMouvement;
 	private Map<Vector2i, Integer> arrivees;
 	private int niveau;
+	private int decompteur; //Affichage de la transition initiale
+	private Text texteDebut;
 
 	
 	public static Plateau chargerPlateau(int numero,Joueur joueur) throws IOException{
@@ -59,7 +64,7 @@ public class Plateau extends Sequence implements Serializable {
 		int ty = Integer.parseInt(chargeur.readLine());
 		int px = Integer.parseInt(chargeur.readLine());
 		int py = Integer.parseInt(chargeur.readLine());
-		int dir = Integer.parseInt(chargeur.readLine());
+		String dir = chargeur.readLine();
 		
 		chargee.damierEntite = new Entite[tx+2][ty+2];
 		chargee.damierCases = new Case[tx+2][ty+2];
@@ -82,11 +87,14 @@ public class Plateau extends Sequence implements Serializable {
 							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
 				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
 				}
-			}
-			chargee.damierCases[i+1][0] = Rocher.getInstance();	
-			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();	
-			chargee.damierCases[i+1][ty+1] = Rocher.getInstance();	
+			}				
+			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();			
 			chargee.damierCases[0][i+1] = Rocher.getInstance();	
+		}
+		
+		for (int i=0; i<tx; i++) {
+			chargee.damierCases[i+1][0] = Rocher.getInstance();
+			chargee.damierCases[i+1][ty+1] = Rocher.getInstance();
 		}
 		chargee.damierCases[0][0] = Rocher.getInstance();	
 		chargee.damierCases[tx+1][0] = Rocher.getInstance();	
@@ -107,19 +115,8 @@ public class Plateau extends Sequence implements Serializable {
 				}
 			}
 		}
-		TextureJoueur direction = null;
-		switch (dir){
-		case 0: direction = TextureJoueur.JOUEUR_DROITE;
-				break;
-		case 1: direction = TextureJoueur.JOUEUR_HAUT;
-		break;
-		case 2: direction = TextureJoueur.JOUEUR_GAUCHE;
-		break;
-		case 3: direction = TextureJoueur.JOUEUR_BAS;
-		break;
-		default : System.out.println("Mauvaise entree");
-		}
-		joueur.orienter(direction);
+		TextureJoueur direction = Enum.valueOf(TextureJoueur.class, dir);
+		joueur.setElement(direction);
 		
 		chargeur.close();
 		chargee.entiteMobile = null;
@@ -129,6 +126,9 @@ public class Plateau extends Sequence implements Serializable {
 		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
 		chargee.checkMouvement = false;
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
+		chargee.decompteur = 128;
+		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Orange.getFont(),20);
+		chargee.texteDebut.setColor(Color.RED);
 		return chargee;
 	}
 	
@@ -143,7 +143,7 @@ public class Plateau extends Sequence implements Serializable {
 				case UP:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.JOUEUR_HAUT);
+						joueur.setElement( TextureJoueur.HAUT);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, -1));
 						checkMouvement = true;
@@ -153,7 +153,7 @@ public class Plateau extends Sequence implements Serializable {
 				case RIGHT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.JOUEUR_DROITE);
+						joueur.setElement( TextureJoueur.DROITE);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(1, 0));
 						checkMouvement = true;
@@ -162,7 +162,7 @@ public class Plateau extends Sequence implements Serializable {
 				case LEFT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.JOUEUR_GAUCHE);
+						joueur.setElement( TextureJoueur.GAUCHE);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(-1, 0));
 						checkMouvement = true;
@@ -172,12 +172,16 @@ public class Plateau extends Sequence implements Serializable {
 				case DOWN:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.JOUEUR_BAS);
+						joueur.setElement( TextureJoueur.BAS);
 						getEntite(positionJoueur).setMouvement(
 								new Vector2i(0, 1));
 						checkMouvement = true;
 
 					}
+					break;
+					case RETURN:
+					case A:
+						game.ajouterEvenement( NewEventGame.CHARGER_MENU_PAUSE );
 					break;
 				default:
 					break;
@@ -197,6 +201,8 @@ public class Plateau extends Sequence implements Serializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				break;
+			default:
 				break;
 			}
 		}
@@ -223,15 +229,19 @@ public class Plateau extends Sequence implements Serializable {
 				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
 				if ( entiteSuivante!= null ){
-					getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
+					//getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
+					entiteSuivante.collision( getEntite(entiteMobile));
 					entiteMobile= nouvellesCoordonees;
 					checkMouvement = true;
-				}else if (damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y] == Rocher.getInstance()){
-					getEntite(entiteMobile).setMouvement(Vector2i.ZERO);
-				}else {
-					deplacerEntiteMobile(nouvellesCoordonees);
-					checkMouvement = false;
+				} else {
+					damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y].collision(getEntite(entiteMobile));
+					if (! getEntite(entiteMobile).getMouvement().equals(Vector2i.ZERO)) {
+						deplacerEntiteMobile(nouvellesCoordonees);
+						checkMouvement = false;					
+					}	
 				}
+				
+
 			}else {
 				/* Phase 2 */
 				getEntite(entiteMobile).update();
@@ -277,10 +287,20 @@ public class Plateau extends Sequence implements Serializable {
 		for (i = 0; i < damierEntite.length; i++) {
 			for (j = 0; j < damierEntite[0].length; j++) {
 				/* Traitement des entites du plateau */
-				if (damierEntite[j][i] != null) {
-					fenetre.draw(damierEntite[j][i]);
+				if (damierEntite[i][j] != null) {
+					fenetre.draw(damierEntite[i][j]);
 				}
 			}
+		}
+		
+		if (decompteur>0 ){
+			decompteur--;
+			if (4*decompteur <256){
+				texteDebut.setColor(new Color(Color.RED, 4*decompteur));
+			}
+			fenetre.draw(texteDebut);
+			System.out.println("affichage"+decompteur);
+			
 		}
 	}
 

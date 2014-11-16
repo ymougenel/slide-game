@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import jeu.noyau.ChargeurTexture;
 import jeu.noyau.Jeu;
+import jeu.slide.Entite;
 
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2i;
@@ -49,5 +50,9 @@ public abstract class Case implements Serializable{
 	
 	public static Vector2i getTailleCase() {
 		return TAILLECASE;
+	}
+	
+	public void collision (Entite collisioneur){
+		
 	}
 }

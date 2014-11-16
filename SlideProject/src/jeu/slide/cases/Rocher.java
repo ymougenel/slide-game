@@ -3,6 +3,7 @@ package jeu.slide.cases;
 import java.io.ObjectStreamException;
 
 import jeu.noyau.Jeu;
+import jeu.slide.Entite;
 
 import org.jsfml.system.Vector2i;
 
@@ -26,6 +27,13 @@ public class Rocher extends Case {
 	
 	private Object readResolve() throws ObjectStreamException {
 		return getInstance();
+	}
+	
+	@Override
+	public void collision(Entite collisioneur) {
+		super.collision(collisioneur);
+		collisioneur.setMouvement(Vector2i.ZERO);
+		System.out.println("Collisionneur"+collisioneur);
 	}
 
 }

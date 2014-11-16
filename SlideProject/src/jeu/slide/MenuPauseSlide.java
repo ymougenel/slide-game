@@ -7,13 +7,10 @@ import jeu.noyau.Jeu;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
-import org.jsfml.graphics.Font;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
-
-import jeu.slide.NewEventGame;
 
 public class MenuPauseSlide extends Menu {
 
@@ -23,12 +20,6 @@ public class MenuPauseSlide extends Menu {
 		super();
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
-		Font police = new Font();
-		try {
-			police.loadFromStream(Fin.class.getResourceAsStream("/ressources/polices/orangejuice.ttf"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		
 		try {
 			texFond.loadFromStream(getClass().getResourceAsStream("/ressources/images/menu_background.png"));
@@ -47,9 +38,9 @@ public class MenuPauseSlide extends Menu {
 		
 		bouttons.add( new Boutton(texBoutton, null, "reprendre",font));
 		bouttons.add( new Boutton(texBoutton, NewEventGame.RESTART, "rejouer",font));
-		bouttons.add( new Boutton(texBoutton, null, "menu Principal",font));
+		bouttons.add( new Boutton(texBoutton, NewEventGame.CHARGER_MENU_PRINCIPALE, "menu Principal",font));
 		bouttons.add( new Boutton(texBoutton, null, "Details plateau",font));
-		bouttons.add( new Boutton(texBoutton, null, "Quitter",font));
+		bouttons.add( new Boutton(texBoutton, NewEventGame.QUITTER, "Quitter",font));
 		
 		fond = new Sprite(texFond);
 		for(int i=0;i<bouttons.size(); i++){

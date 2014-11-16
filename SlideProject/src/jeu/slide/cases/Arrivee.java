@@ -3,6 +3,7 @@ package jeu.slide.cases;
 import java.io.ObjectStreamException;
 
 import jeu.noyau.Jeu;
+import jeu.slide.Entite;
 
 import org.jsfml.system.Vector2i;
 
@@ -26,4 +27,5 @@ public class Arrivee extends Case {
 	private Object readResolve() throws ObjectStreamException {
 		return getInstance();
 	}
+
 }

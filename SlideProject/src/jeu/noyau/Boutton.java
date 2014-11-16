@@ -23,7 +23,7 @@ public class Boutton extends Sprite {
 		super(texture);
 		this.event = eventgame;
 		this.texte = new Text(message, font);
-		texte.setCharacterSize(50);
+		texte.setCharacterSize(35);
 		rectangle = new RectangleShape(new Vector2f(texte.getGlobalBounds().width,texte.getGlobalBounds().height));
 		rectangle.setPosition(texte.getPosition());
 		rectangle.setFillColor(Color.TRANSPARENT);
@@ -63,7 +63,7 @@ public class Boutton extends Sprite {
 	public void draw(RenderTarget fenetre, RenderStates status) {
 		super.draw(fenetre, status);
 		fenetre.draw(texte, status);
-		fenetre.draw(rectangle);
+		//fenetre.draw(rectangle);
 	}
 
 }

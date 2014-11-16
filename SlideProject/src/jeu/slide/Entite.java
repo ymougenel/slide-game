@@ -72,11 +72,16 @@ public class Entite extends Sprite implements Serializable{
 	}
 	
 	public boolean setMouvement( Vector2i deplacement){
-		if(mobile){
+		if(! deplacement.equals(Vector2i.ZERO) ){
 			this.mouvementEnCours=true;
 			this.mouvement=deplacement;
 			this.positionFinale = new Vector2f(deplacement.x * Case.TAILLECASE.x + getPosition().x, 
 											deplacement.y * Case.TAILLECASE.y + getPosition().y);
+		}
+		else {
+			mouvementEnCours = false;
+			mouvement = Vector2i.ZERO;
+			this.positionFinale=getPosition();
 		}
 		return mobile;
 	}
@@ -137,6 +142,12 @@ public class Entite extends Sprite implements Serializable{
 	
 	public void setElement (Element element){
 		this.textureEntite = element;
+		this.chargeur.addTexture(this, element, trameCourante);
+	}
+	
+	public void collision(Entite collisioneur){
+		this.setMouvement( collisioneur.getMouvement());
+		collisioneur.setMouvement( Vector2i.ZERO);		
 	}
 	
 }

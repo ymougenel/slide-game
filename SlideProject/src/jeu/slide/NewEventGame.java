@@ -6,7 +6,11 @@ public enum NewEventGame implements EventGame {
 	
 	COUCOU,
 	DEBUTPARTIE,
-	RESTART;
+	CHARGER_MENU_PRINCIPALE,
+	CHARGER_MENU_PAUSE,
+	CHARGER_PLATEAU,
+	RESTART,
+	QUITTER;
 	
 	
 	private String message="";

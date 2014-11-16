@@ -23,11 +23,10 @@ public abstract class Jeu {
 	public interface EventGame{};
 	
 	private RenderWindow fenetre;
-	private Collection<Sequence> sequencesChargees;
+	protected LinkedList<Sequence> sequencesChargees;
 	protected Collection<Event> events;
 	private Collection<EventGame> eventsGame;
 	private Stack<EventGame> pileEventGame;
-	private boolean pause;
 	//duree d'une frame en µseconde;
 	public static final float TIME_PER_FRAME = Time.getMilliseconds(1000/60).asMicroseconds();
 	
@@ -60,7 +59,6 @@ public abstract class Jeu {
 	
 	public Jeu(String nom){
 		verifierOs();
-		this.pause=false;
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
 		this.fenetre.setVerticalSyncEnabled(true);
@@ -98,17 +96,6 @@ public abstract class Jeu {
 			eventsGame.add(eventGame);
 			processEventGame(eventGame);
 		}
-	}
-	
-	public void setPause(boolean pause){
-		for(Sequence seq : sequencesChargees){
-			seq.setPause(pause);
-		}
-		this.pause=pause;
-	}
-	
-	public boolean isPause(){
-		return pause;
 	}
 	
 	/** obtenir les evenements externes du jeu
@@ -153,7 +140,8 @@ public abstract class Jeu {
 	        while (timeSinceLastUpdate > TIME_PER_FRAME){
 	        	timeSinceLastUpdate -= TIME_PER_FRAME;
 	        	processEvents();
-	        	for (Sequence seq : sequencesChargees) seq.update(this);
+	        	sequencesChargees.getLast().activeUpdate(this);
+	        	for (Sequence seq : sequencesChargees) seq.backgroundUpdate(this);
 	        }
 	        fenetre.clear();
 	        for (Sequence seq : sequencesChargees) fenetre.draw(seq);

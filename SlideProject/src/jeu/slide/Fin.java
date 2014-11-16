@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import jeu.noyau.ChargeurFont;
 import jeu.noyau.Jeu;
 import jeu.noyau.Sequence;
 
@@ -20,14 +21,8 @@ public class Fin extends Sequence implements Serializable{
 	private transient Text texte;
 
 	public Fin(){
-		Font font = new Font();
-		try {
-			font.loadFromStream(Fin.class.getResourceAsStream("/ressources/polices/orangejuice.ttf"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.texte= new Text(message, font, 60);
+
+		this.texte= new Text(message, ChargeurFont.Orange.getFont(), 60);
 		texte.setPosition( new Vector2f(0, 250));
 		
 		texte.setColor(Color.RED);

@@ -1,10 +1,8 @@
 package jeu.noyau;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import jeu.noyau.Jeu.EventGame;
-import jeu.slide.Fin;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
@@ -24,14 +22,7 @@ public abstract class Menu extends Sequence {
 	public Menu() {
 		index=0;
 		bouttons = new ArrayList<Boutton>();
-		font = new Font();
-		try {
-			font.loadFromStream(Fin.class.getResourceAsStream("/ressources/polices/orangejuice.ttf"));
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		font = ChargeurFont.Orange.getFont();
 	}
 
 	@Override
@@ -49,9 +40,7 @@ public abstract class Menu extends Sequence {
 					newIndex--;
 					break;
 				case RETURN:
-					game.setPause(false);
 					game.liberer(this);
-					this.setPause(false);
 					EventGame evt = bouttons.get(index).getEventGame();
 					if (evt != null) {
 						game.ajouterEvenement(evt);

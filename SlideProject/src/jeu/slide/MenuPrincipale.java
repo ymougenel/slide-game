@@ -2,16 +2,15 @@ package jeu.slide;
 
 import java.io.IOException;
 
+import jeu.noyau.Boutton;
+import jeu.noyau.Jeu;
+import jeu.noyau.Menu;
+
 import org.jsfml.graphics.Color;
-import org.jsfml.graphics.Font;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
-
-import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
-import jeu.noyau.Menu;
 
 public class MenuPrincipale extends Menu{
 
@@ -19,13 +18,6 @@ public class MenuPrincipale extends Menu{
 		super();
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
-		Font police = new Font();
-		try {
-			police.loadFromStream(Fin.class.getResourceAsStream("/ressources/polices/orangejuice.ttf"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
 		try {
 			texFond.loadFromStream(getClass().getResourceAsStream("/ressources/images/menu_background.png"));
 			Image img = new Image();
