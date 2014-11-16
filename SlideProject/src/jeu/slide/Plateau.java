@@ -59,6 +59,8 @@ public class Plateau extends Sequence implements Serializable {
 		int ty = Integer.parseInt(chargeur.readLine());
 		int px = Integer.parseInt(chargeur.readLine());
 		int py = Integer.parseInt(chargeur.readLine());
+		int dir = Integer.parseInt(chargeur.readLine());
+		
 		chargee.damierEntite = new Entite[tx+2][ty+2];
 		chargee.damierCases = new Case[tx+2][ty+2];
 		LinkedList<Integer> file = new LinkedList<Integer>();
@@ -104,7 +106,21 @@ public class Plateau extends Sequence implements Serializable {
 					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
 				}
 			}
-		}	
+		}
+		TextureJoueur direction = null;
+		switch (dir){
+		case 0: direction = TextureJoueur.JOUEUR_DROITE;
+				break;
+		case 1: direction = TextureJoueur.JOUEUR_HAUT;
+		break;
+		case 2: direction = TextureJoueur.JOUEUR_GAUCHE;
+		break;
+		case 3: direction = TextureJoueur.JOUEUR_BAS;
+		break;
+		default : System.out.println("Mauvaise entree");
+		}
+		joueur.orienter(direction);
+		
 		chargeur.close();
 		chargee.entiteMobile = null;
 		chargee.positionJoueur = new Vector2i(px,py);

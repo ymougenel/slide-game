@@ -27,6 +27,7 @@ public class Joueur extends Entite {
 		}
 		
 	}
+	
 	public Joueur() {
 		super();
 		this.chargeur = chargeurJoueur;
@@ -34,11 +35,14 @@ public class Joueur extends Entite {
 		this.setOrigin(4,12);
 		this.scale(1.2f,1.2f);
 		this.setElement(TextureJoueur.JOUEUR_GAUCHE);
-
 	}
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
 		in.defaultReadObject();
 		chargeur.addTexture(this, 0,0);
 		this.setOrigin(8,16);
+	}
+	
+	public void orienter( TextureJoueur direction) {
+		this.chargeur.addTexture(this, direction, 0);
 	}
 }
