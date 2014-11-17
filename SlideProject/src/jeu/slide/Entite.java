@@ -6,6 +6,8 @@ import jeu.noyau.Jeu;
 import jeu.slide.cases.Case;
 
 import org.jsfml.graphics.Color;
+import org.jsfml.graphics.RenderStates;
+import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
@@ -18,15 +20,15 @@ public class Entite extends Sprite{
 	private Vector2f positionFinale;
 	protected boolean mouvementEnCours;
 	private Element textureEntite;
-	private boolean mobile;
 	protected int trameCourante;
 	protected ChargeurTexture chargeur;
+	private boolean fantome;
 	
 	private static ChargeurTexture chargeurEntite = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
 	
 	public enum TextureEntite implements ChargeurTexture.Element {
 		ROCHERMOBILE(1),
-		CLE(0);
+		CLE(1);
 		
 		private int nombreTrame;
 		private TextureEntite (int nombre){
@@ -45,24 +47,19 @@ public class Entite extends Sprite{
 
 	}
 	
-	public Entite(TextureEntite texture,boolean mobile){
-		this(texture);
-		this.mobile=mobile;
-	}
-	
 	public Entite() {
 		super();
 		mouvement = Vector2i.ZERO;	
 		positionFinale = Vector2f.ZERO;
 		mouvementEnCours=false;
 		this.textureEntite = null;
-		this.mobile = true;
 		this.trameCourante =0;
 		this.chargeur = chargeurEntite;
 		setOrigin(8,8);
+		this.fantome=false;
 	}
 	
-	public boolean setMouvement( Vector2i deplacement){
+	public void setMouvement( Vector2i deplacement){
 		if(! deplacement.equals(Vector2i.ZERO) ){
 			this.mouvementEnCours=true;
 			this.mouvement=deplacement;
@@ -74,20 +71,11 @@ public class Entite extends Sprite{
 			mouvement = Vector2i.ZERO;
 			this.positionFinale=getPosition();
 		}
-		return mobile;
 	}
 		
 			
 	public Vector2i getMouvement() {
 		return mouvement;
-	}
-	
-	public boolean transmettreMouvement( Entite receptrice){
-		boolean retour=receptrice.setMouvement(mouvement);
-		this.mouvementEnCours = false;
-		this.mouvement= Vector2i.ZERO;
-		
-		return retour;
 	}
 	
 	public void update() {
@@ -121,9 +109,30 @@ public class Entite extends Sprite{
 		this.chargeur.addTexture(this, element, trameCourante);
 	}
 	
+	public Element getElement(){
+		return textureEntite;
+	}
+	
 	public void collision(Entite collisioneur){
-		this.setMouvement( collisioneur.getMouvement());
-		collisioneur.setMouvement( Vector2i.ZERO);		
+		if(!fantome){
+			this.setMouvement( collisioneur.getMouvement());
+			collisioneur.setMouvement( Vector2i.ZERO);
+		}
+	}
+	
+	public boolean isFantome() {
+		return fantome;
+	}
+	
+	public void setFantome(boolean fantome) {
+		this.fantome = fantome;
+	}
+	
+	@Override
+	public void draw(RenderTarget target, RenderStates states) {
+		if(!fantome){
+			super.draw(target, states);
+		}
 	}
 	
 }

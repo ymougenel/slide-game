@@ -17,6 +17,7 @@ import jeu.slide.cases.Arrivee;
 import jeu.slide.cases.Case;
 import jeu.slide.cases.Fleche;
 import jeu.slide.cases.Glace;
+import jeu.slide.cases.Porte;
 import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
 
@@ -81,6 +82,7 @@ public class Plateau extends Sequence {
 				case "ar":chargee.damierCases[j+1][i+1]=Arrivee.getInstance();
 							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
 				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
+				case "po":chargee.damierCases[j+1][i+1]=new Porte();break;
 				}
 			}				
 			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();			
@@ -103,7 +105,8 @@ public class Plateau extends Sequence {
 				String code = ligne.substring(2*j, 2*j+2);
 				if(!code.equals(VIDE)){
 					switch(code){
-					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE, true);break;
+					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);break;
+					case "cl":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE);break;
 					default:break;
 					}
 					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
@@ -230,7 +233,7 @@ public class Plateau extends Sequence {
 				/* Phase1 */
 				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
-				if ( entiteSuivante!= null ){
+				if ( entiteSuivante!= null && !entiteSuivante.isFantome()){
 					//getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
 					entiteSuivante.collision( getEntite(entiteMobile));
 					entiteMobile= nouvellesCoordonees;

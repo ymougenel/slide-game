@@ -22,7 +22,9 @@ public abstract class Case {
 		MOUSSE,
 		FLECHE,
 		DEPART,
-		ARRIVEE;
+		ARRIVEE,
+		PORTE_FERMEE,
+		PORTE_OUVERTE;
 
 		@Override
 		public int getNombreTrames() {
