@@ -5,12 +5,19 @@ import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 
-public abstract class Sequence implements Drawable {	
+public abstract class Sequence implements Drawable {
 	
-	public abstract void activeUpdate(Jeu game);
-	public abstract void backgroundUpdate(Jeu game);
-
-	protected abstract void render(RenderTarget fenetre);
+	void active(Jeu game){
+		processActiveEvent(game);
+		processActiveEventGame(game);
+		activeUpdate(game);
+	}
+	
+	void passive(Jeu game){
+		processBackgroundEvent(game);
+		processBackgroundEventGame(game);
+		backgroundUpdate(game);
+	}
 	
 	public void draw(RenderTarget fenetre, RenderStates statut) {		
 			ConstView vue=fenetre.getView();//sauvegarder la vue de la fenetre
@@ -18,21 +25,11 @@ public abstract class Sequence implements Drawable {
 			fenetre.setView(vue);//remettre la vue originelle de la fenetre
 	}
 	
-	/*public void setVisible (boolean visibilite){
-		this.visible = visibilite;
-	}
-	
-	public void setPause ( boolean pause){
-		this.enPause = pause;
-	}
-	
-	public boolean isPause() {
-		return enPause;
-	}
-	
-	public boolean isVisible() {
-		return visible;
-	}*/
-	
-	
+	protected abstract void processActiveEvent(Jeu game);
+	protected abstract void processActiveEventGame(Jeu game);
+	protected abstract void processBackgroundEvent(Jeu game);
+	protected abstract void processBackgroundEventGame(Jeu game);
+	protected abstract void activeUpdate(Jeu game);
+	protected abstract void backgroundUpdate(Jeu game);
+	protected abstract void render(RenderTarget fenetre);
 }

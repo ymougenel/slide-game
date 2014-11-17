@@ -1,10 +1,5 @@
 package jeu.slide;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import jeu.noyau.ChargeurTexture;
 import jeu.noyau.ChargeurTexture.Element;
 import jeu.noyau.Jeu;
@@ -15,11 +10,7 @@ import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
-public class Entite extends Sprite implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4940088905580735189L;
+public class Entite extends Sprite{
 	
 	private static float vitesse = 0.25f;
 	protected  static Vector2i TAILLEENTITE = new Vector2i(16,16);
@@ -116,21 +107,6 @@ public class Entite extends Sprite implements Serializable{
 	
 	public boolean mouvementTermine (){
 		return positionFinale.equals(getPosition());
-	}
-	
-	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
-		in.defaultReadObject();
-		if (textureEntite != null) {
-			chargeur.addTexture(this, textureEntite,0);
-		}
-		setPosition( (Vector2f)in.readObject() );
-		setOrigin( (Vector2f)in.readObject() );
-	}
-	
-	private void writeObject(final ObjectOutputStream out) throws IOException{
-		out.defaultWriteObject();
-		out.writeObject(getPosition());
-		out.writeObject(getOrigin());
 	}
 	
 	public void animer (){

@@ -3,22 +3,19 @@ package jeu.slide;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import jeu.noyau.ChargeurFont;
+import jeu.noyau.Direction;
 import jeu.noyau.Jeu;
 import jeu.noyau.Jeu.EventGame;
 import jeu.noyau.Sequence;
 import jeu.slide.Entite.TextureEntite;
-import jeu.slide.Joueur.TextureJoueur;
 import jeu.slide.cases.Arrivee;
 import jeu.slide.cases.Case;
 import jeu.slide.cases.Fleche;
-import jeu.slide.cases.Fleche.Sens;
 import jeu.slide.cases.Glace;
 import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
@@ -33,9 +30,7 @@ import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public class Plateau extends Sequence implements Serializable {
-	
-	private static final long serialVersionUID = 7433390095796292630L;
+public class Plateau extends Sequence {
 	
 	private Case[][] damierCases;
 	private Entite[][] damierEntite;
@@ -43,7 +38,7 @@ public class Plateau extends Sequence implements Serializable {
 	private Vector2i positionJoueur;
 	private Joueur joueur;
 	//private Vector2i dimensionPlateau;
-	private transient View camera;
+	private View camera;
 	private boolean checkMouvement;
 	private Map<Vector2i, Integer> arrivees;
 	private int niveau;
@@ -79,10 +74,10 @@ public class Plateau extends Sequence implements Serializable {
 				switch(ligne.substring(2*j, 2*(j+1))){
 				case "gl":chargee.damierCases[j+1][i+1]=Glace.getInstance();break;
 				case "tr":chargee.damierCases[j+1][i+1]=Sol.getInstance();break;
-				case "fh":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.HAUT);break;
-				case "fg":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.GAUCHE);break;
-				case "fd":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.DROITE);break;
-				case "fb":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Sens.BAS);break;
+				case "fh":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.HAUT);break;
+				case "fg":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.GAUCHE);break;
+				case "fd":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.DROITE);break;
+				case "fb":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.BAS);break;
 				case "ar":chargee.damierCases[j+1][i+1]=Arrivee.getInstance();
 							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
 				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
@@ -115,7 +110,7 @@ public class Plateau extends Sequence implements Serializable {
 				}
 			}
 		}
-		TextureJoueur direction = Enum.valueOf(TextureJoueur.class, dir);
+		Direction direction = Enum.valueOf(Direction.class, dir);
 		joueur.setElement(direction);
 		
 		chargeur.close();
@@ -136,16 +131,16 @@ public class Plateau extends Sequence implements Serializable {
 		super();
 	}
 	
-	private void processEvents(Jeu game){
+	@Override
+	protected void processActiveEvent(Jeu game){
 		for(Event event : game.getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
 				case UP:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.HAUT);
-						getEntite(positionJoueur).setMouvement(
-								new Vector2i(0, -1));
+						joueur.setElement(Direction.HAUT);
+						getEntite(positionJoueur).setMouvement(Direction.HAUT.getSens());
 						checkMouvement = true;
 
 					}
@@ -153,18 +148,16 @@ public class Plateau extends Sequence implements Serializable {
 				case RIGHT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.DROITE);
-						getEntite(positionJoueur).setMouvement(
-								new Vector2i(1, 0));
+						joueur.setElement(Direction.DROITE);
+						getEntite(positionJoueur).setMouvement(Direction.DROITE.getSens());
 						checkMouvement = true;
 					}
 					break;
 				case LEFT:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.GAUCHE);
-						getEntite(positionJoueur).setMouvement(
-								new Vector2i(-1, 0));
+						joueur.setElement(Direction.GAUCHE);
+						getEntite(positionJoueur).setMouvement(Direction.GAUCHE.getSens());
 						checkMouvement = true;
 
 					}
@@ -172,9 +165,8 @@ public class Plateau extends Sequence implements Serializable {
 				case DOWN:
 					if (entiteMobile == null) {
 						entiteMobile = positionJoueur;
-						joueur.setElement( TextureJoueur.BAS);
-						getEntite(positionJoueur).setMouvement(
-								new Vector2i(0, 1));
+						joueur.setElement(Direction.BAS);
+						getEntite(positionJoueur).setMouvement(Direction.BAS.getSens());
 						checkMouvement = true;
 
 					}
@@ -190,7 +182,8 @@ public class Plateau extends Sequence implements Serializable {
 		}		
 	}
 	
-	private void processEventsGame(Jeu game){
+	@Override
+	protected void processActiveEventGame(Jeu game){
 		for(EventGame eg : game.getEventsGame()){
 			switch((NewEventGame)eg){
 			case COUCOU:break;
@@ -209,10 +202,19 @@ public class Plateau extends Sequence implements Serializable {
 	}
 
 	@Override
+	protected void processBackgroundEvent(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void processBackgroundEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void activeUpdate(Jeu game){
-		/* Traitement entrees clavier */
-		processEvents(game);
-		processEventsGame(game);
 		// Patch GITAN 
 		if (entiteMobile != null ) {
 			Vector2i vect = getEntite(entiteMobile).getMouvement();
@@ -299,8 +301,6 @@ public class Plateau extends Sequence implements Serializable {
 				texteDebut.setColor(new Color(Color.RED, 4*decompteur));
 			}
 			fenetre.draw(texteDebut);
-			System.out.println("affichage"+decompteur);
-			
 		}
 	}
 
@@ -335,12 +335,6 @@ public class Plateau extends Sequence implements Serializable {
 	public void backgroundUpdate(Jeu game) {
 		// TODO Auto-generated method stub
 		
-		
-	}
-	
-	private void readObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
-		ois.defaultReadObject();
-		camera = new View(new FloatRect(-8, -8, 16*(damierCases.length+2), 16*(damierCases[0].length+2)));
 		
 	}
 }

@@ -1,7 +1,5 @@
 package jeu.slide.cases;
 
-import java.io.Serializable;
-
 import jeu.noyau.ChargeurTexture;
 import jeu.noyau.Jeu;
 import jeu.slide.Entite;
@@ -9,12 +7,9 @@ import jeu.slide.Entite;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2i;
 
-public abstract class Case implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1622952502425902144L;
-	protected  transient Sprite sprite;
+public abstract class Case {
+	
+	protected Sprite sprite;
 	public static final Vector2i TAILLECASE = new Vector2i(16, 16);
 	
 	protected static ChargeurTexture chargeur = new ChargeurTexture("cases.png", TAILLECASE);

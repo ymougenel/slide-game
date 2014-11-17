@@ -3,7 +3,6 @@ package jeu.slide;
 import java.io.IOException;
 
 import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
@@ -45,12 +44,4 @@ public class MenuPrincipale extends Menu{
 		
 		bouttons.get(0).setColor(Color.GREEN);
 	}
-	@Override
-	public void backgroundUpdate(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

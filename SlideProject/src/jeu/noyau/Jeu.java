@@ -24,6 +24,7 @@ public abstract class Jeu {
 	
 	private RenderWindow fenetre;
 	protected LinkedList<Sequence> sequencesChargees;
+	private Collection<Sequence> sequencesACharger;
 	protected Collection<Event> events;
 	private Collection<EventGame> eventsGame;
 	private Stack<EventGame> pileEventGame;
@@ -67,6 +68,7 @@ public abstract class Jeu {
 		this.events = new LinkedList<Event>();
 		this.eventsGame = new LinkedList<EventGame>();
 		this.pileEventGame = new Stack<EventGame>();
+		this.sequencesACharger = new LinkedList<Sequence>();
 	}
 	
 	/** lever un evenement interne du jeu
@@ -115,7 +117,7 @@ public abstract class Jeu {
 	 * @param seq
 	 */
 	public void charger(Sequence seq){
-		sequencesChargees.add(seq);
+		sequencesACharger.add(seq);
 	}
 	
 	/**desactiver les calculs de la sequence seq
@@ -140,8 +142,12 @@ public abstract class Jeu {
 	        while (timeSinceLastUpdate > TIME_PER_FRAME){
 	        	timeSinceLastUpdate -= TIME_PER_FRAME;
 	        	processEvents();
-	        	sequencesChargees.getLast().activeUpdate(this);
-	        	for (Sequence seq : sequencesChargees) seq.backgroundUpdate(this);
+	        	for(Sequence seq : sequencesACharger){
+	        		sequencesChargees.add(seq);
+	        		sequencesACharger.remove(seq);
+	        	}
+	        	sequencesChargees.getLast().active(this);
+	        	for (Sequence seq : sequencesChargees) seq.passive(this);
 	        }
 	        fenetre.clear();
 	        for (Sequence seq : sequencesChargees) fenetre.draw(seq);

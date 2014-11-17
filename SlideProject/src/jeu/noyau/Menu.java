@@ -26,10 +26,27 @@ public abstract class Menu extends Sequence {
 	}
 
 	@Override
-	public void activeUpdate(Jeu game) {
+	protected void render(RenderTarget fenetre) {
+		fenetre.draw(fond);
+		for( Boutton boutton : bouttons){
+			fenetre.draw(boutton);
+		}
+	}
+	
+	protected void ajouterBoutton( Boutton boutton){
+		this.bouttons.add(boutton);
+	}
+	
+	public void setFond ( Texture texture) {
+		this.fond.setTexture(texture);
+	}
+
+	@Override
+	protected void processActiveEvent(Jeu game) {
 		int newIndex=0;
-		for(Event event : game.getEvents()){
-			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
+		for (Event event : game.getEvents()) {
+			if (event instanceof KeyEvent
+					&& event.type.equals(Event.Type.KEY_PRESSED)) {
 				switch (((KeyEvent) event).key) {
 				case DOWN:
 				case RIGHT:
@@ -58,21 +75,33 @@ public abstract class Menu extends Sequence {
 			bouttons.get(index).setColor(Color.GREEN);
 		}
 	}
+	@Override
+	public void backgroundUpdate(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	protected void render(RenderTarget fenetre) {
-		fenetre.draw(fond);
-		for( Boutton boutton : bouttons){
-			fenetre.draw(boutton);
-		}
-	}
-	
-	protected void ajouterBoutton( Boutton boutton){
-		this.bouttons.add(boutton);
-	}
-	
-	public void setFond ( Texture texture) {
-		this.fond.setTexture(texture);
+	protected void processActiveEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
 	}
 
+	@Override
+	protected void activeUpdate(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void processBackgroundEvent(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void processBackgroundEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -60,5 +60,26 @@ public class Fin extends Sequence implements Serializable{
 		texte.setColor(Color.RED);
 		
 	}
+	@Override
+	protected void processActiveEvent(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void processActiveEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void processBackgroundEvent(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void processBackgroundEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

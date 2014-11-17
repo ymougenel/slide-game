@@ -1,18 +1,14 @@
 package jeu.slide.cases;
 
-import java.io.ObjectStreamException;
-
 import jeu.noyau.Jeu;
 
 import org.jsfml.system.Vector2i;
 
-public final class Sol extends Case {
-
-	private static final long serialVersionUID = 1L;
+public class Sol extends Case {
 	
 	private static Sol singleton = new Sol();
 	
-	public Sol() {
+	private Sol() {
 		super(TextureCase.TERRE);
 	}
 	
@@ -25,9 +21,5 @@ public final class Sol extends Case {
 	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		// TODO Auto-generated method stub
 		return Vector2i.ZERO;
-	}
-	
-	private Object readResolve() throws ObjectStreamException {
-		return getInstance();
 	}
 }

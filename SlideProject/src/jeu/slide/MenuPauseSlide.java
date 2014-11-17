@@ -3,7 +3,6 @@ package jeu.slide;
 import java.io.IOException;
 
 import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
@@ -13,8 +12,6 @@ import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.TextureCreationException;
 
 public class MenuPauseSlide extends Menu {
-
-	//private Text reprendre,rejouer,menuPrincipal;
 	
 	public MenuPauseSlide() {
 		super();
@@ -48,11 +45,5 @@ public class MenuPauseSlide extends Menu {
 		}
 		
 		bouttons.get(0).setColor(Color.GREEN);
-	}
-
-	@Override
-	public void backgroundUpdate(Jeu game) {
-		// TODO Auto-generated method stub
-		
 	}
 }
