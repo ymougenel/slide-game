@@ -85,7 +85,7 @@ public abstract class Jeu {
 		while ((event=fenetre.pollEvent())!=null){
 			events.add(event);
             if (event.type == Event.Type.CLOSED){
-                fenetre.close();
+                this.fermer();
             }
             processEvent(event);
         }
@@ -147,5 +147,11 @@ public abstract class Jeu {
 	        for (Sequence seq : sequencesChargees) fenetre.draw(seq);
 	        fenetre.display();
 	    }
+	}
+	
+	public void fermer() {
+		// On propose la sauvegarde?
+		fenetre.close();
+		// TODO appeller le GC
 	}
 }

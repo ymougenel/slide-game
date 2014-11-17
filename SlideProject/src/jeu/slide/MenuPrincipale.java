@@ -36,7 +36,7 @@ public class MenuPrincipale extends Menu{
 		bouttons.add( new Boutton(texBoutton, NewEventGame.DEBUTPARTIE, "Nouvelle Partie",font));
 		bouttons.add( new Boutton(texBoutton, null, "Options",font));
 		bouttons.add( new Boutton(texBoutton, null, "A propos",font));
-		bouttons.add( new Boutton(texBoutton, null, "Quitter",font));
+		bouttons.add( new Boutton(texBoutton, NewEventGame.QUITTER, "Quitter",font));
 		
 		fond = new Sprite(texFond);
 		for(int i=0;i<bouttons.size(); i++){

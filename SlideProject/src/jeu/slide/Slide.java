@@ -55,6 +55,8 @@ public class Slide extends Jeu {
 					this.sequencesChargees.clear();
 					this.charger(menuPrincipale);
 				break;
+				case QUITTER :
+					this.fermer();
 				default:
 			}
 		}
