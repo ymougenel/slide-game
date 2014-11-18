@@ -3,6 +3,7 @@ package jeu.slide;
 import java.io.IOException;
 
 import jeu.noyau.Boutton;
+import jeu.noyau.Jeu;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
@@ -33,11 +34,11 @@ public class MenuPauseSlide extends Menu {
 			e.printStackTrace();
 		}
 		
-		bouttons.add( new Boutton(texBoutton, null, "reprendre",font));
-		bouttons.add( new Boutton(texBoutton, NewEventGame.RESTART, "rejouer",font));
-		bouttons.add( new Boutton(texBoutton, NewEventGame.CHARGER_MENU_PRINCIPALE, "menu Principal",font));
-		bouttons.add( new Boutton(texBoutton, null, "Details plateau",font));
-		bouttons.add( new Boutton(texBoutton, NewEventGame.QUITTER, "Quitter",font));
+		bouttons.add( new Boutton(texBoutton, "reprendre",font));
+		bouttons.add( new Boutton(texBoutton, "rejouer",font));
+		bouttons.add( new Boutton(texBoutton, "menu Principal",font));
+		bouttons.add( new Boutton(texBoutton, "Details plateau",font));
+		bouttons.add( new Boutton(texBoutton, "Quitter",font));
 		
 		fond = new Sprite(texFond);
 		for(int i=0;i<bouttons.size(); i++){
@@ -45,5 +46,22 @@ public class MenuPauseSlide extends Menu {
 		}
 		
 		bouttons.get(0).setColor(Color.GREEN);
+	}
+
+	@Override
+	protected void performedIndex(int index,Jeu game) {
+		switch(index){
+		case 1:
+			game.ajouterEvenement(NewEventGame.RESTART);
+		break;
+		case 2:
+			game.menuPrincipal();
+		break;
+		case 4:
+			game.fermer();
+		break;
+		default:
+			break;
+		}
 	}
 }

@@ -2,8 +2,6 @@ package jeu.noyau;
 
 import java.util.ArrayList;
 
-import jeu.noyau.Jeu.EventGame;
-
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RenderTarget;
@@ -58,10 +56,7 @@ public abstract class Menu extends Sequence {
 					break;
 				case RETURN:
 					game.liberer(this);
-					EventGame evt = bouttons.get(index).getEventGame();
-					if (evt != null) {
-						game.ajouterEvenement(evt);
-					}
+					performedIndex(index,game);
 				default:
 					break;
 				}
@@ -104,4 +99,6 @@ public abstract class Menu extends Sequence {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	protected abstract void performedIndex(int index,Jeu game);
 }

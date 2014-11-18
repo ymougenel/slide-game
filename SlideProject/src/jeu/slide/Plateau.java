@@ -176,7 +176,7 @@ public class Plateau extends Sequence {
 					break;
 					case RETURN:
 					case A:
-						game.ajouterEvenement( NewEventGame.CHARGER_MENU_PAUSE );
+						game.pause();
 					break;
 				default:
 					break;

@@ -89,7 +89,6 @@ public abstract class Jeu {
             if (event.type == Event.Type.CLOSED){
                 this.fermer();
             }
-            processEvent(event);
         }
 		//depiler les evenements internes
 		this.eventsGame.clear();
@@ -128,8 +127,9 @@ public abstract class Jeu {
 		sequencesChargees.remove(seq);
 	}
 	
-	protected abstract void processEvent(Event event);
 	protected abstract void processEventGame(EventGame event);
+	public abstract void pause();
+	public abstract void menuPrincipal();
 	
 	/**lance la boucle de rafraichissement du jeu
 	 * 
@@ -145,7 +145,7 @@ public abstract class Jeu {
 	        	for(Sequence seq : sequencesACharger){
 	        		sequencesChargees.add(seq);
 	        		sequencesACharger.remove(seq);
-	        	}
+	        	} 
 	        	sequencesChargees.getLast().active(this);
 	        	for (Sequence seq : sequencesChargees) seq.passive(this);
 	        }

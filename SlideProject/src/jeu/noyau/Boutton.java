@@ -1,7 +1,5 @@
 package jeu.noyau;
 
-import jeu.noyau.Jeu.EventGame;
-
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RectangleShape;
@@ -16,12 +14,10 @@ import org.jsfml.system.Vector2f;
 public class Boutton extends Sprite {
 
 	private Text texte;
-	private EventGame event;
 	private Shape rectangle;
 	
-	public Boutton( Texture texture, EventGame eventgame, String message, Font font) {
+	public Boutton( Texture texture, String message, Font font) {
 		super(texture);
-		this.event = eventgame;
 		this.texte = new Text(message, font);
 		texte.setCharacterSize(35);
 		rectangle = new RectangleShape(new Vector2f(texte.getGlobalBounds().width,texte.getGlobalBounds().height));
@@ -29,10 +25,6 @@ public class Boutton extends Sprite {
 		rectangle.setFillColor(Color.TRANSPARENT);
 		rectangle.setOutlineColor(Color.BLUE);
 		rectangle.setOutlineThickness(1);
-	}
-	
-	public EventGame getEventGame (){
-		return event;
 	}
 	
 	public void setPosition ( Vector2f vecteur) {
