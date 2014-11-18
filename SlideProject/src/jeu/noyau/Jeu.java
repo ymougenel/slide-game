@@ -95,7 +95,6 @@ public abstract class Jeu {
 		while(! pileEventGame.isEmpty()){
 			EventGame eventGame = pileEventGame.pop();
 			eventsGame.add(eventGame);
-			processEventGame(eventGame);
 		}
 	}
 	
@@ -127,7 +126,6 @@ public abstract class Jeu {
 		sequencesChargees.remove(seq);
 	}
 	
-	protected abstract void processEventGame(EventGame event);
 	public abstract void pause();
 	public abstract void menuPrincipal();
 	
@@ -142,10 +140,8 @@ public abstract class Jeu {
 	        while (timeSinceLastUpdate > TIME_PER_FRAME){
 	        	timeSinceLastUpdate -= TIME_PER_FRAME;
 	        	processEvents();
-	        	for(Sequence seq : sequencesACharger){
-	        		sequencesChargees.add(seq);
-	        		sequencesACharger.remove(seq);
-	        	} 
+	        	sequencesChargees.addAll(sequencesACharger);
+	        	sequencesACharger.clear(); 
 	        	sequencesChargees.getLast().active(this);
 	        	for (Sequence seq : sequencesChargees) seq.passive(this);
 	        }

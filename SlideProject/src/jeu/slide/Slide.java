@@ -17,23 +17,6 @@ public class Slide extends Jeu {
 		this.menuPrincipale = new MenuPrincipale();
 		this.charger(menuPrincipale);
 	}
-	
-	@Override
-	protected void processEventGame(EventGame event) {
-		if(event instanceof NewEventGame){
-			switch( (NewEventGame) event ){
-				default:
-			}
-		}
-		if(event == NewEventGame.COUCOU){
-			System.out.println("non");
-		}
-	}
-
-	public static void main(String[] args) throws IOException, TextureCreationException {
-		Slide sl = new Slide("jeu du Slide");
-		sl.run();
-	}
 
 	@Override
 	public void pause() {
@@ -46,4 +29,8 @@ public class Slide extends Jeu {
 		this.charger(menuPrincipale);
 	}
 	
+	public static void main(String[] args) throws IOException, TextureCreationException {
+		Slide sl = new Slide("jeu du Slide");
+		sl.run();
+	}
 }
