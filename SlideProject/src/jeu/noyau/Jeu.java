@@ -23,9 +23,9 @@ public abstract class Jeu {
 	public interface EventGame{};
 	
 	private RenderWindow fenetre;
-	protected LinkedList<Sequence> sequencesChargees;
+	private LinkedList<Sequence> sequencesChargees;
 	private Collection<Sequence> sequencesACharger;
-	protected Collection<Event> events;
+	private Collection<Event> events;
 	private Collection<EventGame> eventsGame;
 	private Stack<EventGame> pileEventGame;
 	//duree d'une frame en µseconde;
@@ -124,6 +124,10 @@ public abstract class Jeu {
 	 */
 	public void liberer(Sequence seq){
 		sequencesChargees.remove(seq);
+	}
+	
+	public void libererTous(){
+		this.sequencesChargees.clear();
 	}
 	
 	public abstract void pause();

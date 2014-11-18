@@ -1,15 +1,10 @@
 package jeu.slide;
 
-import java.io.IOException;
-
 import jeu.noyau.Jeu;
-import jeu.noyau.Sequence;
-
-import org.jsfml.graphics.TextureCreationException;
 
 public class Slide extends Jeu {
-	private Sequence menuPause;
-	private Sequence menuPrincipale;
+	private MenuPauseSlide menuPause;
+	private MenuPrincipale menuPrincipale;
 	
 	public Slide(String nom) {
 		super(nom);
@@ -25,11 +20,11 @@ public class Slide extends Jeu {
 
 	@Override
 	public void menuPrincipal() {
-		this.sequencesChargees.clear();
+		libererTous();
 		this.charger(menuPrincipale);
 	}
 	
-	public static void main(String[] args) throws IOException, TextureCreationException {
+	public static void main(String[] args) {
 		Slide sl = new Slide("jeu du Slide");
 		sl.run();
 	}
