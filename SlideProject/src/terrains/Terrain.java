@@ -24,21 +24,21 @@ public class Terrain {
 		
 	}
 	public void placerEntiteImmobile(int i, int j, TextureEntite texture){
-		entites[i-1][j-1] =  new Entite(texture);
+		entites[i-1][j-1] =  new Entite(texture,false);
 	}
 	
 	public void placerEntiteMobile(int i, int j, TextureEntite texture){
-		entites[i-1][j-1] =  new Entite(texture);
+		entites[i-1][j-1] =  new Entite(texture,false);
 	}
 	
 	public void placerBordure( TextureEntite texture) {
 		for (int i = 0; i < TAILLE; i++) {
-			entites[i][0] = new Entite(texture);
-			entites[i][TAILLE-1] = new Entite(texture);
+			entites[i][0] = new Entite(texture,false);
+			entites[i][TAILLE-1] = new Entite(texture,false);
 		/*}
 		for (int i = 1; i < TAILLE-1; i++) {*/
-			entites[0][i] = new Entite(texture);
-			entites[TAILLE-1][i] = new Entite(texture);
+			entites[0][i] = new Entite(texture,false);
+			entites[TAILLE-1][i] = new Entite(texture,false);
 		}
 	}
 	

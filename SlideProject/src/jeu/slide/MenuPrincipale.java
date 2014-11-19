@@ -14,7 +14,7 @@ import org.jsfml.graphics.TextureCreationException;
 
 public class MenuPrincipale extends Menu{
 	
-	private final int debut=-1; /* TODO************** Premier niveau *************************************************/
+	private final int debut=-2; /* TODO************** Premier niveau *************************************************/
 
 	public MenuPrincipale() {
 		super();
