@@ -105,8 +105,8 @@ public class Plateau extends Sequence {
 				String code = ligne.substring(2*j, 2*j+2);
 				if(!code.equals(VIDE)){
 					switch(code){
-					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE,false);break;
-					case "cl":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE,false);break;
+					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);break;
+					case "cl":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE);break;
 					default:break;
 					}
 					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);

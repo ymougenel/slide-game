@@ -40,11 +40,11 @@ public class Entite extends Sprite{
 		}
 	}
 	
-	public Entite(TextureEntite texture, boolean estFantome) {
+	public Entite(TextureEntite texture) {
 		this();
 		chargeur.addTexture(this, texture,0);
 		this.textureEntite = texture;
-		this.fantome = estFantome;
+		this.fantome = false;
 
 	}
 	
