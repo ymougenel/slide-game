@@ -28,7 +28,6 @@ import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Text;
 import org.jsfml.graphics.View;
-import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
@@ -130,7 +129,7 @@ public class Plateau extends Sequence {
 		chargee.decompteur = 128;
 		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Stocky.getFont(),10);
 		chargee.texteDebut.setColor(Color.RED);
-		chargee.texteDebut.setPosition(new Vector2f(4*tx,5*ty));
+		chargee.texteDebut.setPosition(4*tx,5*ty);
 		return chargee;
 	}
 	
@@ -192,6 +191,7 @@ public class Plateau extends Sequence {
 					case NUMPAD6:
 					try {
 						game.charger(Plateau.chargerPlateau(niveau+1, joueur));
+						game.liberer(this);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -201,6 +201,7 @@ public class Plateau extends Sequence {
 					case NUMPAD4:
 					try {
 						game.charger(Plateau.chargerPlateau(niveau-1, joueur));
+						game.liberer(this);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
