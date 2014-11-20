@@ -12,7 +12,7 @@ public class Porte extends Case {
 	private Entite cle;
 
 	public Porte() {
-		super(TextureCase.PORTE_FERMEE);
+		super(TextureCase.PORTE);
 		porteFermee=true;
 		cle=null;
 	}
@@ -22,7 +22,7 @@ public class Porte extends Case {
 		if(cle !=null){
 			cle.setFantome(true);
 			cle=null;
-			chargeur.addTexture(sprite, TextureCase.PORTE_OUVERTE, 0);
+			chargeur.addTexture(sprite, TextureCase.PORTE, 1);
 		}
 		return Vector2i.ZERO;
 	}

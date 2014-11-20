@@ -21,12 +21,8 @@ public abstract class Case {
 		EAU,
 		MOUSSE,
 		FLECHE,
-		DEPART,
 		ARRIVEE,
-		PORTE_FERMEE,
-		PORTE_OUVERTE,
-		GLACE_CRAQUANTE,
-		GLACE_CRAQUEE;
+		PORTE;
 
 		@Override
 		public int getNombreTrames() {

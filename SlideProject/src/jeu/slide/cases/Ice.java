@@ -10,7 +10,7 @@ public class Ice extends Case{
 		private boolean craquee;
 
 		public Ice() {
-			super(TextureCase.GLACE_CRAQUANTE);
+			super(TextureCase.GLACE);
 			craquee = false;
 		}
 
@@ -24,7 +24,7 @@ public class Ice extends Case{
 			super.collision(collisioneur);
 			if(!craquee){
 				craquee=true;
-				chargeur.addTexture(sprite, TextureCase.GLACE_CRAQUEE, 0);
+				chargeur.addTexture(sprite, TextureCase.GLACE, 1);
 			}
 			else {
 				/* TODO recuperer le jeu et reload le niveau, LE JOUEUR EST MORT!!!! */
