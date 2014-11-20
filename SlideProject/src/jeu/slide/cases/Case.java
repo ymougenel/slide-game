@@ -35,7 +35,6 @@ public abstract class Case {
 		sprite= new Sprite();
 		chargeur.addTexture(sprite, texture,0);
 		sprite.setOrigin(8,8);
-		
 	}
 	
 	public  Sprite getSprite() {

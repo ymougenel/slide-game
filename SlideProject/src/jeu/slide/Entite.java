@@ -21,13 +21,15 @@ public class Entite extends Sprite{
 	protected boolean mouvementEnCours;
 	private Element textureEntite;
 	protected int trameCourante;
+	protected int compteurTrame;
+	final int timeTrame=15;
 	protected ChargeurTexture chargeur;
 	private boolean fantome;
 	
 	private static ChargeurTexture chargeurEntite = new ChargeurTexture("entites.png", TAILLEENTITE,new Color(222, 230, 10) );
 	
 	public enum TextureEntite implements ChargeurTexture.Element {
-		ROCHERMOBILE(1),
+		ROCHERMOBILE(4),
 		CLE(1);
 		
 		private int nombreTrame;
@@ -44,8 +46,6 @@ public class Entite extends Sprite{
 		this();
 		chargeur.addTexture(this, texture,0);
 		this.textureEntite = texture;
-		this.fantome = false;
-
 	}
 	
 	public Entite() {
@@ -55,6 +55,7 @@ public class Entite extends Sprite{
 		mouvementEnCours=false;
 		this.textureEntite = null;
 		this.trameCourante =0;
+		this.compteurTrame=0;
 		this.chargeur = chargeurEntite;
 		setOrigin(8,8);
 		this.fantome=false;
@@ -100,7 +101,9 @@ public class Entite extends Sprite{
 	
 	public void animer (){
 		if (trameCourante != 0 || mouvementEnCours) {
-			trameCourante = (trameCourante == textureEntite.getNombreTrames() - 1) ? 0 : trameCourante+1;
+			compteurTrame=++compteurTrame%timeTrame;
+			if(compteurTrame==0) trameCourante++;
+			if(trameCourante ==textureEntite.getNombreTrames()) trameCourante=0;
 		}
 		this.chargeur.addTexture(this, textureEntite, trameCourante);
 	}
