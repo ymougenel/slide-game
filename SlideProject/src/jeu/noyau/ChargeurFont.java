@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.jsfml.graphics.Font;
 
 public enum ChargeurFont {
-			Arial("arial.ttf"),
+			Stocky("stocky.ttf"),
 			Orange("orangejuice.ttf");
 			
 			private ChargeurFont (String police){

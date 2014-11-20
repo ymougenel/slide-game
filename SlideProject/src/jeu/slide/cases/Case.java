@@ -24,7 +24,9 @@ public abstract class Case {
 		DEPART,
 		ARRIVEE,
 		PORTE_FERMEE,
-		PORTE_OUVERTE;
+		PORTE_OUVERTE,
+		GLACE_CRAQUANTE,
+		GLACE_CRAQUEE;
 
 		@Override
 		public int getNombreTrames() {

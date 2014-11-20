@@ -17,6 +17,7 @@ import jeu.slide.cases.Arrivee;
 import jeu.slide.cases.Case;
 import jeu.slide.cases.Fleche;
 import jeu.slide.cases.Glace;
+import jeu.slide.cases.Ice;
 import jeu.slide.cases.Porte;
 import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
@@ -27,6 +28,7 @@ import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Text;
 import org.jsfml.graphics.View;
+import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
@@ -83,6 +85,7 @@ public class Plateau extends Sequence {
 							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
 				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
 				case "po":chargee.damierCases[j+1][i+1]=new Porte();break;
+				case "gc":chargee.damierCases[j+1][i+1]=new Ice();break;
 				}
 			}				
 			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();			
@@ -125,8 +128,9 @@ public class Plateau extends Sequence {
 		chargee.checkMouvement = false;
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
 		chargee.decompteur = 128;
-		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Orange.getFont(),20);
+		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Stocky.getFont(),10);
 		chargee.texteDebut.setColor(Color.RED);
+		chargee.texteDebut.setPosition(new Vector2f(4*tx,5*ty));
 		return chargee;
 	}
 	
@@ -174,12 +178,34 @@ public class Plateau extends Sequence {
 
 					}
 					break;
+					case M:
 					case RETURN:
 					case A:
 						game.pause();
 					break;
-					/*case R:
-						game.ajouterEvenement();*/
+					case R:
+						game.ajouterEvenement( NewEventGame.RESTART );
+					break;
+					case Q:
+						game.fermer();
+					break;
+					case NUMPAD6:
+					try {
+						game.charger(Plateau.chargerPlateau(niveau+1, joueur));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+					
+					case NUMPAD4:
+					try {
+						game.charger(Plateau.chargerPlateau(niveau-1, joueur));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;					
 				default:
 					break;
 				}
@@ -303,7 +329,7 @@ public class Plateau extends Sequence {
 		if (decompteur>0 ){
 			decompteur--;
 			if (4*decompteur <256){
-				texteDebut.setColor(new Color(Color.RED, 4*decompteur));
+				texteDebut.setColor(new Color(Color.RED, 1000));
 			}
 			fenetre.draw(texteDebut);
 		}

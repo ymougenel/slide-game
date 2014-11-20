@@ -4,4 +4,5 @@
 .project
 *.class
 SlideProject/bin
+hs_err_*
 
