@@ -39,7 +39,6 @@ public class Plateau extends Sequence {
 	private Vector2i entiteMobile;
 	private Vector2i positionJoueur;
 	private Joueur joueur;
-	//private Vector2i dimensionPlateau;
 	private View camera;
 	private Map<Vector2i, Integer> arrivees;
 	private int niveau;
@@ -137,39 +136,21 @@ public class Plateau extends Sequence {
 	
 	@Override
 	protected void processActiveEvent(Jeu game){
+		Direction sens=null;
 		for(Event event : game.getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
 				case UP:
-					if (entiteMobile == null) {
-						entiteMobile = positionJoueur;
-						joueur.setElement(Direction.HAUT);
-						getEntite(positionJoueur).setMouvement(Direction.HAUT.getSens());
-
-					}
+						sens=Direction.HAUT;
 					break;
 				case RIGHT:
-					if (entiteMobile == null) {
-						entiteMobile = positionJoueur;
-						joueur.setElement(Direction.DROITE);
-						getEntite(positionJoueur).setMouvement(Direction.DROITE.getSens());
-					}
+						sens=Direction.DROITE;
 					break;
 				case LEFT:
-					if (entiteMobile == null) {
-						entiteMobile = positionJoueur;
-						joueur.setElement(Direction.GAUCHE);
-						getEntite(positionJoueur).setMouvement(Direction.GAUCHE.getSens());
-
-					}
+						sens=Direction.GAUCHE;
 					break;
 				case DOWN:
-					if (entiteMobile == null) {
-						entiteMobile = positionJoueur;
-						joueur.setElement(Direction.BAS);
-						getEntite(positionJoueur).setMouvement(Direction.BAS.getSens());
-
-					}
+						sens=Direction.BAS;
 					break;
 					case M:
 					case RETURN:
@@ -205,7 +186,12 @@ public class Plateau extends Sequence {
 					break;
 				}
 			}
-		}		
+		}
+		if(sens!=null && entiteMobile == null) {
+			entiteMobile = positionJoueur;
+			joueur.setElement(sens);
+			joueur.setMouvement(sens.getSens());
+		}
 	}
 	
 	@Override
@@ -229,24 +215,22 @@ public class Plateau extends Sequence {
 
 	@Override
 	protected void processBackgroundEvent(Jeu game) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	protected void processBackgroundEventGame(Jeu game) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public void activeUpdate(Jeu game){		
 		if(entiteMobile!=null){
-			Entite mobile=getEntite(entiteMobile);
+			Entite mobile=damierEntite[entiteMobile.x][entiteMobile.y];
 			if (mobile.debutMouvement) {
 				/* Phase1 */
-				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
-				Entite entiteSuivante = getEntite( nouvellesCoordonees );
+				Vector2i nouvellesCoordonees = Vector2i.add(entiteMobile, mobile.getMouvement());
+				Entite entiteSuivante =damierEntite[nouvellesCoordonees.x][nouvellesCoordonees.y];
 				if ( entiteSuivante!= null && !entiteSuivante.isFantome()){
 					entiteSuivante.setMouvement( mobile.getMouvement());
 					mobile.setMouvement( Vector2i.ZERO);
@@ -256,14 +240,20 @@ public class Plateau extends Sequence {
 					if (mobile.getMouvement().equals(Vector2i.ZERO)) {
 						entiteMobile=null;
 					}else{
-						deplacerEntiteMobile(nouvellesCoordonees);
+						damierEntite[entiteMobile.x][entiteMobile.y] = null;
+						damierEntite[nouvellesCoordonees.x][nouvellesCoordonees.y] = mobile;
+						entiteMobile = nouvellesCoordonees;
+						if(mobile==joueur){
+							positionJoueur = nouvellesCoordonees;
+						}
 					}
 					mobile.update();
 				}
 			}else if ( mobile.mouvementTermine() ) {
 				/* Phase 2 */
-				mobile.setMouvement(getCase(entiteMobile).interaction(mobile.getMouvement(), game));
-				if(getCase(entiteMobile) == Arrivee.getInstance() && mobile == joueur){
+				Case destination = damierCases[entiteMobile.x][entiteMobile.y];
+				mobile.setMouvement(destination.interaction(mobile.getMouvement(), game));
+				if(destination == Arrivee.getInstance() && mobile == joueur){
 					changerNiveau(game);
 				}
 				if (mobile.getMouvement().equals(Vector2i.ZERO)) {
@@ -321,37 +311,8 @@ public class Plateau extends Sequence {
 		}
 	}
 
-	private Vector2i coordoneesSuivantes() {
-		if (entiteMobile == null) {
-			return null;
-		} else {
-			return Vector2i.add(entiteMobile, getEntite(entiteMobile).getMouvement());
-		}
-
-	}
-
-	private Entite getEntite(Vector2i position) {
-		return damierEntite[position.x][position.y];
-	}
-
-	private void deplacerEntiteMobile(Vector2i position) {
-		Entite aDeplacer = damierEntite[entiteMobile.x][entiteMobile.y];
-		damierEntite[entiteMobile.x][entiteMobile.y] = null;
-		damierEntite[position.x][position.y] = aDeplacer;
-		entiteMobile = position;
-		if(getEntite(entiteMobile)==joueur){
-			positionJoueur = position;
-		}
-	}
-	
-	private Case getCase ( Vector2i position){
-		return damierCases[position.x][position.y];
-	}
-
 	@Override
 	public void backgroundUpdate(Jeu game) {
-		// TODO Auto-generated method stub
-		
-		
+	
 	}
 }
