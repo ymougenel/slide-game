@@ -1,11 +1,15 @@
 package jeu.slide;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import jeu.noyau.ChargeurFont;
 import jeu.noyau.Direction;
@@ -40,19 +44,21 @@ public class Plateau extends Sequence {
 	private Vector2i positionJoueur;
 	private Joueur joueur;
 	private View camera;
-	private Map<Vector2i, Integer> arrivees;
-	private int niveau;
+	private Map<Vector2i, String> arrivees;
+	private String nom;
 	private int decompteur; //Affichage de la transition initiale
 	private Text texteDebut;
+	private FicheTechniquePlateau fichePlateau;
 
 	
-	public static Plateau chargerPlateau(int numero,Joueur joueur) throws IOException{
+	public static Plateau chargerPlateau(String plateau,Joueur joueur) throws IOException{
+		FicheTechniquePlateau fiche = new FicheTechniquePlateau();
 		Plateau chargee = new Plateau();
-		chargee.arrivees = new HashMap<Vector2i, Integer>();
-		chargee.niveau = numero;
+		chargee.arrivees = new HashMap<Vector2i, String>();
+		chargee.nom = plateau;
 		
 		BufferedReader chargeur = new BufferedReader(new InputStreamReader(
-				Plateau.class.getResourceAsStream("/ressources/plateaux/terrain"+numero+".ascii")));
+				Plateau.class.getResourceAsStream("/ressources/plateaux/"+plateau+".plt")));
 		final String VIDE = "--";
 		String ligne;
 		int tx = Integer.parseInt(chargeur.readLine());
@@ -63,9 +69,9 @@ public class Plateau extends Sequence {
 		
 		chargee.damierEntite = new Entite[tx+2][ty+2];
 		chargee.damierCases = new Case[tx+2][ty+2];
-		LinkedList<Integer> file = new LinkedList<Integer>();
+		LinkedList<String> file = new LinkedList<String>();
 		while(!(ligne = chargeur.readLine()).equals("")){
-			file.add(Integer.parseInt(ligne));
+			file.add(ligne);
 		}
 		
 		for(int i=0;i<ty;i++){
@@ -113,6 +119,32 @@ public class Plateau extends Sequence {
 				}
 			}
 		}
+		chargeur.readLine();
+		/*
+		ligne = chargeur.readLine();
+		String mot;
+		while ( ligne!=" "){
+			mot= ligne.substring(0,ligne.indexOf(" "));
+			switch (mot){
+			case "@Nom": fiche.nom = chargeur.readLine();
+			break;
+			case "@Numero" : fiche.numero =Integer.parseInt(chargeur.readLine());
+			break;
+			case "@Date" : fiche.date = chargeur.readLine();
+			break;
+			case "@Auteur": fiche.auteur = chargeur.readLine();
+			break;
+			default: System.out.println("Option non trouve pour" + mot);
+			break;
+			}
+			ligne = chargeur.readLine();
+		}
+		
+		 
+		
+		
+		fiche.afficher();*/
+		
 		Direction direction = Enum.valueOf(Direction.class, dir);
 		joueur.setElement(direction);
 		
@@ -124,9 +156,10 @@ public class Plateau extends Sequence {
 		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
 		chargee.decompteur = 128;
-		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Stocky.getFont(),10);
-		chargee.texteDebut.setColor(Color.RED);
-		chargee.texteDebut.setPosition(4*tx,5*ty);
+		chargee.texteDebut = new Text("Niveau"+plateau, ChargeurFont.Stocky.getFont(),80);
+		chargee.texteDebut.setColor(Color.BLUE);
+		chargee.texteDebut.setPosition(10,10);
+		chargee.fichePlateau = fiche;
 		return chargee;
 	}
 	
@@ -163,24 +196,35 @@ public class Plateau extends Sequence {
 					case Q:
 						game.fermer();
 					break;
-					case NUMPAD6:
+					case NUMPAD5:
+					String[] listePlateau;
 					try {
-						game.charger(Plateau.chargerPlateau(niveau+1, joueur));
-						game.liberer(this);
+						listePlateau = new File(Plateau.class.getResource("/ressources/plateaux").toURI()).list();
+						String plateauACharger = (String)JOptionPane.showInputDialog(null,"Niveau a charger :",
+								"Mode cheat activated !",JOptionPane.QUESTION_MESSAGE,null,listePlateau,null);
+						if (plateauACharger!=null){
+							plateauACharger = plateauACharger.substring(0, plateauACharger.length()-4);
+							game.charger(Plateau.chargerPlateau(plateauACharger, joueur));
+							game.liberer(this);
+						}
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+
 					break;
 					
 					case NUMPAD4:
-					try {
+					/*try {
 						game.charger(Plateau.chargerPlateau(niveau-1, joueur));
 						game.liberer(this);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 					break;					
 				default:
 					break;
@@ -201,7 +245,7 @@ public class Plateau extends Sequence {
 			case COUCOU:break;
 			case RESTART:
 				try {
-					game.charger(Plateau.chargerPlateau(niveau, joueur));
+					game.charger(Plateau.chargerPlateau(nom, joueur));
 					game.liberer(this);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -267,7 +311,7 @@ public class Plateau extends Sequence {
 
 	private void changerNiveau(Jeu game){
 		try {
-			Integer nouveauNiveau = arrivees.get(entiteMobile);
+			String nouveauNiveau = arrivees.get(entiteMobile);
 			if(nouveauNiveau != null){
 				game.charger(Plateau.chargerPlateau(nouveauNiveau, joueur));
 			}else{
@@ -301,11 +345,12 @@ public class Plateau extends Sequence {
 				}
 			}
 		}
-		
+
 		if (decompteur>0 ){
+			fenetre.setView(fenetre.getDefaultView());
 			decompteur--;
 			if (4*decompteur <256){
-				texteDebut.setColor(new Color(Color.RED, 1000));
+				texteDebut.setColor(new Color(Color.BLUE, 4*decompteur));
 			}
 			fenetre.draw(texteDebut);
 		}

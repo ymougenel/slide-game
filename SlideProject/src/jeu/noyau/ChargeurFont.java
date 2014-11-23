@@ -6,6 +6,7 @@ import org.jsfml.graphics.Font;
 
 public enum ChargeurFont {
 			Stocky("stocky.ttf"),
+			Arial("arial.ttf"),
 			Orange("orangejuice.ttf");
 			
 			private ChargeurFont (String police){
