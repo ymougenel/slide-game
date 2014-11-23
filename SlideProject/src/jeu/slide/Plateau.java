@@ -224,7 +224,7 @@ public class Plateau extends Sequence {
 	}
 	
 	@Override
-	public void activeUpdate(Jeu game){		
+	protected void activeUpdate(Jeu game){		
 		if(entiteMobile!=null){
 			Entite mobile=damierEntite[entiteMobile.x][entiteMobile.y];
 			if (mobile.debutMouvement) {
@@ -281,7 +281,7 @@ public class Plateau extends Sequence {
 	}
 	
 	@Override
-	public void render(RenderTarget fenetre) {
+	protected void render(RenderTarget fenetre) {
 		fenetre.setView(camera);
 		int i, j;
 		Sprite sprite;
@@ -312,7 +312,7 @@ public class Plateau extends Sequence {
 	}
 
 	@Override
-	public void backgroundUpdate(Jeu game) {
+	protected void backgroundUpdate(Jeu game) {
 	
 	}
 }

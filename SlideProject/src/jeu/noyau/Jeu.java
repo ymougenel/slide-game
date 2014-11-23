@@ -18,7 +18,7 @@ import org.jsfml.system.Time;
 import org.jsfml.window.VideoMode;
 import org.jsfml.window.event.Event;
 
-public abstract class Jeu {
+public class Jeu {
 	//ajout de commentaire inutile
 	public interface EventGame{};
 	
@@ -28,6 +28,7 @@ public abstract class Jeu {
 	private Collection<Event> events;
 	private Collection<EventGame> eventsGame;
 	private Stack<EventGame> pileEventGame;
+	private Sequence pause,menuPrincipal;
 	//duree d'une frame en µseconde;
 	public static final float TIME_PER_FRAME = Time.getMilliseconds(1000/60).asMicroseconds();
 	
@@ -58,7 +59,7 @@ public abstract class Jeu {
 		}
 	}
 	
-	public Jeu(String nom){
+	public Jeu(String nom, Sequence pause, Sequence menuPrincipal){
 		verifierOs();
 		this.fenetre = new RenderWindow(new VideoMode(800, 600, 32), nom);
 		this.fenetre.setFramerateLimit(60);
@@ -69,6 +70,9 @@ public abstract class Jeu {
 		this.eventsGame = new LinkedList<EventGame>();
 		this.pileEventGame = new Stack<EventGame>();
 		this.sequencesACharger = new LinkedList<Sequence>();
+		this.pause = pause;
+		this.menuPrincipal = menuPrincipal;
+		charger(menuPrincipal);
 	}
 	
 	/** lever un evenement interne du jeu
@@ -130,8 +134,14 @@ public abstract class Jeu {
 		this.sequencesChargees.clear();
 	}
 	
-	public abstract void pause();
-	public abstract void menuPrincipal();
+	public void pause() {
+		this.charger(pause);
+	}
+
+	public void menuPrincipal() {
+		libererTous();
+		this.charger(menuPrincipal);
+	}
 	
 	/**lance la boucle de rafraichissement du jeu
 	 * 
