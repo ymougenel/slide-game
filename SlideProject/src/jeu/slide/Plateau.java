@@ -41,7 +41,6 @@ public class Plateau extends Sequence {
 	private Joueur joueur;
 	//private Vector2i dimensionPlateau;
 	private View camera;
-	private boolean checkMouvement;
 	private Map<Vector2i, Integer> arrivees;
 	private int niveau;
 	private int decompteur; //Affichage de la transition initiale
@@ -124,7 +123,6 @@ public class Plateau extends Sequence {
 		chargee.joueur = joueur;
 		chargee.damierEntite[px][py]=joueur;
 		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
-		chargee.checkMouvement = false;
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
 		chargee.decompteur = 128;
 		chargee.texteDebut = new Text("Niveau"+numero, ChargeurFont.Stocky.getFont(),10);
@@ -147,7 +145,6 @@ public class Plateau extends Sequence {
 						entiteMobile = positionJoueur;
 						joueur.setElement(Direction.HAUT);
 						getEntite(positionJoueur).setMouvement(Direction.HAUT.getSens());
-						checkMouvement = true;
 
 					}
 					break;
@@ -156,7 +153,6 @@ public class Plateau extends Sequence {
 						entiteMobile = positionJoueur;
 						joueur.setElement(Direction.DROITE);
 						getEntite(positionJoueur).setMouvement(Direction.DROITE.getSens());
-						checkMouvement = true;
 					}
 					break;
 				case LEFT:
@@ -164,7 +160,6 @@ public class Plateau extends Sequence {
 						entiteMobile = positionJoueur;
 						joueur.setElement(Direction.GAUCHE);
 						getEntite(positionJoueur).setMouvement(Direction.GAUCHE.getSens());
-						checkMouvement = true;
 
 					}
 					break;
@@ -173,7 +168,6 @@ public class Plateau extends Sequence {
 						entiteMobile = positionJoueur;
 						joueur.setElement(Direction.BAS);
 						getEntite(positionJoueur).setMouvement(Direction.BAS.getSens());
-						checkMouvement = true;
 
 					}
 					break;
@@ -246,64 +240,55 @@ public class Plateau extends Sequence {
 	}
 	
 	@Override
-	public void activeUpdate(Jeu game){
-		// Patch GITAN 
-		if (entiteMobile != null ) {
-			Vector2i vect = getEntite(entiteMobile).getMouvement();
-			if (vect.x==0 && vect.y ==0) {
-				entiteMobile=null;
-				checkMouvement = false;
-			}
-		}
-		// Fin patch GITATn le reste est ~ propres
-		
+	public void activeUpdate(Jeu game){		
 		if(entiteMobile!=null){
-			if ( checkMouvement ) {
+			Entite mobile=getEntite(entiteMobile);
+			if (mobile.debutMouvement) {
 				/* Phase1 */
 				Vector2i nouvellesCoordonees = coordoneesSuivantes() ;
 				Entite entiteSuivante = getEntite( nouvellesCoordonees );
 				if ( entiteSuivante!= null && !entiteSuivante.isFantome()){
-					//getEntite(entiteMobile).transmettreMouvement(entiteSuivante);
-					entiteSuivante.collision( getEntite(entiteMobile));
+					entiteSuivante.setMouvement( mobile.getMouvement());
+					mobile.setMouvement( Vector2i.ZERO);
 					entiteMobile= nouvellesCoordonees;
-					checkMouvement = true;
 				} else {
-					damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y].collision(getEntite(entiteMobile));
-					if (! getEntite(entiteMobile).getMouvement().equals(Vector2i.ZERO)) {
+					damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y].collision(mobile);
+					if (mobile.getMouvement().equals(Vector2i.ZERO)) {
+						entiteMobile=null;
+					}else{
 						deplacerEntiteMobile(nouvellesCoordonees);
-						checkMouvement = false;					
-					}	
-				}
-				
-
-			}else {
-				/* Phase 2 */
-				getEntite(entiteMobile).update();
-				getEntite(entiteMobile).animer();
-				if ( getEntite(entiteMobile).mouvementTermine() ) {
-					Vector2i nouvelleCinetique = getCase(entiteMobile).interaction(getEntite(entiteMobile).getMouvement(), game);
-					getEntite(entiteMobile).setMouvement(nouvelleCinetique);
-					checkMouvement = true;
-					if(getCase(entiteMobile) == Arrivee.getInstance() && getEntite(entiteMobile) == joueur){
-						try {
-							Integer nouveauNiveau = arrivees.get(entiteMobile);
-							if(nouveauNiveau != null){
-								game.charger(Plateau.chargerPlateau(nouveauNiveau, joueur));
-							}else{
-								game.charger(new Fin());
-							}
-							game.liberer(this);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
+					mobile.update();
 				}
+			}else if ( mobile.mouvementTermine() ) {
+				/* Phase 2 */
+				mobile.setMouvement(getCase(entiteMobile).interaction(mobile.getMouvement(), game));
+				if(getCase(entiteMobile) == Arrivee.getInstance() && mobile == joueur){
+					changerNiveau(game);
+				}
+				if (mobile.getMouvement().equals(Vector2i.ZERO)) {
+					entiteMobile=null;
+				}
+			}else{
+				mobile.update();
 			}
-			
 		}
 	}
 
+	private void changerNiveau(Jeu game){
+		try {
+			Integer nouveauNiveau = arrivees.get(entiteMobile);
+			if(nouveauNiveau != null){
+				game.charger(Plateau.chargerPlateau(nouveauNiveau, joueur));
+			}else{
+				game.charger(new Fin());
+			}
+			game.liberer(this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void render(RenderTarget fenetre) {

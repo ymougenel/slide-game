@@ -19,6 +19,7 @@ public class Entite extends Sprite{
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
 	protected boolean mouvementEnCours;
+	protected boolean debutMouvement;
 	private Element textureEntite;
 	protected int trameCourante;
 	protected int compteurTrame;
@@ -53,6 +54,7 @@ public class Entite extends Sprite{
 		mouvement = Vector2i.ZERO;	
 		positionFinale = Vector2f.ZERO;
 		mouvementEnCours=false;
+		debutMouvement=false;
 		this.textureEntite = null;
 		this.trameCourante =0;
 		this.compteurTrame=0;
@@ -64,12 +66,14 @@ public class Entite extends Sprite{
 	public void setMouvement( Vector2i deplacement){
 		if(! deplacement.equals(Vector2i.ZERO) ){
 			this.mouvementEnCours=true;
+			this.debutMouvement=true;
 			this.mouvement=deplacement;
 			this.positionFinale = new Vector2f(deplacement.x * Case.TAILLECASE.x + getPosition().x, 
 											deplacement.y * Case.TAILLECASE.y + getPosition().y);
 		}
 		else {
 			mouvementEnCours = false;
+			debutMouvement=false;
 			mouvement = Vector2i.ZERO;
 			this.positionFinale=getPosition();
 		}
@@ -85,12 +89,14 @@ public class Entite extends Sprite{
 			float distanceX = Jeu.TIME_PER_FRAME * vitesse * mouvement.x / 1000;
 			float distanceY = Jeu.TIME_PER_FRAME * vitesse * mouvement.y / 1000;
 			this.move(distanceX, distanceY);
+			debutMouvement=false;
 			/* TODO ANIMATION FLOWER */
 			
 			if ( getPosition().x * mouvement.x > positionFinale.x * mouvement.x || getPosition().y *mouvement.y > positionFinale.y * mouvement.y){
 				this.setPosition(positionFinale);
 				this.mouvementEnCours = false;
 			}
+			animer();
 		}
 		
 	}
@@ -99,7 +105,11 @@ public class Entite extends Sprite{
 		return positionFinale.equals(getPosition());
 	}
 	
-	public void animer (){
+	public boolean debutMouvement(){
+		return debutMouvement;
+	}
+	
+	protected void animer (){
 		if (trameCourante != 0 || mouvementEnCours) {
 			compteurTrame=++compteurTrame%timeTrame;
 			if(compteurTrame==0) trameCourante++;
@@ -115,13 +125,6 @@ public class Entite extends Sprite{
 	
 	public Element getElement(){
 		return textureEntite;
-	}
-	
-	public void collision(Entite collisioneur){
-		if(!fantome){
-			this.setMouvement( collisioneur.getMouvement());
-			collisioneur.setMouvement( Vector2i.ZERO);
-		}
 	}
 	
 	public boolean isFantome() {
