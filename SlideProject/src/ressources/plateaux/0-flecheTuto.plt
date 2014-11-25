@@ -19,4 +19,4 @@ rm----------
 rm----------
 --rm--rm----
 
-@Nom LE Commencement
+@Nom Suivez-moi!

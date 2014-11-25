@@ -14,3 +14,6 @@ glglgl
 --rm--
 
 @Nom Le commencement
+@Author Yann
+@Date 12/10/14
+@Numero 0

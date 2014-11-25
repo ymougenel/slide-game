@@ -120,19 +120,19 @@ public class Plateau extends Sequence {
 			}
 		}
 		chargeur.readLine();
-		/*
 		ligne = chargeur.readLine();
 		String mot;
-		while ( ligne!=" "){
+		while ( ligne!=" " && ligne != null ){
 			mot= ligne.substring(0,ligne.indexOf(" "));
+			System.out.println("mot trovue"+mot);
 			switch (mot){
-			case "@Nom": fiche.nom = chargeur.readLine();
+			case "@Nom": fiche.nom = ligne.substring(ligne.indexOf(" ")+1);
 			break;
-			case "@Numero" : fiche.numero =Integer.parseInt(chargeur.readLine());
+			case "@Numero" : fiche.numero =Integer.parseInt( ligne.substring(ligne.indexOf(" ")+1) );
 			break;
-			case "@Date" : fiche.date = chargeur.readLine();
+			case "@Date" : fiche.date = ligne.substring(ligne.indexOf(" ")+1);
 			break;
-			case "@Auteur": fiche.auteur = chargeur.readLine();
+			case "@Author": fiche.auteur = ligne.substring(ligne.indexOf(" ")+1);
 			break;
 			default: System.out.println("Option non trouve pour" + mot);
 			break;
@@ -143,7 +143,7 @@ public class Plateau extends Sequence {
 		 
 		
 		
-		fiche.afficher();*/
+		fiche.afficher();
 		
 		Direction direction = Enum.valueOf(Direction.class, dir);
 		joueur.setElement(direction);
@@ -156,7 +156,8 @@ public class Plateau extends Sequence {
 		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
 		chargee.decompteur = 128;
-		chargee.texteDebut = new Text("Niveau"+plateau, ChargeurFont.Stocky.getFont(),80);
+		String texte = (fiche.nom!=null)?fiche.nom:"Niveau"+plateau ;
+		chargee.texteDebut = new Text(texte, ChargeurFont.Stocky.getFont(),80);
 		chargee.texteDebut.setColor(Color.BLUE);
 		chargee.texteDebut.setPosition(10,10);
 		chargee.fichePlateau = fiche;
