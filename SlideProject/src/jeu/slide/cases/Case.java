@@ -11,6 +11,7 @@ public abstract class Case {
 	
 	protected Sprite sprite;
 	public static final Vector2i TAILLECASE = new Vector2i(16, 16);
+	protected Entite ecraseur;
 	
 	protected static ChargeurTexture chargeur = new ChargeurTexture("cases.png", TAILLECASE);
 	
@@ -35,6 +36,7 @@ public abstract class Case {
 		sprite= new Sprite();
 		chargeur.addTexture(sprite, texture,0);
 		sprite.setOrigin(8,8);
+		ecraseur=null;
 	}
 	
 	public  Sprite getSprite() {
@@ -47,6 +49,6 @@ public abstract class Case {
 	}
 	
 	public void collision (Entite collisioneur){
-		
+		ecraseur = collisioneur;
 	}
 }

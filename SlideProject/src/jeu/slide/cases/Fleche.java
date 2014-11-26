@@ -2,7 +2,6 @@ package jeu.slide.cases;
 
 import jeu.noyau.Direction;
 import jeu.noyau.Jeu;
-import jeu.slide.Entite;
 import jeu.slide.Joueur;
 
 import org.jsfml.system.Vector2i;
@@ -34,14 +33,9 @@ public class Fleche extends Case {
 	@Override
 	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		// TODO Auto-generated method stub
-		return sens.getSens();
-	}
-	
-	@Override
-	public void collision(Entite collisioneur) {
-		if ( collisioneur instanceof Joueur) {
-			collisioneur.setElement(sens);
+		if ( ecraseur instanceof Joueur) {
+			ecraseur.setElement(sens);
 		}
-		super.collision(collisioneur);
+		return sens.getSens();
 	}
 }
