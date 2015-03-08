@@ -1,23 +1,22 @@
 package jeu.slide.cases;
 
-import jeu.noyau.Jeu;
+import jeu.noyau.render.ViewController;
 
-import org.jsfml.system.Vector2i;
 
 public class Arrivee extends Case {
 	
-	private static Arrivee singleton = new Arrivee();
+	private String niveauSuivant;
 	
-	private Arrivee() {
-		super(TextureCase.ARRIVEE);
+	public Arrivee(ViewController vc,String niveauSuivant) {
+		super(vc,TextureCase.ARRIVEE);
+		this.niveauSuivant = niveauSuivant;
 	}
 	
-	public static Arrivee getInstance() {
-		return singleton;
+	public void setNiveauSuivant(String niveauSuivant) {
+		this.niveauSuivant = niveauSuivant;
 	}
-
-	@Override
-	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
-		return Vector2i.ZERO;
+	
+	public String getNiveauSuivant() {
+		return niveauSuivant;
 	}
 }

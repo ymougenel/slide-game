@@ -3,7 +3,7 @@ package jeu.slide;
 import java.io.IOException;
 
 import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
+import jeu.noyau.GameController;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
@@ -16,8 +16,8 @@ public class MenuPrincipale extends Menu{
 	
 	private final String debut="0-debut"; /* TODO************** Premier niveau *************************************************/
 
-	public MenuPrincipale() {
-		super();
+	public MenuPrincipale(Slide game,int id) {
+		super(game,id);
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
 		try {
@@ -49,22 +49,40 @@ public class MenuPrincipale extends Menu{
 	}
 
 	@Override
-	protected void performedIndex(int index, Jeu game) {
+	protected void performedIndex(int index, GameController game) {
 		switch(index){
 		case 0:
 			try {
-				game.charger(Plateau.chargerPlateau(debut, new Joueur()));
+				game.charger(new Plateau(getGame(),0,debut, new Joueur(game)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		break;
 		case 3:
-			game.fermer();
+			game.stop();
 		break;
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	protected void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void processEventGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void update() {
+		// TODO Auto-generated method stub
 		
 	}
 }

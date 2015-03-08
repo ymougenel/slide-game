@@ -5,18 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import jeu.noyau.ChargeurFont;
 import jeu.noyau.Direction;
-import jeu.noyau.Jeu;
-import jeu.noyau.Jeu.EventGame;
-import jeu.noyau.Sequence;
-import jeu.slide.Entite.TextureEntite;
+import jeu.noyau.GameController;
+import jeu.noyau.GameController.EventGame;
+import jeu.noyau.render.ChargeurFont;
+import jeu.slide.Sprite.TextureEntite;
 import jeu.slide.cases.Arrivee;
 import jeu.slide.cases.Case;
 import jeu.slide.cases.Fleche;
@@ -27,35 +24,29 @@ import jeu.slide.cases.Rocher;
 import jeu.slide.cases.Sol;
 
 import org.jsfml.graphics.Color;
-import org.jsfml.graphics.FloatRect;
-import org.jsfml.graphics.RenderTarget;
-import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Text;
-import org.jsfml.graphics.View;
-import org.jsfml.system.Vector2i;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public class Plateau extends Sequence {
+public class Plateau extends SlideSequence {
 	
-	private Case[][] damierCases;
-	private Entite[][] damierEntite;
-	private Vector2i entiteMobile;
-	private Vector2i positionJoueur;
+	protected Case[][] damierCases;
+	protected Sprite[][] damierEntite;
+	private int entiteMobileX;
+	private int entiteMobileY;
+	private int positionJoueurX;
+	private int positionJoueurY;
 	private Joueur joueur;
-	private View camera;
-	private Map<Vector2i, String> arrivees;
 	private String nom;
-	private int decompteur; //Affichage de la transition initiale
-	private Text texteDebut;
+	protected int decompteur; //Affichage de la transition initiale
+	protected Text texteDebut;
 	private FicheTechniquePlateau fichePlateau;
 
 	
-	public static Plateau chargerPlateau(String plateau,Joueur joueur) throws IOException{
+	public Plateau(Slide game, int id, String plateau,Joueur joueur) throws IOException{
+		super(game,id);
 		FicheTechniquePlateau fiche = new FicheTechniquePlateau();
-		Plateau chargee = new Plateau();
-		chargee.arrivees = new HashMap<Vector2i, String>();
-		chargee.nom = plateau;
+		nom = plateau;
 		
 		BufferedReader chargeur = new BufferedReader(new InputStreamReader(
 				Plateau.class.getResourceAsStream("/ressources/plateaux/"+plateau+".plt")));
@@ -67,8 +58,8 @@ public class Plateau extends Sequence {
 		int py = Integer.parseInt(chargeur.readLine());
 		String dir = chargeur.readLine();
 		
-		chargee.damierEntite = new Entite[tx+2][ty+2];
-		chargee.damierCases = new Case[tx+2][ty+2];
+		damierEntite = new Sprite[tx+2][ty+2];
+		damierCases = new Case[tx+2][ty+2];
 		LinkedList<String> file = new LinkedList<String>();
 		while(!(ligne = chargeur.readLine()).equals("")){
 			file.add(ligne);
@@ -78,31 +69,30 @@ public class Plateau extends Sequence {
 			ligne = chargeur.readLine();
 			for(int j=0;j<tx;j++){
 				switch(ligne.substring(2*j, 2*(j+1))){
-				case "gl":chargee.damierCases[j+1][i+1]=Glace.getInstance();break;
-				case "tr":chargee.damierCases[j+1][i+1]=Sol.getInstance();break;
-				case "fh":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.HAUT);break;
-				case "fg":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.GAUCHE);break;
-				case "fd":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.DROITE);break;
-				case "fb":chargee.damierCases[j+1][i+1]=Fleche.getInstance(Direction.BAS);break;
-				case "ar":chargee.damierCases[j+1][i+1]=Arrivee.getInstance();
-							chargee.arrivees.put(new Vector2i(j+1,i+1), file.poll()); break;
-				case "ri":chargee.damierCases[j+1][i+1]=Rocher.getInstance();break;
-				case "po":chargee.damierCases[j+1][i+1]=new Porte();break;
-				case "gc":chargee.damierCases[j+1][i+1]=new Ice();break;
+				case "gl":damierCases[j+1][i+1]=new Glace(game);break;
+				case "tr":damierCases[j+1][i+1]=new Sol(game);break;
+				case "fh":damierCases[j+1][i+1]=new Fleche(game,Direction.HAUT);break;
+				case "fg":damierCases[j+1][i+1]=new Fleche(game,Direction.GAUCHE);break;
+				case "fd":damierCases[j+1][i+1]=new Fleche(game,Direction.DROITE);break;
+				case "fb":damierCases[j+1][i+1]=new Fleche(game,Direction.BAS);break;
+				case "ar":damierCases[j+1][i+1]=new Arrivee(game,file.poll());break;
+				case "ri":damierCases[j+1][i+1]=new Rocher(game);break;
+				case "po":damierCases[j+1][i+1]=new Porte(game);break;
+				case "gc":damierCases[j+1][i+1]=new Ice(game);break;
 				}
 			}				
-			chargee.damierCases[tx+1][i+1] = Rocher.getInstance();			
-			chargee.damierCases[0][i+1] = Rocher.getInstance();	
+			damierCases[tx+1][i+1] =new  Rocher(game);			
+			damierCases[0][i+1] =new  Rocher(game);	
 		}
 		
 		for (int i=0; i<tx; i++) {
-			chargee.damierCases[i+1][0] = Rocher.getInstance();
-			chargee.damierCases[i+1][ty+1] = Rocher.getInstance();
+			damierCases[i+1][0] =new  Rocher(game);
+			damierCases[i+1][ty+1] =new Rocher(game);
 		}
-		chargee.damierCases[0][0] = Rocher.getInstance();	
-		chargee.damierCases[tx+1][0] = Rocher.getInstance();	
-		chargee.damierCases[0][ty+1] = Rocher.getInstance();	
-		chargee.damierCases[tx+1][ty+1] = Rocher.getInstance();
+		damierCases[0][0] =new  Rocher(game);	
+		damierCases[tx+1][0] =new  Rocher(game);	
+		damierCases[0][ty+1] =new Rocher(game);	
+		damierCases[tx+1][ty+1] =new  Rocher(game);
 		
 		chargeur.readLine();
 		for(int i=0;i<ty;i++){
@@ -111,11 +101,11 @@ public class Plateau extends Sequence {
 				String code = ligne.substring(2*j, 2*j+2);
 				if(!code.equals(VIDE)){
 					switch(code){
-					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);break;
-					case "cl":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE);break;
+					case "rm":damierEntite[j+1][i+1]=new Sprite(game,TextureEntite.ROCHERMOBILE);break;
+					case "cl":damierEntite[j+1][i+1]=new Sprite(game,TextureEntite.CLE);break;
 					default:break;
 					}
-					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+					damierEntite[j+1][i+1].getRender().setPosition((j+1)*Case.TAILLECASEX,(i+1)*Case.TAILLECASEY);
 				}
 			}
 		}
@@ -149,29 +139,26 @@ public class Plateau extends Sequence {
 		joueur.setElement(direction);
 		
 		chargeur.close();
-		chargee.entiteMobile = null;
-		chargee.positionJoueur = new Vector2i(px,py);
-		chargee.joueur = joueur;
-		chargee.damierEntite[px][py]=joueur;
-		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
-		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
-		chargee.decompteur = 128;
+		entiteMobileX = -1;
+		entiteMobileY = -1;
+		positionJoueurX = px;
+		positionJoueurY = py;
+		this.joueur = joueur;
+		damierEntite[px][py]=joueur;
+		this.joueur.getRender().setPosition(px*Case.TAILLECASEX,py*Case.TAILLECASEY);
+		decompteur = 128;
 		String texte = (fiche.nom!=null)?fiche.nom:"Niveau"+plateau ;
-		chargee.texteDebut = new Text(texte, ChargeurFont.Stocky.getFont(),80);
-		chargee.texteDebut.setColor(Color.BLUE);
-		chargee.texteDebut.setPosition(10,10);
-		chargee.fichePlateau = fiche;
-		return chargee;
-	}
-	
-	private Plateau(){
-		super();
+		texteDebut = new Text(texte, ChargeurFont.Stocky.getFont(),80);
+		texteDebut.setColor(Color.BLUE);
+		texteDebut.setPosition(10,10);
+		fichePlateau = fiche;
+		this.render = new RenderPlateau();
 	}
 	
 	@Override
-	protected void processActiveEvent(Jeu game){
+	protected void processInputs(){
 		Direction sens=null;
-		for(Event event : game.getEvents()){
+		for(Event event : getGame().getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
 				case UP:
@@ -189,13 +176,13 @@ public class Plateau extends Sequence {
 					case M:
 					case RETURN:
 					case A:
-						game.pause();
+						
 					break;
 					case R:
 						game.ajouterEvenement( NewEventGame.RESTART );
 					break;
 					case Q:
-						game.fermer();
+						game.stop();
 					break;
 					case NUMPAD5:
 					String[] listePlateau;
@@ -205,8 +192,8 @@ public class Plateau extends Sequence {
 								"Mode cheat activated !",JOptionPane.QUESTION_MESSAGE,null,listePlateau,null);
 						if (plateauACharger!=null){
 							plateauACharger = plateauACharger.substring(0, plateauACharger.length()-4);
-							game.charger(Plateau.chargerPlateau(plateauACharger, joueur));
-							game.liberer(this);
+							game.charger(new Plateau(getGame(),0,plateauACharger, joueur));
+							game.liberer();
 						}
 					} catch (URISyntaxException e) {
 						// TODO Auto-generated catch block
@@ -232,22 +219,23 @@ public class Plateau extends Sequence {
 				}
 			}
 		}
-		if(sens!=null && entiteMobile == null) {
-			entiteMobile = positionJoueur;
+		if(sens!=null && entiteMobileX == -1 && entiteMobileY == -1) {
+			entiteMobileX = positionJoueurX;
+			entiteMobileY = positionJoueurY;
 			joueur.setElement(sens);
-			joueur.setMouvement(sens.getSens());
+			joueur.setMouvement(sens.getSensX(),sens.getSensY());
 		}
 	}
 	
 	@Override
-	protected void processActiveEventGame(Jeu game){
+	protected void processEventGame(){
 		for(EventGame eg : game.getEventsGame()){
 			switch((NewEventGame)eg){
 			case COUCOU:break;
 			case RESTART:
 				try {
-					game.charger(Plateau.chargerPlateau(nom, joueur));
-					game.liberer(this);
+					game.charger(new Plateau(getGame(),0,nom, joueur));
+					game.liberer();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -257,108 +245,73 @@ public class Plateau extends Sequence {
 			}
 		}
 	}
-
-	@Override
-	protected void processBackgroundEvent(Jeu game) {
-		
-	}
 	
 	@Override
-	protected void processBackgroundEventGame(Jeu game) {
-		
-	}
-	
-	@Override
-	protected void activeUpdate(Jeu game){		
-		if(entiteMobile!=null){
-			Entite mobile=damierEntite[entiteMobile.x][entiteMobile.y];
+	protected void update(){		
+		if(entiteMobileX != -1 && entiteMobileY != -1 ){
+			Sprite mobile=damierEntite[entiteMobileX][entiteMobileY];
 			if (mobile.debutMouvement) {
 				/* Phase1 */
-				Vector2i nouvellesCoordonees = Vector2i.add(entiteMobile, mobile.getMouvement());
-				Entite entiteSuivante =damierEntite[nouvellesCoordonees.x][nouvellesCoordonees.y];
+				int nouvellesCoordoneesX = entiteMobileX + mobile.getMouvementX();
+				int nouvellesCoordoneesY = entiteMobileY + mobile.getMouvementY();
+				Sprite entiteSuivante =damierEntite[nouvellesCoordoneesX][nouvellesCoordoneesY];
 				if ( entiteSuivante!= null && !entiteSuivante.isFantome()){
-					entiteSuivante.setMouvement( mobile.getMouvement());
-					mobile.setMouvement( Vector2i.ZERO);
-					entiteMobile= nouvellesCoordonees;
+					entiteSuivante.setMouvement( mobile.getMouvementX(),mobile.getMouvementY());
+					mobile.setMouvement(0,0);
+					entiteMobileX= nouvellesCoordoneesX;
+					entiteMobileY = nouvellesCoordoneesY;
 				} else {
-					damierCases[nouvellesCoordonees.x][nouvellesCoordonees.y].collision(mobile);
-					if (mobile.getMouvement().equals(Vector2i.ZERO)) {
-						entiteMobile=null;
+					damierCases[nouvellesCoordoneesX][nouvellesCoordoneesY].collision(mobile);
+					if (mobile.getMouvementX() == 0 && mobile.getMouvementY() == 0) {
+						entiteMobileX =-1;
+						entiteMobileY = -1;
 					}else{
-						damierEntite[entiteMobile.x][entiteMobile.y] = null;
-						damierEntite[nouvellesCoordonees.x][nouvellesCoordonees.y] = mobile;
-						entiteMobile = nouvellesCoordonees;
+						damierEntite[entiteMobileX][entiteMobileY] = null;
+						damierEntite[nouvellesCoordoneesX][nouvellesCoordoneesY] = mobile;
+						entiteMobileX = nouvellesCoordoneesX;
+						entiteMobileY = nouvellesCoordoneesY;
 						if(mobile==joueur){
-							positionJoueur = nouvellesCoordonees;
+							positionJoueurX = nouvellesCoordoneesX;
+							positionJoueurY = nouvellesCoordoneesY;
 						}
 					}
-					mobile.update();
+					mobile.update(getGame());
 				}
 			}else if ( mobile.mouvementTermine() ) {
 				/* Phase 2 */
-				Case destination = damierCases[entiteMobile.x][entiteMobile.y];
-				mobile.setMouvement(destination.interaction(mobile.getMouvement(), game));
-				if(destination == Arrivee.getInstance() && mobile == joueur){
-					changerNiveau(game);
+				Case destination = damierCases[entiteMobileX][entiteMobileY];
+				destination.interaction(mobile, game);
+				if(destination instanceof Arrivee && mobile == joueur){
+					changerNiveau(game, (Arrivee) destination);
 				}
-				if (mobile.getMouvement().equals(Vector2i.ZERO)) {
-					entiteMobile=null;
+				if (mobile.getMouvementX() == 0 && mobile.getMouvementY() == 0) {
+					entiteMobileX=-1;
+					entiteMobileY=-1;
 				}
 			}else{
-				mobile.update();
+				mobile.update(getGame());
 			}
 		}
 	}
 
-	private void changerNiveau(Jeu game){
+	private void changerNiveau(GameController game, Arrivee arrivee){
 		try {
-			String nouveauNiveau = arrivees.get(entiteMobile);
+			String nouveauNiveau = arrivee.getNiveauSuivant();
+			game.liberer();
 			if(nouveauNiveau != null){
-				game.charger(Plateau.chargerPlateau(nouveauNiveau, joueur));
+				game.charger(new Plateau(getGame(),0,nouveauNiveau, joueur));
 			}else{
-				game.charger(new Fin());
+				game.charger(new Fin(getGame(),7));
 			}
-			game.liberer(this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	protected void render(RenderTarget fenetre) {
-		fenetre.setView(camera);
-		int i, j;
-		Sprite sprite;
-		for (i = 0; i < damierCases.length; i++) {
-			for (j = 0; j < damierCases[0].length; j++) {
-				/* Traitement des cases du pleateau */
-				sprite = damierCases[i][j].getSprite();
-				sprite.setPosition(i * Case.TAILLECASE.x, j * Case.TAILLECASE.y);
-				fenetre.draw(sprite);
-			}
-		}
-		for (i = 0; i < damierEntite.length; i++) {
-			for (j = 0; j < damierEntite[0].length; j++) {
-				/* Traitement des entites du plateau */
-				if (damierEntite[i][j] != null) {
-					fenetre.draw(damierEntite[i][j]);
-				}
-			}
-		}
-
-		if (decompteur>0 ){
-			fenetre.setView(fenetre.getDefaultView());
-			decompteur--;
-			if (4*decompteur <256){
-				texteDebut.setColor(new Color(Color.BLUE, 4*decompteur));
-			}
-			fenetre.draw(texteDebut);
-		}
-	}
 
 	@Override
-	protected void backgroundUpdate(Jeu game) {
-	
+	protected void init() {
+		// TODO Auto-generated method stub
+		
 	}
 }

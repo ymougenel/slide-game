@@ -1,4 +1,4 @@
-package jeu.noyau;
+package jeu.noyau.render;
 
 import java.io.IOException;
 

@@ -1,31 +1,18 @@
 package jeu.slide.cases;
 
-import jeu.noyau.Jeu;
-import jeu.slide.Entite;
-
-import org.jsfml.system.Vector2i;
+import jeu.noyau.render.ViewController;
+import jeu.slide.Sprite;
 
 public class Rocher extends Case {
-
-	private static Rocher singleton = new Rocher();
 	
-	private Rocher() {
-		super(TextureCase.ROCHER);
-	}
-	
-	public static Rocher getInstance() {
-		return singleton;
-	}
-
-	@Override
-	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
-		return Vector2i.ZERO;
+	public Rocher(ViewController vc) {
+		super(vc, TextureCase.ROCHER);
 	}
 	
 	@Override
-	public void collision(Entite collisioneur) {
+	public void collision(Sprite collisioneur) {
 		super.collision(collisioneur);
-		collisioneur.setMouvement(Vector2i.ZERO);
+		collisioneur.setMouvement(0,0);
 	}
 
 }

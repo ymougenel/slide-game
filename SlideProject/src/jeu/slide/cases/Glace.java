@@ -1,25 +1,17 @@
 package jeu.slide.cases;
 
-import jeu.noyau.Jeu;
-
-import org.jsfml.system.Vector2i;
+import jeu.noyau.GameController;
+import jeu.noyau.render.ViewController;
+import jeu.slide.Sprite;
 
 public class Glace extends Case {
 	
-	private static Glace singleton = new Glace();
-	
-	private Glace() {
-		super(TextureCase.GLACE);
-	}
-	
-	public static Case getInstance() {
-		// TODO Auto-generated method stub
-		return singleton;
+	public Glace(ViewController vc) {
+		super(vc, TextureCase.GLACE);
 	}
 
 	@Override
-	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
-		// TODO Auto-generated method stub
-		return vitesse;
+	public void interaction(Sprite sprite, GameController jeu) {
+		sprite.setMouvement(sprite.getMouvementX(), sprite.getMouvementY());
 	}
 }

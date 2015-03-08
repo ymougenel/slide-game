@@ -1,35 +1,49 @@
 package jeu.noyau;
 
-import org.jsfml.graphics.ConstView;
-import org.jsfml.graphics.Drawable;
-import org.jsfml.graphics.RenderStates;
-import org.jsfml.graphics.RenderTarget;
+import jeu.noyau.render.RenderSequence;
 
-public abstract class Sequence implements Drawable {
+
+public abstract class Sequence {
 	
-	void active(Jeu game){
-		processActiveEvent(game);
-		processActiveEventGame(game);
-		activeUpdate(game);
+	public enum Mode {
+		Active, 
+		Pause,
+		Background;
 	}
 	
-	void passive(Jeu game){
-		processBackgroundEvent(game);
-		processBackgroundEventGame(game);
-		backgroundUpdate(game);
+	protected int id;
+	protected Mode mode;
+	protected GameController game;
+	protected RenderSequence render;
+	
+	
+	protected Sequence(GameController game, int idSeq) {
+		this.id = idSeq;
+		this.mode = Mode.Pause;
+		this.game = game;
 	}
 	
-	public void draw(RenderTarget fenetre, RenderStates statut) {		
-			ConstView vue=fenetre.getView();//sauvegarder la vue de la fenetre
-			render(fenetre);
-			fenetre.setView(vue);//remettre la vue originelle de la fenetre
+	public GameController getGame() {
+		return game;
 	}
 	
-	protected abstract void processActiveEvent(Jeu game);
-	protected abstract void processActiveEventGame(Jeu game);
-	protected abstract void processBackgroundEvent(Jeu game);
-	protected abstract void processBackgroundEventGame(Jeu game);
-	protected abstract void activeUpdate(Jeu game);
-	protected abstract void backgroundUpdate(Jeu game);
-	protected abstract void render(RenderTarget fenetre);
+	public RenderSequence getRender() {
+		return render;
+	}
+	
+	public void setMode(Mode mode){
+		this.mode=mode;
+	}
+	
+	public Mode getMode() {
+		return mode;
+	}
+	
+	protected abstract void init();
+	protected abstract void processInputs();
+	protected abstract void processEventGame();
+	protected abstract void update();
+	protected void render(){
+		render.render(game, this);
+	}
 }

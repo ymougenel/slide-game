@@ -2,32 +2,36 @@ package jeu.noyau;
 
 import java.util.ArrayList;
 
+import jeu.noyau.render.ChargeurFont;
+import jeu.slide.Slide;
+import jeu.slide.SlideSequence;
+
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
-import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public abstract class Menu extends Sequence {
+public abstract class Menu extends SlideSequence {
 
 	protected Sprite fond; 
 	protected int index;
 	protected ArrayList<Boutton> bouttons;
 	protected Font font;
 	
-	public Menu() {
+	public Menu(Slide game,int id) {
+		super(game,id);
 		index=0;
 		bouttons = new ArrayList<Boutton>();
 		font = ChargeurFont.Orange.getFont();
 	}
 
 	@Override
-	protected void render(RenderTarget fenetre) {
-		fenetre.draw(fond);
+	protected void render() {
+		getGame().getRenderView().draw(fond);
 		for( Boutton boutton : bouttons){
-			fenetre.draw(boutton);
+			getGame().getRenderView().draw(boutton);
 		}
 	}
 	
@@ -39,10 +43,12 @@ public abstract class Menu extends Sequence {
 		this.fond.setTexture(texture);
 	}
 
+	
+	
 	@Override
-	protected void processActiveEvent(Jeu game) {
+	protected void processInputs() {
 		int newIndex=0;
-		for (Event event : game.getEvents()) {
+		for (Event event : getGame().getEvents()) {
 			if (event instanceof KeyEvent
 					&& event.type.equals(Event.Type.KEY_PRESSED)) {
 				switch (((KeyEvent) event).key) {
@@ -55,7 +61,7 @@ public abstract class Menu extends Sequence {
 					newIndex--;
 					break;
 				case RETURN:
-					game.liberer(this);
+					setMode(Mode.Pause);
 					performedIndex(index,game);
 				default:
 					break;
@@ -70,35 +76,6 @@ public abstract class Menu extends Sequence {
 			bouttons.get(index).setColor(Color.GREEN);
 		}
 	}
-	@Override
-	public void backgroundUpdate(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void processActiveEventGame(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void activeUpdate(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	@Override
-	protected void processBackgroundEvent(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected void processBackgroundEventGame(Jeu game) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	protected abstract void performedIndex(int index,Jeu game);
+	protected abstract void performedIndex(int index,GameController game);
 }

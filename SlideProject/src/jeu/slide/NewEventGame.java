@@ -1,6 +1,6 @@
 package jeu.slide;
 
-import jeu.noyau.Jeu.EventGame;
+import jeu.noyau.GameController.EventGame;
 
 public enum NewEventGame implements EventGame {
 	

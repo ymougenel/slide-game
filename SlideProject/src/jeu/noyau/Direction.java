@@ -1,27 +1,36 @@
 package jeu.noyau;
 
-import org.jsfml.system.Vector2i;
-
-public enum Direction implements ChargeurTexture.Element {
+public enum Direction implements Element {
 	
-	DROITE(new Vector2i(1,0)),
-	HAUT(new Vector2i(0,-1)),
-	GAUCHE(new Vector2i(-1,0)),
-	BAS(new Vector2i(0,1));
+	DROITE(1,0),
+	HAUT(0,-1),
+	GAUCHE(-1,0),
+	BAS(0,1);
 	
-	private Vector2i sens;
+	private int sensX;
+	private int sensY;
 	
-	private Direction(Vector2i sens){
-		this.sens = sens;
+	private Direction(int sensX,int sensY){
+		this.sensX = sensX;
+		this.sensY = sensY;
 	}
 	
-	public Vector2i getSens(){
-		return sens;
+	public int getSensX(){
+		return sensX;
+	}
+	
+	public int getSensY(){
+		return sensY;
 	}
 
 	@Override
 	public int getNombreTrames() {
 		return 2;
+	}
+
+	@Override
+	public int framesPerTrame() {
+		return 5;
 	}
 
 }

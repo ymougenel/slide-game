@@ -3,7 +3,7 @@ package jeu.slide;
 import java.io.IOException;
 
 import jeu.noyau.Boutton;
-import jeu.noyau.Jeu;
+import jeu.noyau.GameController;
 import jeu.noyau.Menu;
 
 import org.jsfml.graphics.Color;
@@ -14,8 +14,8 @@ import org.jsfml.graphics.TextureCreationException;
 
 public class MenuPauseSlide extends Menu {
 	
-	public MenuPauseSlide() {
-		super();
+	public MenuPauseSlide(Slide game,int id) {
+		super(game,id);
 		Texture texFond = new Texture();
 		Texture texBoutton = new Texture();
 		
@@ -49,19 +49,37 @@ public class MenuPauseSlide extends Menu {
 	}
 
 	@Override
-	protected void performedIndex(int index,Jeu game) {
+	protected void performedIndex(int index,GameController game) {
 		switch(index){
 		case 1:
 			game.ajouterEvenement(NewEventGame.RESTART);
 		break;
 		case 2:
-			game.menuPrincipal();
+			
 		break;
 		case 4:
-			game.fermer();
+			game.stop();
 		break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	protected void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void processEventGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void update() {
+		// TODO Auto-generated method stub
+		
 	}
 }
