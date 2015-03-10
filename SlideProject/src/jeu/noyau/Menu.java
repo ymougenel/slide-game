@@ -2,44 +2,32 @@ package jeu.noyau;
 
 import java.util.ArrayList;
 
-import jeu.noyau.render.ChargeurFont;
-import jeu.noyau.render.Render;
-import jeu.noyau.render.ViewController;
-import jeu.slide.Slide;
-import jeu.slide.jsfml.ViewControllerJSFML;
-
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
+import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public abstract class Menu extends Sequence implements Render<Sequence> {
+public abstract class Menu extends Sequence {
 
 	protected Sprite fond; 
 	protected int index;
 	protected ArrayList<Boutton> bouttons;
 	protected Font font;
 	
-	public Menu(Slide game,int id) {
-		super(game);
+	public Menu() {
 		index=0;
 		bouttons = new ArrayList<Boutton>();
 		font = ChargeurFont.Orange.getFont();
 	}
-	
-	@Override
-	public Render<Sequence> getRender() {
-		return this;
-	}
 
 	@Override
-	public void render(ViewController vc, Sequence seq) {
-		ViewControllerJSFML view = (ViewControllerJSFML) vc;
-		view.getRenderView().draw(fond);
+	protected void render(RenderTarget fenetre) {
+		fenetre.draw(fond);
 		for( Boutton boutton : bouttons){
-			view.getRenderView().draw(boutton);
+			fenetre.draw(boutton);
 		}
 	}
 	
@@ -51,13 +39,10 @@ public abstract class Menu extends Sequence implements Render<Sequence> {
 		this.fond.setTexture(texture);
 	}
 
-	
-	
 	@Override
-	public void processInputs(GameController game) {
-		Slide slide = (Slide) game;
+	protected void processActiveEvent(Jeu game) {
 		int newIndex=0;
-		for (Event event : slide.getEvents()) {
+		for (Event event : game.getEvents()) {
 			if (event instanceof KeyEvent
 					&& event.type.equals(Event.Type.KEY_PRESSED)) {
 				switch (((KeyEvent) event).key) {
@@ -70,7 +55,7 @@ public abstract class Menu extends Sequence implements Render<Sequence> {
 					newIndex--;
 					break;
 				case RETURN:
-					setMode(Mode.Pause);
+					game.liberer(this);
 					performedIndex(index,game);
 				default:
 					break;
@@ -85,6 +70,35 @@ public abstract class Menu extends Sequence implements Render<Sequence> {
 			bouttons.get(index).setColor(Color.GREEN);
 		}
 	}
+	@Override
+	public void backgroundUpdate(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void processActiveEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void activeUpdate(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	protected abstract void performedIndex(int index,GameController game);
+	@Override
+	protected void processBackgroundEvent(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void processBackgroundEventGame(Jeu game) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected abstract void performedIndex(int index,Jeu game);
 }

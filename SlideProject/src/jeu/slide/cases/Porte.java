@@ -1,41 +1,43 @@
 package jeu.slide.cases;
 
-import jeu.noyau.GameController;
-import jeu.noyau.render.ViewController;
-import jeu.slide.Sprite;
-import jeu.slide.Sprite.TextureEntite;
+import jeu.noyau.Jeu;
+import jeu.slide.Entite;
+import jeu.slide.Entite.TextureEntite;
+
+import org.jsfml.system.Vector2i;
 
 public class Porte extends Case {
 	
 	private boolean porteFermee;
-	private Sprite cle;
+	private Entite cle;
 
-	public Porte(ViewController vc) {
-		super(vc, TextureCase.PORTE);
+	public Porte() {
+		super(TextureCase.PORTE);
 		porteFermee=true;
 		cle=null;
 	}
 
 	@Override
-	public void interaction(Sprite sprite, GameController jeu) {
+	public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 		if(cle !=null){
 			cle.setFantome(true);
 			cle=null;
-			render.setTexture(TextureCase.PORTE, 1);
+			chargeur.addTexture(sprite, TextureCase.PORTE, 1);
 		}
-		super.interaction(sprite, jeu);
+		return Vector2i.ZERO;
 	}
 	
 	@Override
-	public void collision(Sprite collisioneur) {
+	public void collision(Entite collisioneur) {
 		super.collision(collisioneur);
 		if(porteFermee){
 			if(collisioneur.getElement() == TextureEntite.CLE){
 				porteFermee=false;
 				cle=collisioneur;
 			}else{
-				collisioneur.setMouvement(0,0);
+				collisioneur.setMouvement(Vector2i.ZERO);
 			}
 		}
 	}
+
 }

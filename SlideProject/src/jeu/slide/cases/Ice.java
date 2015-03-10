@@ -1,27 +1,27 @@
 package jeu.slide.cases;
 
-import jeu.noyau.GameController;
-import jeu.noyau.render.ViewController;
-import jeu.slide.Sprite;
+import jeu.noyau.Jeu;
+
+import org.jsfml.system.Vector2i;
 
 public class Ice extends Case{
 		
 		private boolean craquee;
 
-		public Ice(ViewController vc) {
-			super(vc,TextureCase.GLACE);
+		public Ice() {
+			super(TextureCase.GLACE);
 			craquee = false;
 		}
 
 		@Override
-		public void interaction(Sprite sprite, GameController jeu) {
+		public Vector2i interaction(Vector2i vitesse, Jeu jeu) {
 			if(!craquee){
 				craquee=true;
-				render.setTexture(TextureCase.GLACE, 1);
+				chargeur.addTexture(sprite, TextureCase.GLACE, 1);
 			}
 			else {
 				/* TODO recuperer le jeu et reload le niveau, LE JOUEUR EST MORT!!!! */
 			}
-			super.interaction(sprite, jeu);
+			return Vector2i.ZERO;
 		}
 }
