@@ -56,6 +56,6 @@ public abstract class Entite implements Renderable {
 	}
 	
 	public void draw(ViewController vc){
-		render.draw(vc, this);
+		render.render(vc, this);
 	}
 }

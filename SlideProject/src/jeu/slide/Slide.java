@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jeu.noyau.GameController;
+import jeu.noyau.render.RenderFactory;
+import jeu.noyau.render.ViewController;
+import jeu.slide.jsfml.RenderEntiteJSFMLFactory;
 import jeu.slide.jsfml.ViewControllerJSFML;
 
 import org.jsfml.graphics.RenderWindow;
@@ -17,6 +20,7 @@ public class Slide extends GameController implements ViewControllerJSFML {
 	
 	private RenderWindow fenetre;
 	private List<Event> events;
+	private RenderEntiteJSFMLFactory factory;
 	
 	public Slide() {
 		super("Slide");
@@ -25,6 +29,7 @@ public class Slide extends GameController implements ViewControllerJSFML {
 		this.fenetre.setVerticalSyncEnabled(true);
 		this.fenetre.setKeyRepeatEnabled(false);
 		this.events = new LinkedList<Event>();
+		this.factory = new RenderEntiteJSFMLFactory();
 	}
 	
 	public float getTimePerFrame(){
@@ -81,5 +86,15 @@ public class Slide extends GameController implements ViewControllerJSFML {
 	@Override
 	public RenderWindow getRenderView() {
 		return fenetre;
+	}
+
+	@Override
+	public ViewController getViewController() {
+		return this;
+	}
+
+	@Override
+	public RenderFactory getRenderFactory() {
+		return factory;
 	}
 }

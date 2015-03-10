@@ -3,8 +3,10 @@ package jeu.noyau;
 import java.util.ArrayList;
 
 import jeu.noyau.render.ChargeurFont;
+import jeu.noyau.render.Render;
+import jeu.noyau.render.ViewController;
 import jeu.slide.Slide;
-import jeu.slide.SlideSequence;
+import jeu.slide.jsfml.ViewControllerJSFML;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
@@ -13,7 +15,7 @@ import org.jsfml.graphics.Texture;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public abstract class Menu extends SlideSequence {
+public abstract class Menu extends Sequence implements Render<Sequence> {
 
 	protected Sprite fond; 
 	protected int index;
@@ -21,17 +23,23 @@ public abstract class Menu extends SlideSequence {
 	protected Font font;
 	
 	public Menu(Slide game,int id) {
-		super(game,id);
+		super(game);
 		index=0;
 		bouttons = new ArrayList<Boutton>();
 		font = ChargeurFont.Orange.getFont();
 	}
+	
+	@Override
+	public Render<Sequence> getRender() {
+		return this;
+	}
 
 	@Override
-	protected void render() {
-		getGame().getRenderView().draw(fond);
+	public void render(ViewController vc, Sequence seq) {
+		ViewControllerJSFML view = (ViewControllerJSFML) vc;
+		view.getRenderView().draw(fond);
 		for( Boutton boutton : bouttons){
-			getGame().getRenderView().draw(boutton);
+			view.getRenderView().draw(boutton);
 		}
 	}
 	
@@ -46,9 +54,10 @@ public abstract class Menu extends SlideSequence {
 	
 	
 	@Override
-	protected void processInputs() {
+	public void processInputs(GameController game) {
+		Slide slide = (Slide) game;
 		int newIndex=0;
-		for (Event event : getGame().getEvents()) {
+		for (Event event : slide.getEvents()) {
 			if (event instanceof KeyEvent
 					&& event.type.equals(Event.Type.KEY_PRESSED)) {
 				switch (((KeyEvent) event).key) {

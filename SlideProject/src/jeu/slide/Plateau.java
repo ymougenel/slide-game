@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import jeu.noyau.Direction;
 import jeu.noyau.GameController;
 import jeu.noyau.GameController.EventGame;
+import jeu.noyau.Sequence;
 import jeu.noyau.render.ChargeurFont;
 import jeu.slide.Sprite.TextureEntite;
 import jeu.slide.cases.Arrivee;
@@ -28,7 +29,7 @@ import org.jsfml.graphics.Text;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
 
-public class Plateau extends SlideSequence {
+public class Plateau extends Sequence {
 	
 	protected Case[][] damierCases;
 	protected Sprite[][] damierEntite;
@@ -44,7 +45,7 @@ public class Plateau extends SlideSequence {
 
 	
 	public Plateau(Slide game, int id, String plateau,Joueur joueur) throws IOException{
-		super(game,id);
+		super(game);
 		FicheTechniquePlateau fiche = new FicheTechniquePlateau();
 		nom = plateau;
 		
@@ -152,13 +153,16 @@ public class Plateau extends SlideSequence {
 		texteDebut.setColor(Color.BLUE);
 		texteDebut.setPosition(10,10);
 		fichePlateau = fiche;
-		this.render = new RenderPlateau();
+		System.out.println("coucou");
+		setRender(new RenderPlateau());
+		System.out.println("ok ? "+getRender());
 	}
 	
 	@Override
-	protected void processInputs(){
+	public void processInputs(GameController game){
+		Slide slide = (Slide) game;
 		Direction sens=null;
-		for(Event event : getGame().getEvents()){
+		for(Event event : slide.getEvents()){
 			if(event instanceof KeyEvent && event.type.equals(Event.Type.KEY_PRESSED)){
 				switch (((KeyEvent) event).key) {
 				case UP:
@@ -192,7 +196,7 @@ public class Plateau extends SlideSequence {
 								"Mode cheat activated !",JOptionPane.QUESTION_MESSAGE,null,listePlateau,null);
 						if (plateauACharger!=null){
 							plateauACharger = plateauACharger.substring(0, plateauACharger.length()-4);
-							game.charger(new Plateau(getGame(),0,plateauACharger, joueur));
+							game.charger(new Plateau(slide,0,plateauACharger, joueur));
 							game.liberer();
 						}
 					} catch (URISyntaxException e) {
@@ -228,13 +232,14 @@ public class Plateau extends SlideSequence {
 	}
 	
 	@Override
-	protected void processEventGame(){
+	public void processEventGame(GameController game){
+		Slide slide = (Slide) game;
 		for(EventGame eg : game.getEventsGame()){
 			switch((NewEventGame)eg){
 			case COUCOU:break;
 			case RESTART:
 				try {
-					game.charger(new Plateau(getGame(),0,nom, joueur));
+					game.charger(new Plateau(slide,0,nom, joueur));
 					game.liberer();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -247,7 +252,8 @@ public class Plateau extends SlideSequence {
 	}
 	
 	@Override
-	protected void update(){		
+	public void update(GameController game){
+		Slide slide = (Slide) game;
 		if(entiteMobileX != -1 && entiteMobileY != -1 ){
 			Sprite mobile=damierEntite[entiteMobileX][entiteMobileY];
 			if (mobile.debutMouvement) {
@@ -275,33 +281,33 @@ public class Plateau extends SlideSequence {
 							positionJoueurY = nouvellesCoordoneesY;
 						}
 					}
-					mobile.update(getGame());
+					mobile.update(game);
 				}
 			}else if ( mobile.mouvementTermine() ) {
 				/* Phase 2 */
 				Case destination = damierCases[entiteMobileX][entiteMobileY];
 				destination.interaction(mobile, game);
 				if(destination instanceof Arrivee && mobile == joueur){
-					changerNiveau(game, (Arrivee) destination);
+					changerNiveau(slide, (Arrivee) destination);
 				}
 				if (mobile.getMouvementX() == 0 && mobile.getMouvementY() == 0) {
 					entiteMobileX=-1;
 					entiteMobileY=-1;
 				}
 			}else{
-				mobile.update(getGame());
+				mobile.update(game);
 			}
 		}
 	}
 
-	private void changerNiveau(GameController game, Arrivee arrivee){
+	private void changerNiveau(Slide slide, Arrivee arrivee){
 		try {
 			String nouveauNiveau = arrivee.getNiveauSuivant();
-			game.liberer();
+			slide.liberer();
 			if(nouveauNiveau != null){
-				game.charger(new Plateau(getGame(),0,nouveauNiveau, joueur));
+				slide.charger(new Plateau(slide,0,nouveauNiveau, joueur));
 			}else{
-				game.charger(new Fin(getGame(),7));
+				slide.charger(new Fin(slide,7));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -310,7 +316,7 @@ public class Plateau extends SlideSequence {
 	}
 
 	@Override
-	protected void init() {
+	public void init() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -32,13 +32,9 @@ public class RenderEntiteJSFML implements RenderEntite {
 	public org.jsfml.graphics.Sprite getSprite() {
 		return sprite;
 	}
-	
-	@Override
-	public void init(Entite entite) {
-	}
 
 	@Override
-	public void draw(ViewController vc, Entite entite) {
+	public void render(ViewController vc, Entite entite) {
 		RenderWindow fenetre = ((Slide)vc).getRenderView();
 		fenetre.draw(sprite);
 	}
@@ -88,5 +84,11 @@ public class RenderEntiteJSFML implements RenderEntite {
 	@Override
 	public void setTexture(Element element, int trame) {
 		chargeur.addTexture(this, element, trame);
+	}
+
+	@Override
+	public void init(Entite renderable) {
+		// TODO Auto-generated method stub
+		
 	}
 }

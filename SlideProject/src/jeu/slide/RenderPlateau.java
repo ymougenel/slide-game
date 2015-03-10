@@ -1,7 +1,7 @@
 package jeu.slide;
 
 import jeu.noyau.Sequence;
-import jeu.noyau.render.RenderSequence;
+import jeu.noyau.render.Render;
 import jeu.noyau.render.ViewController;
 import jeu.slide.cases.Case;
 import jeu.slide.jsfml.RenderEntiteJSFML;
@@ -10,7 +10,7 @@ import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.View;
 
-public class RenderPlateau implements RenderSequence {
+public class RenderPlateau implements Render<Sequence> {
 	
 	public RenderPlateau() {
 	}
@@ -52,4 +52,10 @@ public class RenderPlateau implements RenderSequence {
 		}
 	}
 
+
+	@Override
+	public void init(Sequence renderable) {
+		// TODO Auto-generated method stub
+		
+	}
 }
