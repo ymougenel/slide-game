@@ -63,7 +63,7 @@ public class Sprite extends Entite {
 		positionFinaleY = 0;
 		debutMouvement=false;
 		this.fantome=false;
-		this.render = (RenderEntite) game.createRender(this);
+		this.render = (RenderEntite) game.getViewController().getRenderFactory().createRender(this);
 		render.setOrigin(8,8);
 	}
 	
@@ -97,7 +97,7 @@ public class Sprite extends Entite {
 	}
 	
 	
-	public void update(Slide game) {
+	public void update(GameController game) {
 		if(isAnimer()) {	
 			float distanceX = game.getTimePerFrame() * vitesse * mouvementX / 1000;
 			float distanceY = game.getTimePerFrame() * vitesse * mouvementY / 1000;
@@ -127,5 +127,9 @@ public class Sprite extends Entite {
 	
 	public void setFantome(boolean fantome) {
 		this.fantome = fantome;
+	}
+
+	@Override
+	public void init() {
 	}
 }

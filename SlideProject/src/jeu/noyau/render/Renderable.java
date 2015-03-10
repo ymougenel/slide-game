@@ -1,7 +1,11 @@
 package jeu.noyau.render;
 
+import jeu.noyau.GameController;
+
 
 public interface Renderable {
 
-	Render<? extends Renderable> getRender();
+	void init();
+	void update(GameController game);
+	Render<?> getRender();
 }

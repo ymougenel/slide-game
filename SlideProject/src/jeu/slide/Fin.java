@@ -2,25 +2,27 @@ package jeu.slide;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 
+import jeu.noyau.GameController;
 import jeu.noyau.Sequence;
 import jeu.noyau.render.ChargeurFont;
+import jeu.noyau.render.Render;
+import jeu.noyau.render.ViewController;
+import jeu.slide.jsfml.ViewControllerJSFML;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.Text;
 import org.jsfml.system.Vector2f;
 
-public class Fin extends Sequence implements Serializable{
+public class Fin extends Sequence implements Render<Sequence>{
 
-	private static final long serialVersionUID = 1L;
 	private String message="ArcadYann(c) vous félicite!\n ca vous fera 20€";
 	private transient Text texte;
 
 	public Fin(Slide game, int id){
 
-		super(game,id);
+		super(game);
 		
 		this.texte= new Text(message, ChargeurFont.Orange.getFont(), 60);
 		texte.setPosition( new Vector2f(0, 250));
@@ -29,16 +31,11 @@ public class Fin extends Sequence implements Serializable{
 	}
 
 	@Override
-	protected void render() {
-		if(mode == Mode.Active){
-			getGame().getRenderView().draw(texte);
+	public void render(ViewController vc, Sequence seq) {
+		ViewControllerJSFML view = (ViewControllerJSFML) vc;
+		if(getMode() == Mode.Active){
+			view.getRenderView().draw(texte);
 		}
-	}
-	
-	@Override
-	public Slide getGame() {
-		// TODO Auto-generated method stub
-		return (Slide) super.getGame();
 	}
 	
 	private void readObject(final ObjectInputStream in) throws IOException,  ClassNotFoundException {
@@ -58,25 +55,37 @@ public class Fin extends Sequence implements Serializable{
 	}
 
 	@Override
-	protected void init() {
+	public void init() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void processInputs() {
+	public void update(GameController game) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void processEventGame() {
+	public void setRender(Render<Sequence> render) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void update() {
+	public void init(Sequence renderable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void processInputs(GameController game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void processEventGame(GameController game) {
 		// TODO Auto-generated method stub
 		
 	}

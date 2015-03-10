@@ -45,7 +45,7 @@ public abstract class Case extends Entite {
 	}
 	public Case (ViewController vc, TextureCase texture){
 		super();
-		this.render = (RenderEntite) vc.createRender(this);
+		this.render = (RenderEntite) vc.getRenderFactory().createRender(this);
 		setElement(texture);
 		render.setTexture(texture, 0);
 		render.setOrigin(8,8);
@@ -58,5 +58,13 @@ public abstract class Case extends Entite {
 	
 	public void collision (Sprite collisioneur){
 		ecraseur = collisioneur;
+	}
+	
+	@Override
+	public void update(GameController game) {	
+	}
+	
+	@Override
+	public void init() {	
 	}
 }

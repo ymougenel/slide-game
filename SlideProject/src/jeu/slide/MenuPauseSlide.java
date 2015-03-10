@@ -5,6 +5,8 @@ import java.io.IOException;
 import jeu.noyau.Boutton;
 import jeu.noyau.GameController;
 import jeu.noyau.Menu;
+import jeu.noyau.Sequence;
+import jeu.noyau.render.Render;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Image;
@@ -66,19 +68,31 @@ public class MenuPauseSlide extends Menu {
 	}
 
 	@Override
-	protected void init() {
+	public void init(Sequence renderable) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void processEventGame() {
+	public void init() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void update() {
+	public void update(GameController game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRender(Render<Sequence> render) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void processEventGame(GameController game) {
 		// TODO Auto-generated method stub
 		
 	}

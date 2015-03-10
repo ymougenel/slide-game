@@ -14,5 +14,4 @@ public class Rocher extends Case {
 		super.collision(collisioneur);
 		collisioneur.setMouvement(0,0);
 	}
-
 }
