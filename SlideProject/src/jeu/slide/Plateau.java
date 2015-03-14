@@ -13,8 +13,10 @@ import javax.swing.JOptionPane;
 
 import jeu.noyau.ChargeurFont;
 import jeu.noyau.Direction;
+import jeu.noyau.Item;
 import jeu.noyau.Jeu;
 import jeu.noyau.Jeu.EventGame;
+import jeu.noyau.Pomme;
 import jeu.noyau.Sequence;
 import jeu.slide.Entite.TextureEntite;
 import jeu.slide.cases.Arrivee;
@@ -40,6 +42,7 @@ public class Plateau extends Sequence {
 	
 	private Case[][] damierCases;
 	private Entite[][] damierEntite;
+	private Item[][] items;
 	private Vector2i entiteMobile;
 	private Vector2i positionJoueur;
 	private Joueur joueur;
@@ -69,6 +72,7 @@ public class Plateau extends Sequence {
 		
 		chargee.damierEntite = new Entite[tx+2][ty+2];
 		chargee.damierCases = new Case[tx+2][ty+2];
+		chargee.items = new Item[tx+2][ty+2];
 		LinkedList<String> file = new LinkedList<String>();
 		while(!(ligne = chargeur.readLine()).equals("")){
 			file.add(ligne);
@@ -111,11 +115,18 @@ public class Plateau extends Sequence {
 				String code = ligne.substring(2*j, 2*j+2);
 				if(!code.equals(VIDE)){
 					switch(code){
-					case "rm":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);break;
-					case "cl":chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE);break;
+					case "it":	chargee.items[j+1][i+1]=new Pomme();
+								chargee.items[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+								break;
+					case "rm":	chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);
+								chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+								break;
+					case "cl":	chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.CLE);
+								chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+								break;
 					default:break;
 					}
-					chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+					
 				}
 			}
 		}
@@ -126,6 +137,7 @@ public class Plateau extends Sequence {
 			mot= ligne.substring(0,ligne.indexOf(" "));
 			System.out.println("mot trovue"+mot);
 			switch (mot){
+			case "@Bonus": fiche.nom = ligne.substring(ligne.indexOf(" ")+1);
 			case "@Nom": fiche.nom = ligne.substring(ligne.indexOf(" ")+1);
 			break;
 			case "@Numero" : fiche.numero =Integer.parseInt( ligne.substring(ligne.indexOf(" ")+1) );
@@ -301,6 +313,11 @@ public class Plateau extends Sequence {
 				if(destination == Arrivee.getInstance() && mobile == joueur){
 					changerNiveau(game);
 				}
+				if(items[entiteMobile.x][entiteMobile.y]!= null  && mobile == joueur){
+					items[entiteMobile.x][entiteMobile.y]= null;
+					// TODO change texture sprite item
+					System.out.println("cmpt++");
+				}
 				if (mobile.getMouvement().equals(Vector2i.ZERO)) {
 					entiteMobile=null;
 				}
@@ -338,6 +355,16 @@ public class Plateau extends Sequence {
 				fenetre.draw(sprite);
 			}
 		}
+		for (i = 0; i < items.length; i++) {
+			for (j = 0; j < items[0].length; j++) {
+				if (items[i][j] != null) {
+					sprite = items[i][j].getSprite();
+					sprite.setPosition(i * Case.TAILLECASE.x, j * Case.TAILLECASE.y);
+					fenetre.draw(sprite);
+				}
+			}
+		}
+		
 		for (i = 0; i < damierEntite.length; i++) {
 			for (j = 0; j < damierEntite[0].length; j++) {
 				/* Traitement des entites du plateau */

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp SlideProject/src/ressources/sprites/* ./SlideProject/bin/ressources/sprites
