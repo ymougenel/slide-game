@@ -14,7 +14,7 @@ import org.jsfml.system.Vector2i;
 
 public class Entite extends Sprite{
 	
-	private static float vitesse = 0.2f;
+	private static float vitesse = 0.25f;
 	protected  static Vector2i TAILLEENTITE = new Vector2i(16,16);
 	protected Vector2i mouvement;
 	private Vector2f positionFinale;
