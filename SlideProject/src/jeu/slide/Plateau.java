@@ -115,9 +115,9 @@ public class Plateau extends Sequence {
 				String code = ligne.substring(2*j, 2*j+2);
 				if(!code.equals(VIDE)){
 					switch(code){
-					case "it":	chargee.items[j+1][i+1]=new Pomme();
+					/*case "it":	chargee.items[j+1][i+1]=new Pomme();
 								chargee.items[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
-								break;
+								break;*/
 					case "rm":	chargee.damierEntite[j+1][i+1]=new Entite(TextureEntite.ROCHERMOBILE);
 								chargee.damierEntite[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
 								break;
@@ -132,6 +132,27 @@ public class Plateau extends Sequence {
 		}
 		chargeur.readLine();
 		ligne = chargeur.readLine();
+		if( ligne.contains("-")) {
+			for(int i=0;i<ty;i++){
+				for(int j=0;j<tx;j++){
+					String code = ligne.substring(2*j, 2*j+2);
+					if(!code.equals(VIDE)){
+						switch(code){
+						case "it":	chargee.items[j+1][i+1]=new Pomme();
+									chargee.items[j+1][i+1].setPosition((j+1)*Case.TAILLECASE.x,(i+1)*Case.TAILLECASE.y);
+									break;
+						default:break;
+						}
+						
+					}
+				}
+				ligne = chargeur.readLine();
+			}
+			
+			chargeur.readLine();
+			ligne = chargeur.readLine();
+		}
+		
 		String mot;
 		while ( ligne!=" " && ligne != null ){
 			mot= ligne.substring(0,ligne.indexOf(" "));
