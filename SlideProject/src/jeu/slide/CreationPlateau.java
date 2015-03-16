@@ -12,7 +12,7 @@ public class CreationPlateau {
 	private void traitementSouris(Vector2i position) {
 		int marge=3;
 
-        int i = (int)((position.x - sprites[0][0].getPosition().x) / TAILLECASE);	// Ligne pointée
+       /* int i = (int)((position.x - sprites[0][0].getPosition().x) / TAILLECASE);	// Ligne pointée
         int j = (int)((position.y - sprites[0][0].getPosition().y) / TAILLECASE);	// COlonne pointée
         
         if( i>TAILLE-1 && i<TAILLE-1+marge){i--;}	// Correctifs pour effets de bords
@@ -25,9 +25,9 @@ public class CreationPlateau {
         		this.definirTexture(sprites[survolCase.x][survolCase.y], 0);			
         	}
         }
-        survolCase = courant;
+        survolCase = courant
         this.definirTexture(sprites[i][j], TAILLECASE);
-        //System.out.println("Case trouve : "+i+" X " +j);
+        //System.out.println("Case trouve : "+i+" X " +j);*/;
                       
 	}
 }
