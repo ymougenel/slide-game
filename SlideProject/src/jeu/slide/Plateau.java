@@ -72,7 +72,7 @@ public class Plateau extends Sequence {
 		
 		chargee.damierEntite = new Entite[tx+2][ty+2];
 		chargee.damierCases = new Case[tx+2][ty+2];
-		chargee.items = new Item[tx+2][ty+2];
+		chargee.items = new Item[tx+2][ty+2];	
 		LinkedList<String> file = new LinkedList<String>();
 		while(!(ligne = chargeur.readLine()).equals("")){
 			file.add(ligne);
