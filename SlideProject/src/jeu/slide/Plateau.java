@@ -132,7 +132,7 @@ public class Plateau extends Sequence {
 		}
 		chargeur.readLine();
 		ligne = chargeur.readLine();
-		if( ligne.contains("-")) {
+		if( ligne != null && ligne.contains("-") ) {
 			for(int i=0;i<ty;i++){
 				for(int j=0;j<tx;j++){
 					String code = ligne.substring(2*j, 2*j+2);
