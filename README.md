@@ -11,7 +11,7 @@ The game includes around twelve levels, among with created sprites and design!
 
 ## How to play it
 Download and run [Slide.jar](https://github.com/ymougenel/slide/raw/develop/Slide.jar)
-
+_*-> Note*_ If your stuck, press <kbd>R</kbd> to restart the level.
 ## Development
 
 Just load the project on an IDE and launch the src/slide/Slide.java class.
