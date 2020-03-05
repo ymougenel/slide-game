@@ -158,7 +158,6 @@ public class Plateau extends Sequence {
 		String mot;
 		while ( ligne!=" " && ligne != null ){
 			mot= ligne.substring(0,ligne.indexOf(" "));
-			System.out.println("mot trovue"+mot);
 			switch (mot){
 			case "@Bonus": fiche.nom = ligne.substring(ligne.indexOf(" ")+1);
 			case "@Nom": fiche.nom = ligne.substring(ligne.indexOf(" ")+1);
@@ -178,7 +177,7 @@ public class Plateau extends Sequence {
 		 
 		
 		
-		fiche.afficher();
+//		fiche.afficher();
 		
 		Direction direction = Enum.valueOf(Direction.class, dir);
 		joueur.setElement(direction);
@@ -191,8 +190,8 @@ public class Plateau extends Sequence {
 		joueur.setPosition(px*Case.TAILLECASE.y,py*Case.TAILLECASE.y);
 		chargee.camera = new View(new FloatRect(-8, -8, 16*(tx+2), 16*(ty+2)));
 		chargee.decompteur = 128;
-		String texte = (fiche.nom!=null)?fiche.nom:"Niveau"+plateau ;
-		chargee.texteDebut = new Text(texte, ChargeurFont.Stocky.getFont(),80);
+		String texte = (fiche.nom!=null)?fiche.nom:"Niveau : "+fiche.nom ;
+		chargee.texteDebut = new Text(texte, ChargeurFont.Stocky.getFont(),40);
 		chargee.texteDebut.setColor(Color.BLUE);
 		chargee.texteDebut.setPosition(10,10);
 		chargee.fichePlateau = fiche;

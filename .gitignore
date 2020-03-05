@@ -6,3 +6,5 @@
 SlideProject/bin
 hs_err_*
 
+.idea
+SlideProject/SlideProject.iml

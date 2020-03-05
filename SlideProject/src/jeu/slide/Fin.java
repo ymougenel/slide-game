@@ -17,7 +17,7 @@ import org.jsfml.system.Vector2f;
 public class Fin extends Sequence implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String message="ArcadYann(c) vous félicite!\n ca vous fera 20€";
+	private String message="ArcadYann(c) congrats you!\n We hope you enjoyed the game";
 	private transient Text texte;
 
 	public Fin(){
