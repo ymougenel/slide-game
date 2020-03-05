@@ -10,7 +10,7 @@ The game includes around twelve levels, among with created sprites and design!
 ![demo](slide.gif)
 
 ## How to play it
-Download and run [Slide.jar](https://github.com/ymougenel/slide/raw/develop/Side.jar)
+Download and run [Slide.jar](https://github.com/ymougenel/slide/raw/develop/Slide.jar)
 
 ## Development
 
